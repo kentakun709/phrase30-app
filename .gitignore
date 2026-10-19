@@ -42,3 +42,6 @@ Thumbs.db
 # 試験の出力
 test-results/
 playwright-report/
+
+# 音声ファイルの差し替え口（将来、高品質TTSで作った音声を置く場所。git に載せる）
+!audio/**

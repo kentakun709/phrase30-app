@@ -5,6 +5,8 @@ import { dirname, join } from 'node:path'
 const here = dirname(fileURLToPath(import.meta.url))
 const d = JSON.parse(readFileSync(join(here, '..', 'data', 'phrases.json'), 'utf8'))
 const EXPECT = { languages: 6, phrases: 30, codes: ['en', 'zh', 'ko', 'es', 'ru', 'th'] }
+if (!Array.isArray(d.sections) || d.sections.length === 0) errs0('sections（小見出し）が無い')
+function errs0 (m) { console.error('× ' + m); process.exit(1) }
 const errs = []
 const codes = d.languages.map(l => l.code)
 if (codes.length !== EXPECT.languages) errs.push(`言語が ${codes.length} 件（あるべき ${EXPECT.languages}）`)
@@ -24,9 +26,11 @@ d.phrases.forEach((p, i) => {
     if (!x.ja || !x.ja.trim()) errs.push(`n=${p.n} ${c} の ja が空`)
     if (!('template' in x) || !x.template) errs.push(`n=${p.n} ${c} の template が無い`)
     if (!('audio' in x)) errs.push(`n=${p.n} ${c} に audio 欄が無い`)
-    if (p.ja.includes('〇〇') && !x.template.includes('〇〇')) errs.push(`n=${p.n} ${c}: 原文は〇〇入りなのに template に〇〇が無い`)
-    if (x.example.includes('〇〇')) errs.push(`n=${p.n} ${c}: example に〇〇が残っている（読み上げられない）`)
-    if (x.ja.includes('〇〇')) errs.push(`n=${p.n} ${c}: ja（例文の訳）に〇〇が残っている`)
+    if (p.ja.includes('〇〇') && x.template && !x.template.includes('〇〇')) errs.push(`n=${p.n} ${c}: 原文は〇〇入りなのに template に〇〇が無い`)
+    if (x.example && x.example.includes('〇〇')) errs.push(`n=${p.n} ${c}: example に〇〇が残っている（読み上げられない）`)
+    if (x.ja && x.ja.includes('〇〇')) errs.push(`n=${p.n} ${c}: ja（例文の訳）に〇〇が残っている`)
+    if (c === 'th' && x.example && !x.example.endsWith('ครับ')) errs.push(`n=${p.n} th: 例文の文末に丁寧形 ครับ が無い`)
+    if (x.audio && !/^(?!\/\/)(?![a-z]+:)[^\s]+$/i.test(x.audio)) errs.push(`n=${p.n} ${c}: audio は空か同じサイト内の相対パスだけ（${x.audio}）`)
   }
 })
 console.log(`言語 ${codes.length}/${EXPECT.languages}・フレーズ ${d.phrases.length}/${EXPECT.phrases}・表現 ${count}/${EXPECT.languages * EXPECT.phrases}`)

@@ -12,6 +12,10 @@ for (const [f, s] of files) {
   if (/api[_-]?key|apikey|client_secret|authorization|bearer|stripe|paypal|login|signin|password/i.test(s)) errs.push(`${f}: 鍵・ログイン・課金の語がある`)
   if (f === 'index.html' && /<script[^>]+src=["']https?:/.test(s)) errs.push(`${f}: 外部スクリプトを読み込んでいる`)
 }
-console.log(`点検したファイル ${files.length}/3`)
+// data の audio 欄（音声ファイルの差し替え口）に外部URLが入っていないこと
+const data = JSON.parse(readFileSync(join(here, '..', 'data', 'phrases.json'), 'utf8'))
+let audioN = 0
+for (const p of data.phrases) for (const [c, x] of Object.entries(p.langs)) { audioN++; if (x.audio && /^(https?:)?\/\//i.test(x.audio)) errs.push(`phrases.json n=${p.n} ${c}: audio が外部URL ${x.audio}`) }
+console.log(`点検したファイル ${files.length}/3・audio 欄 ${audioN}/180`)
 if (errs.length) { console.error('× ' + errs.length + ' 件'); errs.forEach(e => console.error('  - ' + e)); process.exit(1) }
 console.log('○ check-no-external: 外部通信・鍵・ログイン・課金なし')
