@@ -75,7 +75,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
         expect((await c.locator('.ja').innerText()).trim().length, `${code} ${i + 1} 訳`).toBeGreaterThan(0)
         const tpl = data.phrases[i].langs[code].template, ex = data.phrases[i].langs[code].example
         if (tpl.includes('〇〇')) await expect(c.locator('.tpl'), `${code} ${i + 1} 型`).toContainText('言い換えの型')
-        else if (tpl !== ex) await expect(c.locator('.tpl'), `${code} ${i + 1} 別の言い方`).toContainText('別の言い方')
+        else if (tpl !== ex) await expect(c.locator('.tpl'), `${code} ${i + 1} 別の言い方`).toContainText('別の言い方（鳴るのは上の文）')
       }
       const def = data.languages.find(l => l.code === code)
       if (def.note) await expect(page.locator('#langnote')).toHaveText(def.note)
@@ -170,6 +170,36 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(top.height, '固定の帯は画面の3割以内').toBeLessThan(844 * 0.3)
   })
 
+  test('AC5c 一番長い案内（声の一覧が空・鳴らない＋声なし）でも、固定の帯は画面の3割以内', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH([]))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    await page.locator('.tab[data-lang="th"]').click()
+    await expect(page.locator('#notice')).toBeVisible()
+    const h1 = (await page.locator('.top').boundingBox()).height
+    console.log('固定の帯の高さ（一覧が空・タイ語）:', Math.round(h1), 'px')
+    expect(h1).toBeLessThan(844 * 0.3)
+    await page.evaluate(() => { window.__silent = true })
+    await page.locator('.card').first().click()
+    await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
+    const h2 = (await page.locator('.top').boundingBox()).height
+    console.log('固定の帯の高さ（鳴らない＋声なし）:', Math.round(h2), 'px')
+    expect(h2).toBeLessThan(844 * 0.3)
+  })
+
+  test('声が無い言語の「声の足し方」は言語ごとに1回だけ自動で開き、閉じたら押しても開き直さない', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH([{ name: 'Samantha', lang: 'en-US', default: true }]))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    await page.locator('.tab[data-lang="th"]').click()
+    expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
+    await page.locator('#howtosum').click()
+    expect(await page.locator('#howto').evaluate(el => el.open)).toBe(false)
+    await page.locator('.card').first().click()
+    await page.waitForTimeout(200)
+    expect(await page.locator('#howto').evaluate(el => el.open), '押しても開き直さない').toBe(false)
+  })
+
   test('AC5b 声が無い案内が出ている時も、固定の帯は 250px 以内', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH([{ name: 'Samantha', lang: 'en-US', default: true }]))
     await page.goto('/')
@@ -202,9 +232,11 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await page.waitForTimeout(200)
     expect(errors).toEqual([])
     // 声が後から入った（voiceschanged）→ 案内が消え、声の名前が出る
+    expect(await page.locator('#howto').evaluate(el => el.open), '声が無い間は手順が開いている').toBe(true)
     await page.evaluate(() => window.__fireVoices([{ name: 'Samantha', lang: 'en-US' }, { name: 'Kanya', lang: 'th-TH' }]))
     await expect(page.locator('#notice')).toBeHidden()
     await expect(page.locator('#voiceinfo')).toContainText('Kanya')
+    expect(await page.locator('#howto').evaluate(el => el.open), '自分で「声の足し方を見る」を押して開けた物は、声が見つかっても畳まない').toBe(true)
     // 英語に戻すと案内は出ない（en-US がある）
     await page.locator('.tab[data-lang="en"]').click()
     await expect(page.locator('#notice')).toBeHidden()
@@ -216,8 +248,10 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeVisible()
     await expect(page.locator('#notice')).toContainText('英語')
     await expect(page.locator('#notice')).toContainText('設定')
-    await page.locator('#noticeclose').click()
+    expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
+    await page.evaluate(() => window.__fireVoices([{ name: 'Karen', lang: 'en-AU' }]))
     await expect(page.locator('#notice')).toBeHidden()
+    expect(await page.locator('#howto').evaluate(el => el.open), '一覧が入ったら手順は畳まれる').toBe(false)
   })
 
   test('AC7c 読み上げが始まらない・例外になる時は、光ったままにせず案内を出す', async ({ page }) => {
@@ -252,6 +286,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await page.evaluate(() => { window.__silent = true })
     await page.locator('.card').first().click()
     await expect(page.locator('#notice')).toContainText('鳴りませんでした', { timeout: 7000 })
+    await expect(page.locator('#notice')).toContainText('声が無いためです')
     await page.locator('#noticeclose').click()
     await page.evaluate(() => { window.__silent = false })
     await page.locator('.card').nth(1).click()
@@ -259,7 +294,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeHidden()   // 閉じたタイ語の案内は出し直さない
     await page.evaluate(() => { window.__silent = true })
     await page.locator('.card').nth(2).click()
-    await expect(page.locator('#notice')).toContainText('鳴りませんでした', { timeout: 7000 })   // 失敗の知らせは、また失敗すればまた出る
+    await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })   // 失敗の知らせは、また失敗すればまた出る
     await page.evaluate(() => { window.__silent = false })
     await page.locator('.tab[data-lang="ru"]').click()
     await expect(page.locator('#notice')).toContainText('ロシア語')   // 別の言語の案内は出る
@@ -333,8 +368,25 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(await pick('es', [{ name: 'Eddy (Spanish (Spain))', lang: 'es-ES', voiceURI: 'com.apple.eloquence.es-ES.Eddy' }, { name: 'Mónica', lang: 'es-ES', voiceURI: 'com.apple.voice.compact.es-ES.Monica' }])).toBe('Mónica')
     expect(await pick('en', [{ name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.compact.en-AU.Karen' }, { name: 'Samantha', lang: 'en-US', voiceURI: 'com.apple.voice.premium.en-US.Samantha' }])).toBe('Samantha')   // 入れたプレミアムの声は簡易版の豪に勝つ
     expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Samantha', lang: 'en-US' }])).toBe('Karen')   // 同じ質なら NZ に近い豪
+    expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Samantha', lang: 'en-US', voiceURI: 'com.apple.voice.enhanced.en-US.Samantha' }])).toBe('Samantha')   // 自然さが地域より先（普通の豪より拡張の米）
+    expect(await pick('es', [{ name: 'Mónica', lang: 'es-ES' }, { name: 'Diego', lang: 'es-AR', voiceURI: 'com.apple.voice.premium.es-AR.Diego' }])).toBe('Diego')   // 普通の西よりプレミアムの亜
+    expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Samantha', lang: 'en-US', default: true }])).toBe('Karen')   // 既定の声は最後の決め手
+    expect(await pick('en', [{ name: 'Zulu', lang: 'en-AU' }, { name: 'Alpha', lang: 'en-AU' }])).toBe('Alpha')   // 完全に同点なら名前の順（列挙順に左右されない）
+    // 簡易版の声の時は、帯の「もっと自然な声に」から手順へ飛べる
+    await page.evaluate(() => window.__fireVoices([{ name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.compact.en-AU.Karen' }]))
+    await page.locator('.tab[data-lang="en"]').click()
+    await expect(page.locator('#voiceinfo')).toContainText('簡易版')
+    await expect(page.locator('#voicehow')).toBeVisible()
+    await page.locator('#voicehow').click()
+    expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
+    expect(await pick('en', [{ name: 'Alpha', lang: 'en-AU' }, { name: 'Zulu', lang: 'en-AU' }])).toBe('Alpha')
     expect(await pick('en', [{ name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.compact.en-AU.Karen' }, { name: 'Samantha', lang: 'en-US', voiceURI: 'com.apple.voice.compact.en-US.Samantha' }])).toBe('Karen')   // どちらも簡易版なら豪
     expect(await pick('es', [{ name: 'Mónica', lang: 'es-ES', voiceURI: 'com.apple.voice.compact.es-ES.Monica' }, { name: 'Paulina', lang: 'es-MX', voiceURI: 'com.apple.voice.enhanced.es-MX.Paulina' }])).toBe('Paulina')   // 拡張の声は地域より先
+    // 第1候補の地域の声があるのに、より自然な声を選んだ時は「代用」と言わない
+    await page.evaluate(() => window.__fireVoices([{ name: 'Mónica', lang: 'es-ES', voiceURI: 'com.apple.voice.compact.es-ES.Monica' }, { name: 'Paulina', lang: 'es-MX', voiceURI: 'com.apple.voice.enhanced.es-MX.Paulina' }]))
+    await page.locator('.tab[data-lang="es"]').click()
+    await expect(page.locator('#voiceinfo')).toContainText('Paulina')
+    await expect(page.locator('#voiceinfo')).toContainText('より自然な声を選びました')
     expect(await pick('en', [{ name: 'Hayley', lang: 'en-NZ', voiceURI: 'com.apple.voice.compact.en-NZ.Hayley' }, { name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.enhanced.en-AU.Karen' }])).toBe('Hayley')   // NZ があれば必ず NZ
     expect(await pick('zh', [{ name: 'Sinji', lang: 'zh-HK' }, { name: 'Meijia', lang: 'zh-TW' }])).toBe('Meijia')
     expect(await pick('zh', [{ name: 'Sinji', lang: 'zh-HK' }, { name: 'Meijia', lang: 'zh-TW' }, { name: 'Tingting', lang: 'zh-CN' }])).toBe('Tingting')
@@ -345,11 +397,14 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
     await expect(page.locator('.card')).toHaveCount(30)
-    await page.evaluate(() => window.scrollTo(0, 1200))
+    const firstVisible = () => page.evaluate(() => { const h = document.querySelector('.top').getBoundingClientRect().height; for (const c of document.querySelectorAll('.card')) { if (c.getBoundingClientRect().bottom > h + 1) return Number(c.dataset.n) } return 0 })
+    await page.evaluate(() => { const el = document.querySelector('.card[data-n="20"]'); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - document.querySelector('.top').getBoundingClientRect().height - 8) })
     await page.waitForTimeout(600)
+    expect(await firstVisible()).toBe(20)
     // locator.click() は固定表示のタブを「本来の位置」へスクロールしてから押す（試験の都合）ので、指で押すのと同じ素の click を送る
     await page.locator('.tab[data-lang="zh"]').dispatchEvent('click')
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)   // 初めて開く中国語は英語の位置を引き継ぐ
+    await expect.poll(firstVisible).toBe(20)   // 初めて開く中国語は、英語で見えていた番号（20）を引き継ぐ
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
     await page.evaluate(() => window.scrollTo(0, 300))
     await page.waitForTimeout(600)
     await page.locator('.tab[data-lang="en"]').dispatchEvent('click')

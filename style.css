@@ -23,13 +23,15 @@ body{max-width:640px;margin:0 auto;padding-bottom:env(safe-area-inset-bottom)}
 .tab small{font-size:10px;color:var(--sub);margin-top:2px}
 .tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
 .tab[aria-selected="true"] small{color:var(--accent-ink);opacity:.85}
-.notice{display:flex;gap:8px;align-items:flex-start;margin:8px 0 0;padding:8px 10px;border-radius:10px;background:var(--play-bg);border:1px solid var(--play);font-size:13px;line-height:1.5}
+.notice{display:flex;gap:8px;align-items:flex-start;margin:6px 0 0;padding:6px 10px;border-radius:10px;background:var(--play-bg);border:1px solid var(--play);font-size:12px;line-height:1.45}
 .notice[hidden]{display:none}
 .notice .ntext{flex:1 1 auto}
-.notice .nlink{appearance:none;border:0;background:transparent;color:var(--accent);font-weight:600;font-size:13px;padding:4px 0;min-height:32px;cursor:pointer;text-decoration:underline}
+.notice .nlink{display:block;appearance:none;border:0;background:transparent;color:var(--accent);font-weight:600;font-size:12px;padding:0;min-height:32px;cursor:pointer;text-decoration:underline;text-align:left}
 .notice .nlink[hidden]{display:none}
 .notice .nclose{appearance:none;border:0;background:transparent;color:var(--ink);font-size:18px;line-height:1;padding:0 4px;cursor:pointer;min-width:44px;min-height:44px;margin:-8px -6px -8px 0}
 .controls{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}
+.controls .nlink{appearance:none;border:0;background:transparent;color:var(--accent);font-weight:600;font-size:12px;padding:0 4px;min-height:44px;cursor:pointer;text-decoration:underline;white-space:nowrap}
+.controls .nlink[hidden]{display:none}
 .voiceinfo{font-size:11px;color:var(--sub);line-height:1.4;flex:1 1 auto;min-height:14px}
 .toggle{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;min-height:44px;padding:0 12px;font-size:13px;cursor:pointer;white-space:nowrap}
 .toggle[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -40,7 +42,7 @@ body{max-width:640px;margin:0 auto;padding-bottom:env(safe-area-inset-bottom)}
 .langnote:empty{display:none}
 .howto{margin:8px 12px 0;font-size:12px;color:var(--sub);line-height:1.5}
 .howto[hidden]{display:none}
-.howto summary{cursor:pointer;color:var(--accent);font-weight:600;min-height:44px;display:flex;align-items:center}
+.howto summary{cursor:pointer;color:var(--accent);font-weight:600;padding:12px 0;line-height:1.4}
 .howto p{margin:4px 0 0}
 
 /* 一覧とカード */
