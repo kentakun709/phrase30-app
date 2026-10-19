@@ -1,0 +1,1518 @@
+{
+ "version": "0.1",
+ "source": "Chatwork 2026-10-19 13:30 要件定義書 v0.1「覚えるべきフレーズ30」",
+ "languages": [
+  {
+   "code": "en",
+   "name": "English",
+   "nameJa": "英語",
+   "bcp47": [
+    "en-NZ",
+    "en-AU",
+    "en-GB",
+    "en-IE",
+    "en-US",
+    "en"
+   ],
+   "note": "ニュージーランドの声（en-NZ）があればそれを優先。無ければ豪→英→米の順"
+  },
+  {
+   "code": "zh",
+   "name": "中文",
+   "nameJa": "中国語",
+   "bcp47": [
+    "zh-CN",
+    "zh-Hans",
+    "cmn-Hans-CN",
+    "cmn-CN",
+    "zh"
+   ],
+   "note": "普通話（簡体字）。台湾の声（zh-TW）は使わない"
+  },
+  {
+   "code": "ko",
+   "name": "한국어",
+   "nameJa": "韓国語",
+   "bcp47": [
+    "ko-KR",
+    "ko"
+   ],
+   "note": "丁寧なくだけた形（〜요）。韓国語では「あなた（당신）」をあまり使わず、相手の名前＋씨で言う"
+  },
+  {
+   "code": "es",
+   "name": "Español",
+   "nameJa": "スペイン語",
+   "bcp47": [
+    "es-ES",
+    "es-MX",
+    "es-US",
+    "es-AR",
+    "es"
+   ],
+   "note": "スペインでも中南米でも通じる言い方。親しい相手への tú の形"
+  },
+  {
+   "code": "ru",
+   "name": "Русский",
+   "nameJa": "ロシア語",
+   "bcp47": [
+    "ru-RU",
+    "ru"
+   ],
+   "note": "初対面に使う丁寧な вы の形"
+  },
+  {
+   "code": "th",
+   "name": "ไทย",
+   "nameJa": "タイ語",
+   "bcp47": [
+    "th-TH",
+    "th"
+   ],
+   "note": "丁寧に言うときは文末に ครับ（男性）／ค่ะ（女性）を付ける。例文は付けていない"
+  }
+ ],
+ "phrases": [
+  {
+   "n": 1,
+   "ja": "お名前はなんですか？",
+   "langs": {
+    "en": {
+     "template": "What's your name?",
+     "example": "What's your name?",
+     "ja": "お名前はなんですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你叫什么名字？",
+     "example": "你叫什么名字？",
+     "ja": "お名前はなんですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "이름이 뭐예요?",
+     "example": "이름이 뭐예요?",
+     "ja": "お名前はなんですか？",
+     "note": "目上の人には 성함이 어떻게 되세요? がより丁寧",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Cómo te llamas?",
+     "example": "¿Cómo te llamas?",
+     "ja": "お名前はなんですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Как вас зовут?",
+     "example": "Как вас зовут?",
+     "ja": "お名前はなんですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณชื่ออะไร",
+     "example": "คุณชื่ออะไร",
+     "ja": "お名前はなんですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 2,
+   "ja": "出身地はどこですか？",
+   "langs": {
+    "en": {
+     "template": "Where are you from?",
+     "example": "Where are you from?",
+     "ja": "出身はどちらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你是哪里人？",
+     "example": "你是哪里人？",
+     "ja": "出身はどちらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "어디에서 왔어요?",
+     "example": "어디에서 왔어요?",
+     "ja": "どこから来ましたか？（出身は？）",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿De dónde eres?",
+     "example": "¿De dónde eres?",
+     "ja": "出身はどちらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Откуда вы?",
+     "example": "Откуда вы?",
+     "ja": "出身はどちらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณมาจากไหน",
+     "example": "คุณมาจากไหน",
+     "ja": "出身はどちらですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 3,
+   "ja": "どこに住んでいますか？",
+   "langs": {
+    "en": {
+     "template": "Where do you live?",
+     "example": "Where do you live?",
+     "ja": "どこに住んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你住在哪里？",
+     "example": "你住在哪里？",
+     "ja": "どこに住んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "어디에 살아요?",
+     "example": "어디에 살아요?",
+     "ja": "どこに住んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Dónde vives?",
+     "example": "¿Dónde vives?",
+     "ja": "どこに住んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Где вы живёте?",
+     "example": "Где вы живёте?",
+     "ja": "どこに住んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณอยู่ที่ไหน",
+     "example": "คุณอยู่ที่ไหน",
+     "ja": "どこに住んでいますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 4,
+   "ja": "元気ですか？",
+   "langs": {
+    "en": {
+     "template": "How's it going?",
+     "example": "How's it going?",
+     "ja": "元気？（調子どう？）",
+     "note": "ニュージーランドで一番よく聞く形。How are you? でもよい",
+     "audio": ""
+    },
+    "zh": {
+     "template": "最近怎么样？",
+     "example": "最近怎么样？",
+     "ja": "最近どう？（元気？）",
+     "note": "教科書の 你好吗？ は日常ではあまり言わない",
+     "audio": ""
+    },
+    "ko": {
+     "template": "잘 지내요?",
+     "example": "잘 지내요?",
+     "ja": "元気ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Cómo estás?",
+     "example": "¿Cómo estás?",
+     "ja": "元気ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Как дела?",
+     "example": "Как дела?",
+     "ja": "元気ですか？（調子どう？）",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "สบายดีไหม",
+     "example": "สบายดีไหม",
+     "ja": "元気ですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 5,
+   "ja": "あなたはどうですか？",
+   "langs": {
+    "en": {
+     "template": "How about you?",
+     "example": "How about you?",
+     "ja": "あなたは？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你呢？",
+     "example": "你呢？",
+     "ja": "あなたは？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 씨는요?",
+     "example": "민수 씨는요?",
+     "ja": "ミンスさんは？",
+     "note": "名前の後に 씨 を付けて聞く",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Y tú?",
+     "example": "¿Y tú?",
+     "ja": "あなたは？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "А вы?",
+     "example": "А вы?",
+     "ja": "あなたは？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "แล้วคุณล่ะ",
+     "example": "แล้วคุณล่ะ",
+     "ja": "あなたは？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 6,
+   "ja": "はじめまして",
+   "langs": {
+    "en": {
+     "template": "Nice to meet you.",
+     "example": "Nice to meet you.",
+     "ja": "はじめまして（会えてうれしいです）",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "很高兴认识你。",
+     "example": "很高兴认识你。",
+     "ja": "はじめまして（お会いできてうれしいです）",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "만나서 반가워요.",
+     "example": "만나서 반가워요.",
+     "ja": "はじめまして（会えてうれしいです）",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "Mucho gusto.",
+     "example": "Mucho gusto.",
+     "ja": "はじめまして",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Очень приятно.",
+     "example": "Очень приятно.",
+     "ja": "はじめまして（お会いできてうれしいです）",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "ยินดีที่ได้รู้จัก",
+     "example": "ยินดีที่ได้รู้จัก",
+     "ja": "はじめまして",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 7,
+   "ja": "何をしていますか？",
+   "langs": {
+    "en": {
+     "template": "What do you do?",
+     "example": "What do you do?",
+     "ja": "お仕事は何をしていますか？",
+     "note": "職業を聞く言い方",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你是做什么工作的？",
+     "example": "你是做什么工作的？",
+     "ja": "お仕事は何をしていますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "무슨 일 하세요?",
+     "example": "무슨 일 하세요?",
+     "ja": "お仕事は何をしていますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿A qué te dedicas?",
+     "example": "¿A qué te dedicas?",
+     "ja": "お仕事は何をしていますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Кем вы работаете?",
+     "example": "Кем вы работаете?",
+     "ja": "お仕事は何をしていますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณทำงานอะไร",
+     "example": "คุณทำงานอะไร",
+     "ja": "お仕事は何をしていますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 8,
+   "ja": "〇〇語を話しますか？",
+   "langs": {
+    "en": {
+     "template": "Do you speak 〇〇?",
+     "example": "Do you speak English?",
+     "ja": "英語を話しますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你会说〇〇吗？",
+     "example": "你会说中文吗？",
+     "ja": "中国語を話せますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 할 줄 알아요?",
+     "example": "한국어 할 줄 알아요?",
+     "ja": "韓国語はできますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Hablas 〇〇?",
+     "example": "¿Hablas español?",
+     "ja": "スペイン語を話しますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Вы говорите по-〇〇?",
+     "example": "Вы говорите по-русски?",
+     "ja": "ロシア語を話しますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณพูดภาษา〇〇ได้ไหม",
+     "example": "คุณพูดภาษาไทยได้ไหม",
+     "ja": "タイ語を話せますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 9,
+   "ja": "なぜ〇〇語を勉強していますか？",
+   "langs": {
+    "en": {
+     "template": "Why are you learning 〇〇?",
+     "example": "Why are you learning English?",
+     "ja": "なぜ英語を勉強しているのですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你为什么学〇〇？",
+     "example": "你为什么学中文？",
+     "ja": "なぜ中国語を勉強しているのですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "왜 〇〇를 공부해요?",
+     "example": "왜 한국어를 공부해요?",
+     "ja": "なぜ韓国語を勉強しているのですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Por qué estudias 〇〇?",
+     "example": "¿Por qué estudias español?",
+     "ja": "なぜスペイン語を勉強しているのですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Почему вы учите 〇〇?",
+     "example": "Почему вы учите русский?",
+     "ja": "なぜロシア語を勉強しているのですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "ทำไมคุณถึงเรียนภาษา〇〇",
+     "example": "ทำไมคุณถึงเรียนภาษาไทย",
+     "ja": "なぜタイ語を勉強しているのですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 10,
+   "ja": "なぜなら〇〇だからです",
+   "langs": {
+    "en": {
+     "template": "Because 〇〇.",
+     "example": "Because I want to travel.",
+     "ja": "旅行がしたいからです",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "因为〇〇。",
+     "example": "因为我想去旅行。",
+     "ja": "旅行に行きたいからです",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇서요.",
+     "example": "여행 가고 싶어서요.",
+     "ja": "旅行に行きたいからです",
+     "note": "会話では 왜냐하면 を付けずに 〜서요 で終える",
+     "audio": ""
+    },
+    "es": {
+     "template": "Porque 〇〇.",
+     "example": "Porque quiero viajar.",
+     "ja": "旅行がしたいからです",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Потому что 〇〇.",
+     "example": "Потому что я хочу путешествовать.",
+     "ja": "旅行がしたいからです",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "เพราะว่า〇〇",
+     "example": "เพราะว่าอยากไปเที่ยว",
+     "ja": "旅行に行きたいからです",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 11,
+   "ja": "どれくらい〇〇語を学んでいますか？",
+   "langs": {
+    "en": {
+     "template": "How long have you been learning 〇〇?",
+     "example": "How long have you been learning English?",
+     "ja": "英語をどれくらい学んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你学〇〇多久了？",
+     "example": "你学中文多久了？",
+     "ja": "中国語をどれくらい学んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 배운 지 얼마나 됐어요?",
+     "example": "한국어 배운 지 얼마나 됐어요?",
+     "ja": "韓国語を学んでどれくらいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Cuánto tiempo llevas estudiando 〇〇?",
+     "example": "¿Cuánto tiempo llevas estudiando español?",
+     "ja": "スペイン語をどれくらい学んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Как долго вы учите 〇〇?",
+     "example": "Как долго вы учите русский?",
+     "ja": "ロシア語をどれくらい学んでいますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณเรียนภาษา〇〇มานานแค่ไหนแล้ว",
+     "example": "คุณเรียนภาษาไทยมานานแค่ไหนแล้ว",
+     "ja": "タイ語をどれくらい学んでいますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 12,
+   "ja": "趣味はなんですか？",
+   "langs": {
+    "en": {
+     "template": "What do you do for fun?",
+     "example": "What do you do for fun?",
+     "ja": "趣味は何ですか？（休みの日は何をしますか？）",
+     "note": "What are your hobbies? より自然",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你平时喜欢做什么？",
+     "example": "你平时喜欢做什么？",
+     "ja": "普段は何をするのが好きですか？（趣味は？）",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "취미가 뭐예요?",
+     "example": "취미가 뭐예요?",
+     "ja": "趣味は何ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Qué haces en tu tiempo libre?",
+     "example": "¿Qué haces en tu tiempo libre?",
+     "ja": "暇なときは何をしますか？（趣味は？）",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Чем вы увлекаетесь?",
+     "example": "Чем вы увлекаетесь?",
+     "ja": "趣味は何ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "งานอดิเรกของคุณคืออะไร",
+     "example": "งานอดิเรกของคุณคืออะไร",
+     "ja": "趣味は何ですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 13,
+   "ja": "〇〇したことはありますか？",
+   "langs": {
+    "en": {
+     "template": "Have you ever 〇〇?",
+     "example": "Have you ever been to Japan?",
+     "ja": "日本に行ったことはありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你〇〇过吗？",
+     "example": "你去过日本吗？",
+     "ja": "日本に行ったことはありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 본 적 있어요?",
+     "example": "일본에 가 본 적 있어요?",
+     "ja": "日本に行ったことはありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Has 〇〇 alguna vez?",
+     "example": "¿Has estado alguna vez en Japón?",
+     "ja": "日本に行ったことはありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Вы когда-нибудь 〇〇?",
+     "example": "Вы когда-нибудь были в Японии?",
+     "ja": "日本に行ったことはありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณเคย〇〇ไหม",
+     "example": "คุณเคยไปญี่ปุ่นไหม",
+     "ja": "日本に行ったことはありますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 14,
+   "ja": "〇〇してもいいですか？",
+   "langs": {
+    "en": {
+     "template": "Can I 〇〇?",
+     "example": "Can I take a photo?",
+     "ja": "写真を撮ってもいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "我可以〇〇吗？",
+     "example": "我可以拍照吗？",
+     "ja": "写真を撮ってもいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇도 돼요?",
+     "example": "사진 찍어도 돼요?",
+     "ja": "写真を撮ってもいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Puedo 〇〇?",
+     "example": "¿Puedo sacar una foto?",
+     "ja": "写真を撮ってもいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Можно 〇〇?",
+     "example": "Можно сфотографировать?",
+     "ja": "写真を撮ってもいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "〇〇ได้ไหม",
+     "example": "ถ่ายรูปได้ไหม",
+     "ja": "写真を撮ってもいいですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 15,
+   "ja": "いつ〇〇しましたか？",
+   "langs": {
+    "en": {
+     "template": "When did you 〇〇?",
+     "example": "When did you come here?",
+     "ja": "いつここに来ましたか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你是什么时候〇〇的？",
+     "example": "你是什么时候来的？",
+     "ja": "いつ来ましたか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "언제 〇〇어요?",
+     "example": "언제 여기 왔어요?",
+     "ja": "いつここに来ましたか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Cuándo 〇〇?",
+     "example": "¿Cuándo llegaste?",
+     "ja": "いつ着きましたか？（いつ来ましたか？）",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Когда вы 〇〇?",
+     "example": "Когда вы сюда приехали?",
+     "ja": "いつここに来ましたか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณ〇〇เมื่อไหร่",
+     "example": "คุณมาที่นี่เมื่อไหร่",
+     "ja": "いつここに来ましたか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 16,
+   "ja": "〇〇が好きですか？",
+   "langs": {
+    "en": {
+     "template": "Do you like 〇〇?",
+     "example": "Do you like sushi?",
+     "ja": "お寿司は好きですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你喜欢〇〇吗？",
+     "example": "你喜欢寿司吗？",
+     "ja": "お寿司は好きですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 좋아해요?",
+     "example": "초밥 좋아해요?",
+     "ja": "お寿司は好きですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Te gusta 〇〇?",
+     "example": "¿Te gusta el sushi?",
+     "ja": "お寿司は好きですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Вы любите 〇〇?",
+     "example": "Вы любите суши?",
+     "ja": "お寿司は好きですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณชอบ〇〇ไหม",
+     "example": "คุณชอบซูชิไหม",
+     "ja": "お寿司は好きですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 17,
+   "ja": "〇〇はどういう意味ですか？",
+   "langs": {
+    "en": {
+     "template": "What does \"〇〇\" mean?",
+     "example": "What does \"sweet as\" mean?",
+     "ja": "「sweet as」はどういう意味ですか？",
+     "note": "sweet as＝NZの「いいね・OK」",
+     "audio": ""
+    },
+    "zh": {
+     "template": "“〇〇”是什么意思？",
+     "example": "“加油”是什么意思？",
+     "ja": "「加油」はどういう意味ですか？",
+     "note": "加油＝がんばれ",
+     "audio": ""
+    },
+    "ko": {
+     "template": "'〇〇'이 무슨 뜻이에요?",
+     "example": "'대박'이 무슨 뜻이에요?",
+     "ja": "「대박」はどういう意味ですか？",
+     "note": "대박＝すごい・やばい",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Qué significa \"〇〇\"?",
+     "example": "¿Qué significa \"vale\"?",
+     "ja": "「vale」はどういう意味ですか？",
+     "note": "vale＝OK・わかった（スペイン）",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Что значит «〇〇»?",
+     "example": "Что значит «ладно»?",
+     "ja": "「ладно」はどういう意味ですか？",
+     "note": "ладно＝いいよ・わかった",
+     "audio": ""
+    },
+    "th": {
+     "template": "“〇〇” แปลว่าอะไร",
+     "example": "“สบายๆ” แปลว่าอะไร",
+     "ja": "「สบายๆ」はどういう意味ですか？",
+     "note": "สบายๆ＝気楽に・のんびり",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 18,
+   "ja": "〇〇ができますか？",
+   "langs": {
+    "en": {
+     "template": "Can you 〇〇?",
+     "example": "Can you swim?",
+     "ja": "泳げますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "你会〇〇吗？",
+     "example": "你会游泳吗？",
+     "ja": "泳げますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 할 줄 알아요?",
+     "example": "수영 할 줄 알아요?",
+     "ja": "泳げますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Sabes 〇〇?",
+     "example": "¿Sabes nadar?",
+     "ja": "泳げますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Вы умеете 〇〇?",
+     "example": "Вы умеете плавать?",
+     "ja": "泳げますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คุณ〇〇เป็นไหม",
+     "example": "คุณว่ายน้ำเป็นไหม",
+     "ja": "泳げますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 19,
+   "ja": "〇〇がありますか？",
+   "langs": {
+    "en": {
+     "template": "Do you have 〇〇?",
+     "example": "Do you have Wi-Fi?",
+     "ja": "Wi-Fi はありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "有〇〇吗？",
+     "example": "这里有无线网吗？",
+     "ja": "ここに Wi-Fi はありますか？",
+     "note": "无线网＝Wi-Fi。口語では 有Wi-Fi吗 とも言う",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 있어요?",
+     "example": "와이파이 있어요?",
+     "ja": "Wi-Fi はありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Tienen 〇〇?",
+     "example": "¿Tienen wifi?",
+     "ja": "Wi-Fi はありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "У вас есть 〇〇?",
+     "example": "У вас есть вай-фай?",
+     "ja": "Wi-Fi はありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "มี〇〇ไหม",
+     "example": "มีไวไฟไหม",
+     "ja": "Wi-Fi はありますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 20,
+   "ja": "もう一度言ってください",
+   "langs": {
+    "en": {
+     "template": "Sorry, could you say that again?",
+     "example": "Sorry, could you say that again?",
+     "ja": "すみません、もう一度言ってもらえますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "请再说一遍。",
+     "example": "请再说一遍。",
+     "ja": "もう一度言ってください",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "다시 한번 말씀해 주세요.",
+     "example": "다시 한번 말씀해 주세요.",
+     "ja": "もう一度おっしゃってください",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Puedes repetirlo, por favor?",
+     "example": "¿Puedes repetirlo, por favor?",
+     "ja": "もう一度言ってもらえますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Повторите, пожалуйста.",
+     "example": "Повторите, пожалуйста.",
+     "ja": "もう一度言ってください",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "ช่วยพูดอีกครั้งได้ไหม",
+     "example": "ช่วยพูดอีกครั้งได้ไหม",
+     "ja": "もう一度言ってもらえますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 21,
+   "ja": "〇〇はいくらですか？",
+   "langs": {
+    "en": {
+     "template": "How much is 〇〇?",
+     "example": "How much is this?",
+     "ja": "これはいくらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "〇〇多少钱？",
+     "example": "这个多少钱？",
+     "ja": "これはいくらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 얼마예요?",
+     "example": "이거 얼마예요?",
+     "ja": "これはいくらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Cuánto cuesta 〇〇?",
+     "example": "¿Cuánto cuesta esto?",
+     "ja": "これはいくらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Сколько стоит 〇〇?",
+     "example": "Сколько это стоит?",
+     "ja": "これはいくらですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "〇〇เท่าไหร่",
+     "example": "อันนี้เท่าไหร่",
+     "ja": "これはいくらですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 22,
+   "ja": "〇〇に行きたいです",
+   "langs": {
+    "en": {
+     "template": "I'd like to go to 〇〇.",
+     "example": "I'd like to go to the station.",
+     "ja": "駅に行きたいです",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "我想去〇〇。",
+     "example": "我想去车站。",
+     "ja": "駅に行きたいです",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇에 가고 싶어요.",
+     "example": "역에 가고 싶어요.",
+     "ja": "駅に行きたいです",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "Quiero ir a 〇〇.",
+     "example": "Quiero ir a la estación.",
+     "ja": "駅に行きたいです",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Я хочу поехать 〇〇.",
+     "example": "Я хочу поехать на вокзал.",
+     "ja": "駅に行きたいです",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "อยากไป〇〇",
+     "example": "อยากไปสถานีรถไฟ",
+     "ja": "駅に行きたいです",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 23,
+   "ja": "〇〇まではどうやって行きますか？",
+   "langs": {
+    "en": {
+     "template": "How do I get to 〇〇?",
+     "example": "How do I get to the airport?",
+     "ja": "空港まではどうやって行きますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "去〇〇怎么走？",
+     "example": "去机场怎么走？",
+     "ja": "空港まではどうやって行きますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇까지 어떻게 가요?",
+     "example": "공항까지 어떻게 가요?",
+     "ja": "空港まではどうやって行きますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Cómo llego a 〇〇?",
+     "example": "¿Cómo llego al aeropuerto?",
+     "ja": "空港まではどうやって行きますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Как добраться до 〇〇?",
+     "example": "Как добраться до аэропорта?",
+     "ja": "空港まではどうやって行きますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "ไป〇〇ยังไง",
+     "example": "ไปสนามบินยังไง",
+     "ja": "空港まではどうやって行きますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 24,
+   "ja": "どの〇〇ですか？",
+   "langs": {
+    "en": {
+     "template": "Which 〇〇?",
+     "example": "Which bus should I take?",
+     "ja": "どのバスに乗ればいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "哪〇〇？",
+     "example": "我应该坐哪路车？",
+     "ja": "どのバスに乗ればいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "어느 〇〇예요?",
+     "example": "어느 버스를 타야 해요?",
+     "ja": "どのバスに乗ればいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Qué 〇〇?",
+     "example": "¿Qué autobús tengo que tomar?",
+     "ja": "どのバスに乗ればいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Какой 〇〇?",
+     "example": "На какой автобус мне сесть?",
+     "ja": "どのバスに乗ればいいですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "〇〇ไหน",
+     "example": "ต้องขึ้นรถเมล์สายไหน",
+     "ja": "どのバスに乗ればいいですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 25,
+   "ja": "あの方はどなたですか？",
+   "langs": {
+    "en": {
+     "template": "Who is that?",
+     "example": "Who is that?",
+     "ja": "あの人は誰ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "那位是谁？",
+     "example": "那位是谁？",
+     "ja": "あの方はどなたですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "저분은 누구세요?",
+     "example": "저분은 누구세요?",
+     "ja": "あの方はどなたですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Quién es esa persona?",
+     "example": "¿Quién es esa persona?",
+     "ja": "あの人は誰ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Кто это?",
+     "example": "Кто это?",
+     "ja": "あの人は誰ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "คนนั้นคือใคร",
+     "example": "คนนั้นคือใคร",
+     "ja": "あの人は誰ですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 26,
+   "ja": "何時ですか？",
+   "langs": {
+    "en": {
+     "template": "What time is it?",
+     "example": "What time is it?",
+     "ja": "何時ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "现在几点？",
+     "example": "现在几点？",
+     "ja": "今、何時ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "지금 몇 시예요?",
+     "example": "지금 몇 시예요?",
+     "ja": "今、何時ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Qué hora es?",
+     "example": "¿Qué hora es?",
+     "ja": "何時ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Который час?",
+     "example": "Который час?",
+     "ja": "何時ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "ตอนนี้กี่โมงแล้ว",
+     "example": "ตอนนี้กี่โมงแล้ว",
+     "ja": "今、何時ですか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 27,
+   "ja": "おすすめの料理はなんですか？",
+   "langs": {
+    "en": {
+     "template": "What do you recommend?",
+     "example": "What do you recommend?",
+     "ja": "おすすめは何ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "有什么推荐的菜吗？",
+     "example": "有什么推荐的菜吗？",
+     "ja": "おすすめの料理はありますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "추천 메뉴가 뭐예요?",
+     "example": "추천 메뉴가 뭐예요?",
+     "ja": "おすすめのメニューは何ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Qué me recomiendas?",
+     "example": "¿Qué me recomiendas?",
+     "ja": "おすすめは何ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Что вы посоветуете?",
+     "example": "Что вы посоветуете?",
+     "ja": "おすすめは何ですか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "มีอะไรแนะนำไหม",
+     "example": "มีอะไรแนะนำไหม",
+     "ja": "おすすめはありますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 28,
+   "ja": "これをください",
+   "langs": {
+    "en": {
+     "template": "I'll have this, please.",
+     "example": "I'll have this, please.",
+     "ja": "これをください（これにします）",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "我要这个。",
+     "example": "我要这个。",
+     "ja": "これをください",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "이거 주세요.",
+     "example": "이거 주세요.",
+     "ja": "これをください",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "Esto, por favor.",
+     "example": "Esto, por favor.",
+     "ja": "これをください",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Это, пожалуйста.",
+     "example": "Это, пожалуйста.",
+     "ja": "これをください",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "เอาอันนี้",
+     "example": "เอาอันนี้",
+     "ja": "これをください",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 29,
+   "ja": "お会計をお願いします",
+   "langs": {
+    "en": {
+     "template": "Can I get the bill, please?",
+     "example": "Can I get the bill, please?",
+     "ja": "お会計をお願いします",
+     "note": "NZ・英では bill、米では check",
+     "audio": ""
+    },
+    "zh": {
+     "template": "买单。",
+     "example": "买单。",
+     "ja": "お会計をお願いします",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "계산해 주세요.",
+     "example": "계산해 주세요.",
+     "ja": "お会計をお願いします",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "La cuenta, por favor.",
+     "example": "La cuenta, por favor.",
+     "ja": "お会計をお願いします",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Счёт, пожалуйста.",
+     "example": "Счёт, пожалуйста.",
+     "ja": "お会計をお願いします",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "เช็คบิลด้วย",
+     "example": "เช็คบิลด้วย",
+     "ja": "お会計をお願いします",
+     "note": "",
+     "audio": ""
+    }
+   }
+  },
+  {
+   "n": 30,
+   "ja": "〇〇していただけますか？",
+   "langs": {
+    "en": {
+     "template": "Could you 〇〇?",
+     "example": "Could you help me?",
+     "ja": "手伝っていただけますか？",
+     "note": "",
+     "audio": ""
+    },
+    "zh": {
+     "template": "可以〇〇吗？",
+     "example": "可以帮我一下吗？",
+     "ja": "ちょっと手伝ってもらえますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ko": {
+     "template": "〇〇 주시겠어요?",
+     "example": "좀 도와주시겠어요?",
+     "ja": "ちょっと手伝っていただけますか？",
+     "note": "",
+     "audio": ""
+    },
+    "es": {
+     "template": "¿Me podrías 〇〇?",
+     "example": "¿Me podrías ayudar?",
+     "ja": "手伝っていただけますか？",
+     "note": "",
+     "audio": ""
+    },
+    "ru": {
+     "template": "Вы не могли бы 〇〇?",
+     "example": "Вы не могли бы мне помочь?",
+     "ja": "手伝っていただけますか？",
+     "note": "",
+     "audio": ""
+    },
+    "th": {
+     "template": "ช่วย〇〇ได้ไหม",
+     "example": "ช่วยหน่อยได้ไหม",
+     "ja": "ちょっと手伝ってもらえますか？",
+     "note": "",
+     "audio": ""
+    }
+   }
+  }
+ ]
+}

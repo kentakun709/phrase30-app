@@ -38,3 +38,7 @@ Thumbs.db
 # 作業台の中身は git に載せない（箱だけ残す）。閉じる時に kiroku/AI出力 へ移す
 作業中/*
 !作業中/.gitkeep
+
+# 試験の出力
+test-results/
+playwright-report/
