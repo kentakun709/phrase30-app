@@ -29,5 +29,10 @@ cd phrase30-app && python3 -m http.server 8000
 - `scripts/check-data.mjs`・`scripts/check-no-external.mjs` … 件数（6・30・180）と中身の点検、外部通信・鍵・課金・外部URLの audio が無いことの点検（`npm run check`）
 - `tests/app.spec.mjs` … Playwright 12本（この Mac の Chrome・幅390）。読み上げは差し替えて呼び出しの順番を見る。`scripts/probe-voices.mjs` は本物の読み上げで言語ごとの声と再生を記録する（音が出る）
 
+## 既知の制約（ベータ）
+- 声の有無・質は端末まかせ（6言語すべての音質は保証しない）。iPhone/Android では設定で高品質の声を追加できる
+- Chrome 内蔵の Google の声（端末内に声が無い時だけ使う）では、読み上げ時にブラウザが Google と通信することがある（鍵・課金・ログインは不要）
+- 自動試験はこの Mac の Chrome（幅390）だけ。iPhone Safari・Android Chrome の実機は未確認。訳はAIが作り、ネイティブの検品は未実施
+
 ## 公開
 GitHub Pages（このリポジトリは public。秘密情報は置かない）。`main` の直下をそのまま配信。

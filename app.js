@@ -29,9 +29,9 @@
     var name = String(v.name || '').toLowerCase(), n = name + ' ' + String(v.voiceURI || '').toLowerCase(), s = 0;
     if (/eloquence|espeak|novelty|whisper|bells|bubbles|organ|cellos|zarvox|trinoids|boing|bad news|good news|jester|wobble|albert|fred|junior|ralph|kathy/.test(n)) s -= 10;
     if (/^(eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/.test(name)) s -= 10;
-    if (/compact/.test(n)) s -= 1;
+    if (/compact/.test(n)) s -= 3;
     if (/premium|enhanced|neural|natural|wavenet|journey|studio|siri/.test(n)) s += 5;
-    if (v.localService !== false) s += 3;           // 端末内の声を優先（外に通信しない）
+    if (v.localService !== false) s += 20;          // 端末内の声を常に先に（外に通信しない）。外の声は端末内に無い時だけ
     if (v.default) s += 1;
     return s;
   }
