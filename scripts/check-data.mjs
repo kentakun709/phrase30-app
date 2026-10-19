@@ -30,7 +30,7 @@ d.phrases.forEach((p, i) => {
     if (x.example && x.example.includes('〇〇')) errs.push(`n=${p.n} ${c}: example に〇〇が残っている（読み上げられない）`)
     if (x.ja && x.ja.includes('〇〇')) errs.push(`n=${p.n} ${c}: ja（例文の訳）に〇〇が残っている`)
     if (c === 'th' && x.example && !x.example.endsWith('ครับ')) errs.push(`n=${p.n} th: 例文の文末に丁寧形 ครับ が無い`)
-    if (x.audio && !/^(?!\/\/)(?![a-z]+:)[^\s]+$/i.test(x.audio)) errs.push(`n=${p.n} ${c}: audio は空か同じサイト内の相対パスだけ（${x.audio}）`)
+    if (x.audio && !/^audio\/[^\s]+$/.test(x.audio)) errs.push(`n=${p.n} ${c}: audio は空か audio/ 配下の相対パスだけ（${x.audio}）`)
   }
 })
 console.log(`言語 ${codes.length}/${EXPECT.languages}・フレーズ ${d.phrases.length}/${EXPECT.phrases}・表現 ${count}/${EXPECT.languages * EXPECT.phrases}`)

@@ -1,57 +1,66 @@
 /* 30フレーズ音声アプリ（ベータ）。登録・課金・外部APIなし。音声は端末の Web Speech API。
-   data/phrases.json の各項目に audio（同じサイト内の音声ファイルのパス）が入っていれば、読み上げの代わりにそれを鳴らす（将来の差し替え口）。 */
+   data/phrases.json の各項目に audio（このサイト内 audio/ の音声ファイルのパス）が入っていれば、読み上げの代わりにそれを鳴らす（将来の差し替え口）。 */
 (function () {
   'use strict';
   var synth = window.speechSynthesis || null;
   var state = { data: null, lang: 'en', voices: [], voice: null, playing: null, utter: null, audioEl: null,
-    noVoice: false, slow: false, gen: 0, watchdog: null, dismissed: '', noticeKey: '' };
+    noVoice: false, slow: false, gen: 0, watchdog: null, dismissed: {}, noticeKey: '', busyCancelAt: 0, scroll: {} };
   var $ = function (id) { return document.getElementById(id); };
   var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticetext'), $noticeclose = $('noticeclose');
-  var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $slow = $('slow');
+  var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody');
 
   var SPEAKER_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
   var LANG_JA = { 'en-nz': 'ニュージーランド英語', 'en-au': 'オーストラリア英語', 'en-gb': 'イギリス英語', 'en-ie': 'アイルランド英語', 'en-us': 'アメリカ英語',
-    'en-in': 'インド英語', 'en-za': '南アフリカ英語', 'en-ca': 'カナダ英語', 'zh-cn': '中国語（普通話）', 'zh-tw': '台湾の中国語', 'zh-hk': '香港の中国語',
+    'en-in': 'インド英語', 'en-za': '南アフリカ英語', 'en-ca': 'カナダ英語',
+    'zh-cn': '中国語（普通話）', 'zh-hans': '中国語（普通話）', 'zh-hans-cn': '中国語（普通話）', 'cmn-cn': '中国語（普通話）', 'cmn-hans-cn': '中国語（普通話）',
+    'zh-tw': '台湾の中国語', 'zh-hant-tw': '台湾の中国語', 'zh-hk': '香港の中国語',
     'ko-kr': '韓国語', 'es-es': 'スペイン語（スペイン）', 'es-mx': 'スペイン語（メキシコ）', 'es-us': 'スペイン語（米国）', 'es-ar': 'スペイン語（アルゼンチン）',
     'ru-ru': 'ロシア語', 'th-th': 'タイ語' };
+  var IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var IS_ANDROID = /Android/.test(navigator.userAgent);
 
   function normLang(l) { return String(l || '').replace(/_/g, '-').toLowerCase(); }
   function langDef(code) { code = code || state.lang; for (var i = 0; i < state.data.languages.length; i++) if (state.data.languages[i].code === code) return state.data.languages[i]; return state.data.languages[0]; }
   function langJa(l) {
     l = normLang(l); if (LANG_JA[l]) return LANG_JA[l];
     var base = l.split('-')[0];
-    for (var i = 0; i < state.data.languages.length; i++) { var d = state.data.languages[i]; for (var j = 0; j < d.bcp47.length; j++) if (normLang(d.bcp47[j]).split('-')[0] === base) return d.nameJa + '（' + l + '）'; }
+    for (var i = 0; i < state.data.languages.length; i++) { var d = state.data.languages[i]; for (var j = 0; j < d.bcp47.length; j++) if (normLang(d.bcp47[j]).split('-')[0] === base) return d.nameJa; }
     return l;
   }
 
-  // 自然な声を優先する点数。名前と識別名（voiceURI）の手がかりと、端末内の声（localService）かどうかで決める
+  // 自然な声を優先する点数（名前と識別名 voiceURI の手がかり）
   function voiceScore(v) {
     var name = String(v.name || '').toLowerCase(), n = name + ' ' + String(v.voiceURI || '').toLowerCase(), s = 0;
     if (/eloquence|espeak|novelty|whisper|bells|bubbles|organ|cellos|zarvox|trinoids|boing|bad news|good news|jester|wobble|albert|fred|junior|ralph|kathy/.test(n)) s -= 10;
     if (/^(eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/.test(name)) s -= 10;
     if (/compact/.test(n)) s -= 3;
     if (/premium|enhanced|neural|natural|wavenet|journey|studio|siri/.test(n)) s += 5;
-    if (v.localService !== false) s += 20;          // 端末内の声を常に先に（外に通信しない）。外の声は端末内に無い時だけ
     if (v.default) s += 1;
     return s;
   }
+  function isCompact(v) { return /compact/.test((String(v.name || '') + ' ' + String(v.voiceURI || '')).toLowerCase()); }
   function best(cands) { cands.sort(function (a, b) { return voiceScore(b) - voiceScore(a); }); return cands[0]; }
+  // 1段目: 端末内の声（localService）だけで地域の優先順に探す。無ければ 2段目: 通信する声も含めて同じ順で探す
   function pickVoice(def, voices) {
     var hard = def.code === 'zh' ? /(^|-)hk($|-)|^yue|hant-hk/ : null;      // 香港の広東語は使わない
     var soft = def.code === 'zh' ? /(^|-)tw($|-)|hant/ : null;              // 台湾の声は、普通話の声が無い時だけ
     var ok = function (l, allowSoft) { return !(hard && hard.test(l)) && (allowSoft || !(soft && soft.test(l))); };
-    var prefs = def.bcp47.map(normLang), i, cands;
-    for (i = 0; i < prefs.length; i++) {
-      var p = prefs[i];
-      cands = voices.filter(function (v) { var l = normLang(v.lang); return (l === p || l.indexOf(p + '-') === 0) && ok(l, false); });
-      if (cands.length) return best(cands);
-    }
+    var prefs = def.bcp47.map(normLang);
     var bases = {}; prefs.forEach(function (p) { bases[p.split('-')[0]] = 1; });
-    cands = voices.filter(function (v) { var l = normLang(v.lang); return bases[l.split('-')[0]] && ok(l, false); });
-    if (cands.length) return best(cands);
-    cands = voices.filter(function (v) { var l = normLang(v.lang); return bases[l.split('-')[0]] && ok(l, true); });
-    if (cands.length) return best(cands);
-    return null;
+    var find = function (pool) {
+      var i, cands;
+      for (i = 0; i < prefs.length; i++) {
+        var p = prefs[i];
+        cands = pool.filter(function (v) { var l = normLang(v.lang); return (l === p || l.indexOf(p + '-') === 0) && ok(l, false); });
+        if (cands.length) return best(cands);
+      }
+      cands = pool.filter(function (v) { var l = normLang(v.lang); return bases[l.split('-')[0]] && ok(l, false); });
+      if (cands.length) return best(cands);
+      cands = pool.filter(function (v) { var l = normLang(v.lang); return bases[l.split('-')[0]] && ok(l, true); });
+      if (cands.length) return best(cands);
+      return null;
+    };
+    return find(voices.filter(function (v) { return v.localService !== false; })) || find(voices) || null;
   }
 
   function refreshVoices() {
@@ -63,31 +72,37 @@
   }
 
   function howToAdd(def) {
-    return ' iPhone: 設定 → アクセシビリティ → 読み上げコンテンツ → 声 → ' + def.nameJa + ' を追加。Android: 設定 → テキスト読み上げ → Google の音声で ' + def.nameJa + ' をインストール。';
+    var ios = 'iPhone: 設定 → アクセシビリティ → 読み上げコンテンツ → 声 → ' + def.nameJa + ' を選び、声をダウンロード（高品質の物を選ぶとより自然）。';
+    var android = 'Android: 設定 → ユーザー補助（機種により システム → 言語と入力）→ テキスト読み上げ → Google の音声 → 音声データをインストール → ' + def.nameJa + '。';
+    if (IS_IOS) return ios; if (IS_ANDROID) return android; return ios + ' ' + android;
   }
   function renderVoiceState() {
     var def = langDef();
-    if (!synth) { showNotice('nosynth', 'このブラウザは読み上げ（Web Speech API）に対応していません。iPhone の Safari か Android の Chrome で開いてください。'); $voiceinfo.textContent = ''; return; }
+    $howtobody.textContent = howToAdd(def) + ' Wi-Fi で1回だけ。数十〜数百MB。';
+    if (!synth) { showNotice('nosynth', 'このブラウザは読み上げに対応していません。iPhone の Safari か Android の Chrome で開いてください。'); $voiceinfo.textContent = ''; return; }
     if (state.noVoice) {
       if (state.voices.length === 0) {
-        showNotice('novoice:' + def.code, '端末の音声の一覧をまだ読み込めていません。カードを1回押すと読み込まれることがあります。それでも【' + def.nameJa + '】が鳴らない時は、設定で音声を追加してください。' + howToAdd(def));
+        showNotice('novoice-empty:' + def.code, '端末の音声の一覧をまだ読み込めていません。カードを1回押すと読み込まれることがあります。それでも【' + def.nameJa + '】が鳴らない時は、設定で音声を追加してください。' + howToAdd(def));
       } else {
         showNotice('novoice:' + def.code, 'この端末には【' + def.nameJa + '】の音声が入っていません。押しても鳴らないか、別の言語の声で読まれることがあります。' + howToAdd(def));
       }
-      $voiceinfo.textContent = '';
+      $voiceinfo.textContent = '声: なし（' + def.nameJa + 'の声がこの端末にありません）';
+      $howto.hidden = false;
     } else {
-      hideNotice('novoice:');
+      hideNotice('novoice');
       var vl = normLang(state.voice.lang), first = normLang(def.bcp47[0]);
-      var txt = '声: ' + state.voice.name + '（' + langJa(vl) + '）';
-      if (vl !== first && LANG_JA[first]) txt += '。' + langJa(first) + 'の声はこの端末に無いため';
+      var txt = '声: ' + state.voice.name + '（' + langJa(vl) + (isCompact(state.voice) ? '・簡易版' : '') + '）';
+      if (LANG_JA[vl] && LANG_JA[first] && LANG_JA[vl] !== LANG_JA[first]) txt += '。' + LANG_JA[first] + 'の声がこの端末に無いので、代わりにこの声で読みます';
       $voiceinfo.textContent = txt;
+      $howto.hidden = false;
     }
   }
   function showNotice(key, text) {
-    if (key === state.dismissed) return;            // 閉じた案内は、同じ件では出し直さない
+    if (state.dismissed[key]) return;              // 閉じた案内は、同じ件では出し直さない
     state.noticeKey = key; $noticetext.textContent = text; $notice.hidden = false;
   }
   function hideNotice(prefix) { if (!prefix || state.noticeKey.indexOf(prefix) === 0) { $notice.hidden = true; $noticetext.textContent = ''; state.noticeKey = ''; } }
+  function hideFailNotices(keys) { keys.forEach(function (k) { if (state.noticeKey === k) hideNotice(k); }); }
 
   function setPlaying(n) {
     state.playing = n;
@@ -109,7 +124,7 @@
     setPlaying(null);
   }
 
-  function speakItem(item, n, def, wasBusy) {
+  function speakItem(item, n, def, delay) {
     if (!synth) { renderVoiceState(); return; }
     if (state.voices.length === 0 || state.noVoice) refreshVoices();   // iOS は最初の操作の後に一覧が入る・声を追加した直後にも効く
     var gen = state.gen;
@@ -118,42 +133,44 @@
     if (state.voice) u.voice = state.voice;
     u.rate = state.slow ? 0.7 : 0.9; u.pitch = 1; u.volume = 1;
     var started = false;
-    u.onstart = function () { if (state.utter !== u) return; started = true; clearWatchdog(); setPlaying(n); };
+    u.onstart = function () { if (state.utter !== u) return; started = true; clearWatchdog(); hideFailNotices(['silent', 'err']); setPlaying(n); };   // 「読み上げで鳴らしました」の案内は残す
     u.onend = function () { if (state.utter !== u) return; clearWatchdog(); setPlaying(null); };
     u.onerror = function (ev) {
       if (state.utter !== u) return;
       clearWatchdog(); setPlaying(null);
       var code = ev && ev.error;
-      if (code && code !== 'interrupted' && code !== 'canceled') showNotice('err', '読み上げに失敗しました（' + code + '）。端末に【' + def.nameJa + '】の音声があるか確かめてください。' + howToAdd(def));
+      if (code && code !== 'interrupted' && code !== 'canceled') showNotice('err', '読み上げに失敗しました。端末に【' + def.nameJa + '】の音声があるか確かめてください。' + howToAdd(def));
     };
     state.utter = u;                               // 参照を持つ（持たないと途中で止まるブラウザがある）
     setPlaying(n);                                 // 押した瞬間に光らせる（onstart が遅い端末がある）
+    var armWatchdog = function (second) {
+      state.watchdog = setTimeout(function () {
+        if (state.utter !== u || started) return;
+        var busy = false; try { busy = !!(synth.speaking || synth.pending); } catch (e) { /* */ }
+        if (busy && !second) { armWatchdog(true); return; }   // 声の読み込み待ちなら、もう1回だけ待つ
+        setPlaying(null);
+        showNotice('silent', '鳴りませんでした。もう一度押してください。音量と消音（マナーモード）も確かめてください。' + (state.noVoice ? howToAdd(def) : ''));
+      }, 2500);
+    };
     var go = function () {
       if (state.gen !== gen || state.utter !== u) return;
       try { if (synth.paused) synth.resume(); synth.speak(u); }
       catch (e) { setPlaying(null); showNotice('err', '読み上げを始められませんでした。もう一度押してください。' + (state.noVoice ? howToAdd(def) : '')); return; }
-      // 鳴り始めない時の見張り（鳴らないのに光ったままにしない）
-      state.watchdog = setTimeout(function () {
-        if (state.utter !== u || started) return;
-        var speaking = false; try { speaking = !!synth.speaking; } catch (e) { /* */ }
-        if (speaking) return;
-        setPlaying(null);
-        showNotice('silent', '鳴りませんでした。もう一度押してください。音量と消音スイッチも確かめてください。' + (state.noVoice ? howToAdd(def) : ''));
-      }, 2500);
+      armWatchdog(false);
     };
-    if (wasBusy) setTimeout(go, 80); else go();    // 止めた直後の speak が落ちる端末があるので、鳴っていた時だけ少し待つ
+    if (delay > 0) setTimeout(go, delay); else go();   // 止めた直後の speak が落ちる端末があるので、鳴っていた時は 80ms 空ける
   }
 
   function playFile(src, item, n, def) {
     if (!state.audioEl) state.audioEl = new Audio();
-    var a = state.audioEl, gen = state.gen, fell = false;
+    var a = state.audioEl, gen = state.gen, fell = false, settled = false;
     var fallback = function () {
-      if (fell || state.gen !== gen) return; fell = true;
+      if (fell || settled || state.gen !== gen) return; fell = true;   // 鳴り終わった後の error では戻らない
       showNotice('audiofail', '音声ファイルが読めないので、端末の読み上げで鳴らしました（' + src + '）。');
-      speakItem(item, n, def, false);
+      speakItem(item, n, def, 0);
     };
-    a.onplay = function () { if (state.gen === gen) setPlaying(n); };
-    a.onended = function () { if (state.gen === gen) setPlaying(null); };
+    a.onplay = function () { if (state.gen === gen) { hideFailNotices(['silent', 'err', 'audiofail']); setPlaying(n); } };
+    a.onended = function () { settled = true; if (state.gen === gen) setPlaying(null); };
     a.onerror = function () { if (state.gen === gen) { setPlaying(null); fallback(); } };
     a.onpause = function () { if (state.gen === gen && a.ended) setPlaying(null); };
     a.src = src;
@@ -166,9 +183,11 @@
   function play(n) {
     var item = state.data.phrases[n - 1].langs[state.lang], def = langDef();
     var wasBusy = false; try { wasBusy = !!(synth && (synth.speaking || synth.pending)); } catch (e) { /* */ }
+    if (wasBusy) state.busyCancelAt = Date.now();
     stopAll();                                     // 前の音声を止め、読み上げの列を空にしてから鳴らす（溜めない）
     if (item.audio) { playFile(item.audio, item, n, def); return; }
-    speakItem(item, n, def, wasBusy);
+    var delay = Math.max(0, 80 - (Date.now() - (state.busyCancelAt || 0)));   // 鳴っていた物を止めてから 80ms は空ける（連打でも）
+    speakItem(item, n, def, delay);
   }
 
   function renderTabs() {
@@ -198,7 +217,11 @@
         '<span class="text" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span>' +
         '<span class="ja">' + esc(it.ja) + '</span>';
       if (it.note) html += '<span class="note">' + esc(it.note) + '</span>';
-      if (it.template && it.template !== it.example) html += '<span class="tpl">言い換えの型: ' + esc(it.template) + '（' + esc(p.ja) + '）</span>';
+      if (it.template && it.template !== it.example) {
+        html += p.ja.indexOf('〇〇') >= 0
+          ? '<span class="tpl">言い換えの型: ' + esc(it.template) + '（' + esc(p.ja) + '）</span>'
+          : '<span class="tpl">別の言い方: ' + esc(it.template) + '</span>';
+      }
       html += SPEAKER_SVG;
       b.innerHTML = html;
       b.addEventListener('click', function () { play(p.n); });
@@ -209,6 +232,7 @@
   }
 
   function setLang(code) {
+    if (state.data) state.scroll[state.lang] = window.scrollY || 0;
     state.lang = code;
     try { localStorage.setItem('phrase30.lang', code); } catch (e) { /* プライベートモード等 */ }
     stopAll();
@@ -217,19 +241,28 @@
     for (var i = 0; i < tabs.length; i++) tabs[i].setAttribute('aria-selected', tabs[i].getAttribute('data-lang') === code ? 'true' : 'false');
     renderList();
     refreshVoices();
+    var y = state.scroll[code] || 0;
+    var restore = function () { try { window.scrollTo(0, y); } catch (e) { /* */ } };
+    restore();
+    if (window.requestAnimationFrame) window.requestAnimationFrame(restore);   // 描画の直後にもう一度（一覧の高さが決まる前だと届かない端末がある）
   }
   function setSlow(on) {
     state.slow = !!on; $slow.setAttribute('aria-pressed', state.slow ? 'true' : 'false');
     try { localStorage.setItem('phrase30.slow', state.slow ? '1' : '0'); } catch (e) { /* */ }
+  }
+  function saveScroll() {
+    state.scroll[state.lang] = window.scrollY || 0;
+    try { localStorage.setItem('phrase30.scroll', JSON.stringify(state.scroll)); } catch (e) { /* */ }
   }
 
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
   function init(data) {
     state.data = data;
-    var saved = null, slow = null;
-    try { saved = localStorage.getItem('phrase30.lang'); slow = localStorage.getItem('phrase30.slow'); } catch (e) { /* */ }
+    var saved = null, slow = null, scroll = null;
+    try { saved = localStorage.getItem('phrase30.lang'); slow = localStorage.getItem('phrase30.slow'); scroll = JSON.parse(localStorage.getItem('phrase30.scroll') || '{}'); } catch (e) { /* */ }
     if (saved && data.languages.some(function (l) { return l.code === saved; })) state.lang = saved;
+    if (scroll && typeof scroll === 'object') state.scroll = scroll;
     setSlow(slow === '1');
     $loading.hidden = true;
     renderTabs();
@@ -238,9 +271,11 @@
     if (synth && typeof synth.addEventListener === 'function') synth.addEventListener('voiceschanged', refreshVoices);
     else if (synth) synth.onvoiceschanged = refreshVoices;
     $slow.addEventListener('click', function () { setSlow(!state.slow); });
-    $noticeclose.addEventListener('click', function () { state.dismissed = state.noticeKey; hideNotice(''); });
+    $noticeclose.addEventListener('click', function () { state.dismissed[state.noticeKey] = true; hideNotice(''); });
     document.addEventListener('visibilitychange', function () { if (document.hidden) stopAll(); });
-    window.addEventListener('pagehide', stopAll);
+    window.addEventListener('pagehide', function () { stopAll(); saveScroll(); });
+    var t = null; window.addEventListener('scroll', function () { if (t) return; t = setTimeout(function () { t = null; saveScroll(); }, 400); }, { passive: true });
+    var y = state.scroll[state.lang] || 0; if (y > 0) { try { window.scrollTo(0, y); } catch (e) { /* */ } }
   }
 
   // 試験と将来の差し替えのための小さな窓口（外部には何も送らない）

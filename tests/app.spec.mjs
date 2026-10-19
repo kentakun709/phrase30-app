@@ -15,11 +15,11 @@ const MOCK_SYNTH = (voices) => `
     var synth = {
       get pending(){ return !!current && !current.started; }, get speaking(){ return !!current && current.started; }, paused: false,
       getVoices: function(){ calls.push({ type: 'getVoices' }); return voices; },
-      cancel: function(){ calls.push({ type: 'cancel' }); if (current) { var c = current; current = null; setTimeout(function(){ if (c.u.onerror) c.u.onerror({ error: 'canceled' }); }, 10); } },
+      cancel: function(){ calls.push({ type: 'cancel', busy: !!current, t: performance.now() }); if (current) { var c = current; current = null; setTimeout(function(){ if (c.u.onerror) c.u.onerror({ error: 'canceled' }); }, 10); } },
       resume: function(){ calls.push({ type: 'resume' }); },
       speak: function(u){
         if (window.__throw) throw new Error('mock speak failure');
-        calls.push({ type: 'speak', text: u.text, lang: u.lang, voice: u.voice ? u.voice.name : null, rate: u.rate });
+        calls.push({ type: 'speak', text: u.text, lang: u.lang, voice: u.voice ? u.voice.name : null, rate: u.rate, t: performance.now() });
         var c = { u: u, started: false }; current = c;
         if (window.__silent) return;
         setTimeout(function(){ if (current !== c) return; c.started = true; if (u.onstart) u.onstart({}); }, 0);
@@ -73,7 +73,8 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
         const c = cards.nth(i)
         expect((await c.locator('.text').innerText()).trim().length, `${code} ${i + 1} 本文`).toBeGreaterThan(0)
         expect((await c.locator('.ja').innerText()).trim().length, `${code} ${i + 1} 訳`).toBeGreaterThan(0)
-        if (data.phrases[i].ja.includes('〇〇')) await expect(c.locator('.tpl'), `${code} ${i + 1} 型`).toBeVisible()
+        if (data.phrases[i].ja.includes('〇〇')) await expect(c.locator('.tpl'), `${code} ${i + 1} 型`).toContainText('言い換えの型')
+        else if (data.phrases[i].langs[code].template !== data.phrases[i].langs[code].example) await expect(c.locator('.tpl'), `${code} ${i + 1} 別の言い方`).toContainText('別の言い方')
       }
       const def = data.languages.find(l => l.code === code)
       if (def.note) await expect(page.locator('#langnote')).toHaveText(def.note)
@@ -84,6 +85,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
   test('AC3 カードを押すと読み上げが呼ばれ、同じカードをもう一度押すとまた呼ばれる（英語は en-AU 等を選ぶ）', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     const card = page.locator('.card').first()
     await card.click()
     await expect(card).toHaveClass(/playing/)
@@ -107,6 +109,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
   test('AC4 新しいタップのたびに cancel → speak の順で呼ばれ、読み上げの列が溜まらない（連打・鳴っている最中も）', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     const cards = page.locator('.card')
     await cards.nth(0).click(); await cards.nth(1).click(); await cards.nth(1).click(); await cards.nth(2).click()
     await page.waitForTimeout(300)
@@ -117,6 +120,11 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(speaks[speaks.length - 1].text).toBe(data.phrases[2].langs.en.example)
     const calls = await page.evaluate(() => window.__calls.filter(c => c.type === 'cancel' || c.type === 'speak').map(c => c.type))
     for (let i = 0; i < calls.length; i++) if (calls[i] === 'speak') expect(calls[i - 1], `speak #${i} の直前`).toBe('cancel')
+    // 鳴っていた物を止めた cancel から、次に鳴らすまで 80ms 以上空く（連打でも）
+    const gaps = await page.evaluate(() => { const c = window.__calls; const out = []; let lastBusyCancel = null
+      for (const x of c) { if (x.type === 'cancel' && x.busy) lastBusyCancel = x.t; if (x.type === 'speak' && lastBusyCancel != null) { out.push(x.t - lastBusyCancel); lastBusyCancel = null } }
+      return out })
+    for (const g of gaps) expect(g, '止めてから鳴らすまでの間').toBeGreaterThanOrEqual(75)
     // 鳴り終わってから押せば、押した回数だけ鳴る
     for (let k = 0; k < 3; k++) { await cards.nth(5).click(); await expect(cards.nth(5)).not.toHaveClass(/playing/, { timeout: 2000 }) }
     expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak' && c.text === window.phrase30.state.data.phrases[5].langs.en.example).length)).toBe(3)
@@ -154,6 +162,10 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(box.height).toBeGreaterThanOrEqual(44)
     const tab = await page.locator('.tab').first().boundingBox()
     expect(tab.height).toBeGreaterThanOrEqual(44)
+    const slow = await page.locator('#slow').boundingBox()
+    expect(slow.height).toBeGreaterThanOrEqual(44)
+    const top = await page.locator('.top').boundingBox()
+    expect(top.height, '固定の帯は画面の3割以内').toBeLessThan(844 * 0.3)
     expect(await page.locator('meta[name="viewport"]').count()).toBe(1)
     expect(await page.locator('#tabs').getAttribute('role')).toBe('tablist')
   })
@@ -192,16 +204,42 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
   test('AC7c 読み上げが始まらない・例外になる時は、光ったままにせず案内を出す', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     const card = page.locator('.card').first()
     await page.evaluate(() => { window.__silent = true })
     await card.click()
     await expect(card).toHaveClass(/playing/)
-    await expect(card).not.toHaveClass(/playing/, { timeout: 4000 })
+    await expect(card).not.toHaveClass(/playing/, { timeout: 7000 })   // 読み込み待ち（pending）なら1回だけ待ち直すので最長5秒
     await expect(page.locator('#notice')).toContainText('鳴りませんでした')
     await page.evaluate(() => { window.__silent = false; window.__throw = true })
     await card.click()
     await expect(card).not.toHaveClass(/playing/)
     await expect(page.locator('#notice')).toContainText('始められませんでした')
+    // 直した後にちゃんと鳴れば、失敗の案内は自動で消える
+    await page.evaluate(() => { window.__throw = false })
+    await card.click()
+    await expect(card).toHaveClass(/playing/)
+    await expect(page.locator('#notice')).toBeHidden()
+  })
+
+  test('AC7d 閉じた案内は言語ごとに覚え、別の案内を閉じても出し直さない。声が無い間は「声: なし」が残る', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH([{ name: 'Samantha', lang: 'en-US', default: true }]))
+    await page.goto('/')
+    await page.locator('.tab[data-lang="th"]').click()
+    await expect(page.locator('#notice')).toContainText('タイ語')
+    await page.locator('#noticeclose').click()
+    await expect(page.locator('#notice')).toBeHidden()
+    await expect(page.locator('#voiceinfo')).toContainText('声: なし')
+    await page.evaluate(() => { window.__silent = true })
+    await page.locator('.card').first().click()
+    await expect(page.locator('#notice')).toContainText('鳴りませんでした', { timeout: 7000 })
+    await page.locator('#noticeclose').click()
+    await page.evaluate(() => { window.__silent = false })
+    await page.locator('.card').nth(1).click()
+    await page.waitForTimeout(300)
+    await expect(page.locator('#notice')).toBeHidden()   // 閉じたタイ語の案内は出し直さない
+    await page.locator('.tab[data-lang="ru"]').click()
+    await expect(page.locator('#notice')).toContainText('ロシア語')   // 別の言語の案内は出る
   })
 
   test('AC9 audio にファイルが入っている項目は、読み上げの代わりにその音声を本当に鳴らす（鳴り終わりまで）', async ({ page }) => {
@@ -213,6 +251,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     })
     await page.route('**/audio/en/01.wav', route => route.fulfill({ status: 200, contentType: 'audio/wav', body: silentWav(0.3) }))
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     const card = page.locator('.card').first()
     await card.click()
     await expect(card).toHaveClass(/playing/)
@@ -232,20 +271,41 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
       await route.fulfill({ json: d })
     })
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     await page.locator('.card').first().click()
     await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length), { timeout: 5000 }).toBe(1)
     await expect(page.locator('#notice')).toContainText('端末の読み上げで鳴らしました')
   })
 
+  test('AC9c 音声ファイルが鳴り終わった後に error が来ても、読み上げには戻らない', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.route('**/data/phrases.json', async route => {
+      const d = JSON.parse(JSON.stringify(data)); d.phrases[0].langs.en.audio = 'audio/en/01.wav'; await route.fulfill({ json: d })
+    })
+    await page.route('**/audio/en/01.wav', route => route.fulfill({ status: 200, contentType: 'audio/wav', body: silentWav(0.3) }))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    const card = page.locator('.card').first()
+    await card.click()
+    await expect(card).not.toHaveClass(/playing/, { timeout: 5000 })
+    await page.evaluate(() => { const a = window.phrase30.state.audioEl; if (a.onerror) a.onerror(new Event('error')) })
+    await page.waitForTimeout(200)
+    expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(0)
+    await expect(page.locator('#notice')).toBeHidden()
+  })
+
   test('声の選び方: 端末内の声を優先し、機械っぽい名前は避け、中国語は香港の声を使わず台湾の声は最後の手段', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     const pick = (defCode, voices) => page.evaluate(([c, vs]) => {
       const def = window.phrase30.state.data.languages.find(l => l.code === c)
       const v = window.phrase30.pickVoice(def, vs.map(x => ({ name: x.name, lang: x.lang, localService: x.localService !== false, voiceURI: x.voiceURI || x.name, default: !!x.default })))
       return v ? v.name : null
     }, [defCode, voices])
     expect(await pick('en', [{ name: 'Google UK English Female', lang: 'en-GB', localService: false }, { name: 'Daniel', lang: 'en-GB' }])).toBe('Daniel')
+    expect(await pick('en', [{ name: 'Molly Online', lang: 'en-NZ', localService: false }, { name: 'Karen', lang: 'en-AU' }])).toBe('Karen')   // 端末内の声が地域をまたいでも先
+    expect(await pick('th', [{ name: 'Google Thai', lang: 'th-TH', localService: false }])).toBe('Google Thai')   // 端末内に無ければ通信する声
     expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Hayley', lang: 'en_NZ' }])).toBe('Hayley')
     expect(await pick('es', [{ name: 'Eddy (Spanish (Spain))', lang: 'es-ES', voiceURI: 'com.apple.eloquence.es-ES.Eddy' }, { name: 'Mónica', lang: 'es-ES', voiceURI: 'com.apple.voice.compact.es-ES.Monica' }])).toBe('Mónica')
     expect(await pick('zh', [{ name: 'Sinji', lang: 'zh-HK' }, { name: 'Meijia', lang: 'zh-TW' }])).toBe('Meijia')
@@ -253,9 +313,26 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(await pick('zh', [{ name: 'Sinji', lang: 'zh-HK' }])).toBe(null)
   })
 
+  test('スクロール位置は言語ごとに覚え、次に開いた時も戻る', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.goto('/')
+    await page.evaluate(() => window.scrollTo(0, 1200))
+    await page.waitForTimeout(600)
+    // locator.click() は固定表示のタブを「本来の位置」へスクロールしてから押す（試験の都合）ので、指で押すのと同じ素の click を送る
+    await page.locator('.tab[data-lang="zh"]').dispatchEvent('click')
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50)
+    await page.locator('.tab[data-lang="en"]').dispatchEvent('click')
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
+    await page.waitForTimeout(600)
+    await page.reload()
+    await expect(page.locator('.card')).toHaveCount(30)
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
+  })
+
   test('言語とゆっくりの選択は次に開いた時も残る', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     await page.locator('.tab[data-lang="ko"]').click()
     await page.locator('#slow').click()
     await page.reload()

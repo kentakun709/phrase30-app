@@ -14,7 +14,7 @@
     "en-US",
     "en"
    ],
-   "note": "ニュージーランドの声（en-NZ）があればそれを優先。無ければ豪→英→米の順"
+   "note": "NZの声が端末にあればそれを使う。無ければNZに近いオーストラリアの声→英→米の順"
   },
   {
    "code": "zh",
@@ -27,7 +27,7 @@
     "cmn-CN",
     "zh"
    ],
-   "note": "普通話（簡体字）。普通話の声が無ければ台湾の声で代用する（香港の広東語の声は使わない）"
+   "note": "中国本土の標準語（簡体字）。普通話の声が無ければ台湾の声で代用"
   },
   {
    "code": "ko",
@@ -37,7 +37,7 @@
     "ko-KR",
     "ko"
    ],
-   "note": "初対面の相手に使う丁寧な形（〜세요／〜요）。韓国語では「あなた（당신）」をあまり使わず、相手の名前＋씨で言う"
+   "note": "初対面の相手に使う丁寧な形（〜세요）。「あなた（당신）」は使わず、相手の名前＋씨で言う"
   },
   {
    "code": "es",
@@ -50,7 +50,7 @@
     "es-AR",
     "es"
    ],
-   "note": "スペインでも中南米でも通じる言い方。友達には tú、店員には usted（27番）"
+   "note": "スペインでも中南米でも通じる言い方。友達には tú、店員・初対面には usted（20・27・30番）"
   },
   {
    "code": "ru",
@@ -70,7 +70,7 @@
     "th-TH",
     "th"
    ],
-   "note": "例文は男性の丁寧形（文末の ครับ）。女性は ครับ を、質問なら คะ・それ以外は ค่ะ に言い換える"
+   "note": "例文は男性の丁寧形（文末の ครับ＝クラップ）。女性は、質問なら คะ（カ）・それ以外は ค่ะ（カ）に言い換える"
   }
  ],
  "phrases": [
@@ -141,7 +141,7 @@
      "audio": ""
     },
     "ko": {
-     "template": "어디에서 왔어요?",
+     "template": "어디에서 오셨어요?",
      "example": "어디에서 오셨어요?",
      "ja": "どこから来ましたか？（出身は？）",
      "note": "",
@@ -189,7 +189,7 @@
      "audio": ""
     },
     "ko": {
-     "template": "어디에 살아요?",
+     "template": "어디 사세요?",
      "example": "어디 사세요?",
      "ja": "どこに住んでいますか？",
      "note": "",
@@ -210,7 +210,7 @@
      "audio": ""
     },
     "th": {
-     "template": "คุณอยู่ที่ไหนครับ",
+     "template": "คุณอาศัยอยู่ที่ไหนครับ",
      "example": "คุณอาศัยอยู่ที่ไหนครับ",
      "ja": "どこに住んでいますか？",
      "note": "",
@@ -237,8 +237,8 @@
      "audio": ""
     },
     "ko": {
-     "template": "잘 지내요?",
-     "example": "잘 지내요?",
+     "template": "잘 지내세요?",
+     "example": "잘 지내세요?",
      "ja": "元気ですか？",
      "note": "",
      "audio": ""
@@ -416,43 +416,43 @@
    "langs": {
     "en": {
      "template": "Do you speak 〇〇?",
-     "example": "Do you speak English?",
-     "ja": "英語を話しますか？",
+     "example": "Do you speak Japanese?",
+     "ja": "日本語を話しますか？",
      "note": "",
      "audio": ""
     },
     "zh": {
      "template": "你会说〇〇吗？",
-     "example": "你会说中文吗？",
-     "ja": "中国語を話せますか？",
+     "example": "你会说英语吗？",
+     "ja": "英語を話せますか？",
      "note": "",
      "audio": ""
     },
     "ko": {
      "template": "〇〇 할 줄 아세요?",
-     "example": "한국어 할 줄 아세요?",
-     "ja": "韓国語はできますか？",
+     "example": "영어 할 줄 아세요?",
+     "ja": "英語はできますか？",
      "note": "",
      "audio": ""
     },
     "es": {
      "template": "¿Hablas 〇〇?",
-     "example": "¿Hablas español?",
-     "ja": "スペイン語を話しますか？",
+     "example": "¿Hablas inglés?",
+     "ja": "英語を話しますか？",
      "note": "",
      "audio": ""
     },
     "ru": {
      "template": "Вы говорите по-〇〇?",
-     "example": "Вы говорите по-русски?",
-     "ja": "ロシア語を話しますか？",
+     "example": "Вы говорите по-английски?",
+     "ja": "英語を話しますか？",
      "note": "言語名は по-русски／по-английски の形（-ски）にする",
      "audio": ""
     },
     "th": {
      "template": "คุณพูดภาษา〇〇ได้ไหมครับ",
-     "example": "คุณพูดภาษาไทยได้ไหมครับ",
-     "ja": "タイ語を話せますか？",
+     "example": "คุณพูดภาษาอังกฤษได้ไหมครับ",
+     "ja": "英語を話せますか？",
      "note": "",
      "audio": ""
     }
@@ -466,42 +466,42 @@
      "template": "Why are you learning 〇〇?",
      "example": "Why are you learning English?",
      "ja": "なぜ英語を勉強しているのですか？",
-     "note": "",
+     "note": "相手に聞かれる形（答えは10番）。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "zh": {
      "template": "你为什么学〇〇？",
      "example": "你为什么学中文？",
      "ja": "なぜ中国語を勉強しているのですか？",
-     "note": "",
+     "note": "相手に聞かれる形（答えは10番）。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "ko": {
-     "template": "왜 〇〇을/를 공부해요?",
-     "example": "왜 한국어를 공부해요?",
+     "template": "왜 〇〇을/를 공부하세요?",
+     "example": "왜 한국어를 공부하세요?",
      "ja": "なぜ韓国語を勉強しているのですか？",
-     "note": "",
+     "note": "相手に聞かれる形（答えは10番）。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "es": {
      "template": "¿Por qué estudias 〇〇?",
      "example": "¿Por qué estudias español?",
      "ja": "なぜスペイン語を勉強しているのですか？",
-     "note": "",
+     "note": "相手に聞かれる形（答えは10番）。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "ru": {
      "template": "Почему вы учите 〇〇?",
      "example": "Почему вы учите русский?",
      "ja": "なぜロシア語を勉強しているのですか？",
-     "note": "",
+     "note": "相手に聞かれる形（答えは10番）。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "th": {
      "template": "ทำไมคุณถึงเรียนภาษา〇〇ครับ",
      "example": "ทำไมคุณถึงเรียนภาษาไทยครับ",
      "ja": "なぜタイ語を勉強しているのですか？",
-     "note": "",
+     "note": "相手に聞かれる形（答えは10番）。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     }
    }
@@ -562,42 +562,42 @@
      "template": "How long have you been learning 〇〇?",
      "example": "How long have you been learning English?",
      "ja": "英語をどれくらい学んでいますか？",
-     "note": "",
+     "note": "相手に聞かれる形。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "zh": {
      "template": "你学〇〇多久了？",
      "example": "你学中文多久了？",
      "ja": "中国語をどれくらい学んでいますか？",
-     "note": "",
+     "note": "相手に聞かれる形。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "ko": {
      "template": "〇〇 배운 지 얼마나 됐어요?",
      "example": "한국어 배운 지 얼마나 됐어요?",
      "ja": "韓国語を学んでどれくらいですか？",
-     "note": "",
+     "note": "相手に聞かれる形。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "es": {
      "template": "¿Cuánto tiempo llevas estudiando 〇〇?",
      "example": "¿Cuánto tiempo llevas estudiando español?",
      "ja": "スペイン語をどれくらい学んでいますか？",
-     "note": "",
+     "note": "相手に聞かれる形。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "ru": {
-     "template": "Как долго вы учите 〇〇?",
+     "template": "Как давно вы учите 〇〇?",
      "example": "Как давно вы учите русский?",
      "ja": "ロシア語をどれくらい学んでいますか？",
-     "note": "",
+     "note": "相手に聞かれる形。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     },
     "th": {
      "template": "คุณเรียนภาษา〇〇มานานแค่ไหนแล้วครับ",
      "example": "คุณเรียนภาษาไทยมานานแค่ไหนแล้วครับ",
      "ja": "タイ語をどれくらい学んでいますか？",
-     "note": "",
+     "note": "相手に聞かれる形。自分が聞くなら〇〇に Japanese を",
      "audio": ""
     }
    }
@@ -669,8 +669,8 @@
      "audio": ""
     },
     "ko": {
-     "template": "〇〇아/어 본 적 있어요?",
-     "example": "일본에 가 본 적 있어요?",
+     "template": "〇〇아/어 보신 적 있으세요?",
+     "example": "일본에 가 보신 적 있으세요?",
      "ja": "日本に行ったことはありますか？",
      "note": "",
      "audio": ""
@@ -725,7 +725,7 @@
     },
     "es": {
      "template": "¿Puedo 〇〇?",
-     "example": "¿Puedo hacer una foto?",
+     "example": "¿Puedo tomar una foto?",
      "ja": "写真を撮ってもいいですか？",
      "note": "",
      "audio": ""
@@ -765,7 +765,7 @@
      "audio": ""
     },
     "ko": {
-     "template": "언제 〇〇어요?",
+     "template": "언제 〇〇(으)셨어요?",
      "example": "여기 언제 오셨어요?",
      "ja": "いつここに来ましたか？",
      "note": "",
@@ -813,8 +813,8 @@
      "audio": ""
     },
     "ko": {
-     "template": "〇〇 좋아해요?",
-     "example": "초밥 좋아해요?",
+     "template": "〇〇 좋아하세요?",
+     "example": "초밥 좋아하세요?",
      "ja": "お寿司は好きですか？",
      "note": "",
      "audio": ""
@@ -871,7 +871,7 @@
      "template": "¿Qué significa \"〇〇\"?",
      "example": "¿Qué significa \"vale\"?",
      "ja": "「vale」はどういう意味ですか？",
-     "note": "vale＝OK・わかった（スペイン）",
+     "note": "vale＝OK・わかった（スペインの言い方）",
      "audio": ""
     },
     "ru": {
@@ -909,8 +909,8 @@
      "audio": ""
     },
     "ko": {
-     "template": "〇〇할 줄 알아요?",
-     "example": "수영할 줄 알아요?",
+     "template": "〇〇할 줄 아세요?",
+     "example": "수영할 줄 아세요?",
      "ja": "泳げますか？",
      "note": "",
      "audio": ""
@@ -951,9 +951,9 @@
     },
     "zh": {
      "template": "有〇〇吗？",
-     "example": "这里有无线网吗？",
+     "example": "有Wi-Fi吗？",
      "ja": "ここに Wi-Fi はありますか？",
-     "note": "无线网＝Wi-Fi。口語では 有Wi-Fi吗 とも言う",
+     "note": "",
      "audio": ""
     },
     "ko": {
@@ -1013,7 +1013,7 @@
     },
     "es": {
      "template": "¿Puedes repetirlo, por favor?",
-     "example": "¿Puedes repetirlo, por favor?",
+     "example": "¿Puede repetirlo, por favor?",
      "ja": "もう一度言ってもらえますか？",
      "note": "",
      "audio": ""
@@ -1192,7 +1192,7 @@
     "zh": {
      "template": "哪个〇〇？",
      "example": "哪一路车？",
-     "ja": "どのバスですか？（何路の）",
+     "ja": "どのバスですか？",
      "note": "",
      "audio": ""
     },
@@ -1327,10 +1327,10 @@
    "ja": "おすすめの料理はなんですか？",
    "langs": {
     "en": {
-     "template": "What do you recommend?",
-     "example": "What would you recommend?",
-     "ja": "おすすめは何ですか？",
-     "note": "店で聞く定番。料理を指すなら What's good here? も",
+     "template": "What dish would you recommend?",
+     "example": "What dish would you recommend?",
+     "ja": "おすすめの料理は何ですか？",
+     "note": "店で聞く定番。短く What do you recommend? / What's good here? も",
      "audio": ""
     },
     "zh": {
@@ -1348,7 +1348,7 @@
      "audio": ""
     },
     "es": {
-     "template": "¿Qué me recomiendas?",
+     "template": "¿Qué plato me recomienda?",
      "example": "¿Qué plato me recomienda?",
      "ja": "おすすめの料理は何ですか？",
      "note": "店員には usted の形（recomienda）",
@@ -1383,7 +1383,7 @@
     },
     "zh": {
      "template": "我要这个。",
-     "example": "请给我这个。",
+     "example": "我要这个。",
      "ja": "これをください",
      "note": "",
      "audio": ""
@@ -1492,8 +1492,8 @@
      "audio": ""
     },
     "es": {
-     "template": "¿Me podrías 〇〇?",
-     "example": "¿Me podrías ayudar?",
+     "template": "¿Me podría 〇〇?",
+     "example": "¿Me podría ayudar?",
      "ja": "手伝っていただけますか？",
      "note": "",
      "audio": ""
@@ -1519,7 +1519,7 @@
   {
    "from": 1,
    "to": 12,
-   "title": "自己紹介・会話を始める"
+   "title": "初対面で聞く・会話を始める"
   },
   {
    "from": 13,
