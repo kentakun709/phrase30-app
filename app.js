@@ -6,8 +6,8 @@
   var state = { data: null, lang: 'en', voices: [], voice: null, playing: null, utter: null, audioEl: null,
     noVoice: false, slow: false, gen: 0, watchdog: null, dismissed: {}, noticeKey: '', busyCancelAt: 0, scroll: {} };
   var $ = function (id) { return document.getElementById(id); };
-  var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticetext'), $noticeclose = $('noticeclose');
-  var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody');
+  var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticebody'), $noticeclose = $('noticeclose'), $noticehow = $('noticehow');
+  var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody'), $howtosum = $('howtosum');
 
   var SPEAKER_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
   var LANG_JA = { 'en-nz': 'ニュージーランド英語', 'en-au': 'オーストラリア英語', 'en-gb': 'イギリス英語', 'en-ie': 'アイルランド英語', 'en-us': 'アメリカ英語',
@@ -40,31 +40,35 @@
   }
   function isCompact(v) { return /compact/.test((String(v.name || '') + ' ' + String(v.voiceURI || '')).toLowerCase()); }
   function best(cands) { cands.sort(function (a, b) { return voiceScore(b) - voiceScore(a); }); return cands[0]; }
-  // 1段目: 端末内の声（localService）だけで地域の優先順に探す。無ければ 2段目: 通信する声も含めて同じ順で探す
+  // 声の選び方: 端末内の声（localService）だけで「地域の近さ＋声の質」の点数が最も高い物。無ければ通信する声も含めて同じ基準
+  //   英語で NZ の声があれば必ずそれ（+100）。無ければ「自然さ」（premium/enhanced +5・compact -3・機械声 -10）を先にし、地域の近さ（豪 8・英 6・…）は同点の並びだけ
+  //   → 普通の豪の声は普通の米の声に勝ち、プレミアムの米の声は簡易版の豪の声に勝つ（要件「端末内の音声から自然な声を優先」「可能なら NZ」。周回3 judge の裁定）
+  function regionScore(def, l) {
+    var prefs = def.bcp47.map(normLang), i;
+    for (i = 0; i < prefs.length; i++) if (l === prefs[i] || l.indexOf(prefs[i] + '-') === 0) {
+      if (def.code === 'en' && i === 0) return 100;                 // NZ の声が端末にあれば必ず（要件「可能なら NZ」）
+      return 2 * (prefs.length - 1 - i);                           // それ以外は同点の並びだけ（premium +5 と compact -3 の差 8 と同じ幅）
+    }
+    return 0;
+  }
   function pickVoice(def, voices) {
     var hard = def.code === 'zh' ? /(^|-)hk($|-)|^yue|hant-hk/ : null;      // 香港の広東語は使わない
     var soft = def.code === 'zh' ? /(^|-)tw($|-)|hant/ : null;              // 台湾の声は、普通話の声が無い時だけ
-    var ok = function (l, allowSoft) { return !(hard && hard.test(l)) && (allowSoft || !(soft && soft.test(l))); };
-    var prefs = def.bcp47.map(normLang);
-    var bases = {}; prefs.forEach(function (p) { bases[p.split('-')[0]] = 1; });
+    var bases = {}; def.bcp47.forEach(function (p) { bases[normLang(p).split('-')[0]] = 1; });
+    var sameLang = function (v) { var l = normLang(v.lang); return bases[l.split('-')[0]] && !(hard && hard.test(l)); };
     var find = function (pool) {
-      var i, cands;
-      for (i = 0; i < prefs.length; i++) {
-        var p = prefs[i];
-        cands = pool.filter(function (v) { var l = normLang(v.lang); return (l === p || l.indexOf(p + '-') === 0) && ok(l, false); });
-        if (cands.length) return best(cands);
-      }
-      cands = pool.filter(function (v) { var l = normLang(v.lang); return bases[l.split('-')[0]] && ok(l, false); });
-      if (cands.length) return best(cands);
-      cands = pool.filter(function (v) { var l = normLang(v.lang); return bases[l.split('-')[0]] && ok(l, true); });
-      if (cands.length) return best(cands);
-      return null;
+      var cands = pool.filter(sameLang);
+      var main = cands.filter(function (v) { return !(soft && soft.test(normLang(v.lang))); });
+      if (!main.length) main = cands;
+      if (!main.length) return null;
+      main.sort(function (a, b) { return (regionScore(def, normLang(b.lang)) + voiceScore(b)) - (regionScore(def, normLang(a.lang)) + voiceScore(a)); });
+      return main[0];
     };
     return find(voices.filter(function (v) { return v.localService !== false; })) || find(voices) || null;
   }
 
   function refreshVoices() {
-    if (!synth) return;
+    if (!synth) { renderVoiceState(); return; }
     try { state.voices = synth.getVoices() || []; } catch (e) { state.voices = []; }
     state.voice = pickVoice(langDef(), state.voices);
     state.noVoice = !state.voice;
@@ -72,27 +76,29 @@
   }
 
   function howToAdd(def) {
-    var ios = 'iPhone: 設定 → アクセシビリティ → 読み上げコンテンツ → 声 → ' + def.nameJa + ' を選び、声をダウンロード（高品質の物を選ぶとより自然）。';
+    var region = def.code === 'en' ? ' → オーストラリア（NZ に一番近い。他の地域でも可）' : def.code === 'es' ? '（スペインか中南米のどれでも可）' : '';
+    var ios = 'iPhone: 設定 → アクセシビリティ → 読み上げコンテンツ → 声 → ' + def.nameJa + region + ' を選び、名前に「拡張」か「プレミアム」と付いた声をダウンロード。';
     var android = 'Android: 設定 → ユーザー補助（機種により システム → 言語と入力）→ テキスト読み上げ → Google の音声 → 音声データをインストール → ' + def.nameJa + '。';
     if (IS_IOS) return ios; if (IS_ANDROID) return android; return ios + ' ' + android;
   }
   function renderVoiceState() {
     var def = langDef();
-    $howtobody.textContent = howToAdd(def) + ' Wi-Fi で1回だけ。数十〜数百MB。';
+    $howtobody.textContent = howToAdd(def) + ' Wi-Fi で、言語ごとに1回。数十〜数百MB。入れたら、この画面で言語タブを押し直すと新しい声になります。';
+    $howtosum.textContent = state.noVoice ? '【' + def.nameJa + '】の声の足し方' : '声が機械っぽい時は → もっと自然な声にする（言語ごとに1回）';
     if (!synth) { showNotice('nosynth', 'このブラウザは読み上げに対応していません。iPhone の Safari か Android の Chrome で開いてください。'); $voiceinfo.textContent = ''; return; }
     if (state.noVoice) {
       if (state.voices.length === 0) {
-        showNotice('novoice-empty:' + def.code, '端末の音声の一覧をまだ読み込めていません。カードを1回押すと読み込まれることがあります。それでも【' + def.nameJa + '】が鳴らない時は、設定で音声を追加してください。' + howToAdd(def));
+        showNotice('novoice-empty:' + def.code, '端末の音声の一覧をまだ読み込めていません。カードを1回押すと読み込まれることがあります。それでも【' + def.nameJa + '】が鳴らない時は、端末の設定で音声を足してください。');
       } else {
-        showNotice('novoice:' + def.code, 'この端末には【' + def.nameJa + '】の音声が入っていません。押しても鳴らないか、別の言語の声で読まれることがあります。' + howToAdd(def));
+        showNotice('novoice:' + def.code, 'この端末には【' + def.nameJa + '】の音声が入っていません。端末の設定で足せます。');
       }
-      $voiceinfo.textContent = '声: なし（' + def.nameJa + 'の声がこの端末にありません）';
-      $howto.hidden = false;
+      $voiceinfo.textContent = '声: なし';
+      $howto.hidden = false; $howto.open = true;
     } else {
       hideNotice('novoice');
       var vl = normLang(state.voice.lang), first = normLang(def.bcp47[0]);
       var txt = '声: ' + state.voice.name + '（' + langJa(vl) + (isCompact(state.voice) ? '・簡易版' : '') + '）';
-      if (LANG_JA[vl] && LANG_JA[first] && LANG_JA[vl] !== LANG_JA[first]) txt += '。' + LANG_JA[first] + 'の声がこの端末に無いので、代わりにこの声で読みます';
+      if (LANG_JA[vl] && LANG_JA[first] && LANG_JA[vl] !== LANG_JA[first]) txt += '。' + LANG_JA[first] + 'の声が無いので代用';
       $voiceinfo.textContent = txt;
       $howto.hidden = false;
     }
@@ -100,6 +106,7 @@
   function showNotice(key, text) {
     if (state.dismissed[key]) return;              // 閉じた案内は、同じ件では出し直さない
     state.noticeKey = key; $noticetext.textContent = text; $notice.hidden = false;
+    $noticehow.hidden = !/^(novoice|err|silent)/.test(key);   // 声の足し方へ飛ぶボタン（声の問題の時だけ）
   }
   function hideNotice(prefix) { if (!prefix || state.noticeKey.indexOf(prefix) === 0) { $notice.hidden = true; $noticetext.textContent = ''; state.noticeKey = ''; } }
   function hideFailNotices(keys) { keys.forEach(function (k) { if (state.noticeKey === k) hideNotice(k); }); }
@@ -115,7 +122,10 @@
   }
   function clearWatchdog() { if (state.watchdog) { clearTimeout(state.watchdog); state.watchdog = null; } }
 
+  function nowMs() { return (window.performance && performance.now) ? performance.now() : Date.now(); }
   function stopAll() {
+    var wasBusy = false; try { wasBusy = !!(synth && (synth.speaking || synth.pending)); } catch (e) { /* */ }
+    if (wasBusy) state.busyCancelAt = nowMs();     // 鳴っていた物を止めた時刻（この後 80ms は鳴らさない）
     state.gen++;                                   // これより前の読み上げ・遅延の予約を全部無効にする
     state.utter = null;                            // 止めた読み上げの遅いイベント（onend/onerror）が後から効かないように
     clearWatchdog();
@@ -124,8 +134,9 @@
     setPlaying(null);
   }
 
-  function speakItem(item, n, def, delay) {
+  function speakItem(item, n, def) {
     if (!synth) { renderVoiceState(); return; }
+    var delay = state.busyCancelAt ? Math.min(80, Math.max(0, 80 - (nowMs() - state.busyCancelAt))) : 0;
     if (state.voices.length === 0 || state.noVoice) refreshVoices();   // iOS は最初の操作の後に一覧が入る・声を追加した直後にも効く
     var gen = state.gen;
     var u = new SpeechSynthesisUtterance(item.example);
@@ -139,7 +150,7 @@
       if (state.utter !== u) return;
       clearWatchdog(); setPlaying(null);
       var code = ev && ev.error;
-      if (code && code !== 'interrupted' && code !== 'canceled') showNotice('err', '読み上げに失敗しました。端末に【' + def.nameJa + '】の音声があるか確かめてください。' + howToAdd(def));
+      if (code && code !== 'interrupted' && code !== 'canceled') showNotice('err', '読み上げに失敗しました。端末に【' + def.nameJa + '】の音声があるか確かめてください（手順は下の「もっと自然な声にする」）。');
     };
     state.utter = u;                               // 参照を持つ（持たないと途中で止まるブラウザがある）
     setPlaying(n);                                 // 押した瞬間に光らせる（onstart が遅い端末がある）
@@ -148,14 +159,16 @@
         if (state.utter !== u || started) return;
         var busy = false; try { busy = !!(synth.speaking || synth.pending); } catch (e) { /* */ }
         if (busy && !second) { armWatchdog(true); return; }   // 声の読み込み待ちなら、もう1回だけ待つ
+        var speaking = false; try { speaking = !!synth.speaking; } catch (e) { /* */ }
+        if (speaking) return;                                 // onstart が来ない端末でも、鳴っているなら黙っておく
         setPlaying(null);
-        showNotice('silent', '鳴りませんでした。もう一度押してください。音量と消音（マナーモード）も確かめてください。' + (state.noVoice ? howToAdd(def) : ''));
+        showNotice('silent', '鳴りませんでした。もう一度押してください。音量と消音（マナーモード）も確かめてください。' + (state.noVoice ? '【' + def.nameJa + '】の音声は端末の設定で追加できます（手順は下）。' : ''));
       }, 2500);
     };
     var go = function () {
       if (state.gen !== gen || state.utter !== u) return;
       try { if (synth.paused) synth.resume(); synth.speak(u); }
-      catch (e) { setPlaying(null); showNotice('err', '読み上げを始められませんでした。もう一度押してください。' + (state.noVoice ? howToAdd(def) : '')); return; }
+      catch (e) { setPlaying(null); showNotice('err', '読み上げを始められませんでした。もう一度押してください。' + (state.noVoice ? '【' + def.nameJa + '】の音声は端末の設定で追加できます（手順は下）。' : '')); return; }
       armWatchdog(false);
     };
     if (delay > 0) setTimeout(go, delay); else go();   // 止めた直後の speak が落ちる端末があるので、鳴っていた時は 80ms 空ける
@@ -167,7 +180,7 @@
     var fallback = function () {
       if (fell || settled || state.gen !== gen) return; fell = true;   // 鳴り終わった後の error では戻らない
       showNotice('audiofail', '音声ファイルが読めないので、端末の読み上げで鳴らしました（' + src + '）。');
-      speakItem(item, n, def, 0);
+      speakItem(item, n, def);
     };
     a.onplay = function () { if (state.gen === gen) { hideFailNotices(['silent', 'err', 'audiofail']); setPlaying(n); } };
     a.onended = function () { settled = true; if (state.gen === gen) setPlaying(null); };
@@ -182,12 +195,10 @@
 
   function play(n) {
     var item = state.data.phrases[n - 1].langs[state.lang], def = langDef();
-    var wasBusy = false; try { wasBusy = !!(synth && (synth.speaking || synth.pending)); } catch (e) { /* */ }
-    if (wasBusy) state.busyCancelAt = Date.now();
-    stopAll();                                     // 前の音声を止め、読み上げの列を空にしてから鳴らす（溜めない）
+    stopAll();                                     // 前の音声を止め、読み上げの列を空にしてから鳴らす（溜めない・止めた直後 80ms は空ける）
+    hideFailNotices(['audiofail']);                // 前のファイルの知らせは、次を押したら消す（また失敗すればまた出る）
     if (item.audio) { playFile(item.audio, item, n, def); return; }
-    var delay = Math.max(0, 80 - (Date.now() - (state.busyCancelAt || 0)));   // 鳴っていた物を止めてから 80ms は空ける（連打でも）
-    speakItem(item, n, def, delay);
+    speakItem(item, n, def);
   }
 
   function renderTabs() {
@@ -218,7 +229,7 @@
         '<span class="ja">' + esc(it.ja) + '</span>';
       if (it.note) html += '<span class="note">' + esc(it.note) + '</span>';
       if (it.template && it.template !== it.example) {
-        html += p.ja.indexOf('〇〇') >= 0
+        html += it.template.indexOf('〇〇') >= 0
           ? '<span class="tpl">言い換えの型: ' + esc(it.template) + '（' + esc(p.ja) + '）</span>'
           : '<span class="tpl">別の言い方: ' + esc(it.template) + '</span>';
       }
@@ -232,7 +243,8 @@
   }
 
   function setLang(code) {
-    if (state.data) state.scroll[state.lang] = window.scrollY || 0;
+    var curY = window.scrollY || 0;
+    if (state.data) state.scroll[state.lang] = curY;
     state.lang = code;
     try { localStorage.setItem('phrase30.lang', code); } catch (e) { /* プライベートモード等 */ }
     stopAll();
@@ -241,7 +253,7 @@
     for (var i = 0; i < tabs.length; i++) tabs[i].setAttribute('aria-selected', tabs[i].getAttribute('data-lang') === code ? 'true' : 'false');
     renderList();
     refreshVoices();
-    var y = state.scroll[code] || 0;
+    var y = (code in state.scroll) ? state.scroll[code] : curY;   // 初めて開く言語は、今見ていた位置をそのまま引き継ぐ
     var restore = function () { try { window.scrollTo(0, y); } catch (e) { /* */ } };
     restore();
     if (window.requestAnimationFrame) window.requestAnimationFrame(restore);   // 描画の直後にもう一度（一覧の高さが決まる前だと届かない端末がある）
@@ -271,7 +283,12 @@
     if (synth && typeof synth.addEventListener === 'function') synth.addEventListener('voiceschanged', refreshVoices);
     else if (synth) synth.onvoiceschanged = refreshVoices;
     $slow.addEventListener('click', function () { setSlow(!state.slow); });
-    $noticeclose.addEventListener('click', function () { state.dismissed[state.noticeKey] = true; hideNotice(''); });
+    $noticehow.addEventListener('click', function () {
+      $howto.hidden = false; $howto.open = true;
+      var top = document.querySelector('.top'), h = top ? top.getBoundingClientRect().height : 0;
+      try { window.scrollTo(0, Math.max(0, $howto.getBoundingClientRect().top + (window.scrollY || 0) - h - 8)); } catch (e) { /* */ }
+    });
+    $noticeclose.addEventListener('click', function () { if (/^(nosynth|novoice)/.test(state.noticeKey)) state.dismissed[state.noticeKey] = true; hideNotice(''); });   // 失敗の知らせは次に失敗すればまた出す
     document.addEventListener('visibilitychange', function () { if (document.hidden) stopAll(); });
     window.addEventListener('pagehide', function () { stopAll(); saveScroll(); });
     var t = null; window.addEventListener('scroll', function () { if (t) return; t = setTimeout(function () { t = null; saveScroll(); }, 400); }, { passive: true });

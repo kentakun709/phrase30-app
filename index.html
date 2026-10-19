@@ -12,16 +12,16 @@
 <header class="top">
   <h1 class="title">30フレーズ <span class="beta">ベータ</span></h1>
   <nav id="tabs" class="tabs" role="tablist" aria-label="言語"></nav>
-  <div id="notice" class="notice" role="status" hidden><span class="ntext" id="noticetext"></span><button type="button" class="nclose" id="noticeclose" aria-label="閉じる">×</button></div>
+  <div id="notice" class="notice" role="status" hidden><span class="ntext" id="noticetext"><span id="noticebody"></span> <button type="button" class="nlink" id="noticehow" hidden>声の足し方を見る</button></span><button type="button" class="nclose" id="noticeclose" aria-label="閉じる">×</button></div>
   <div class="controls">
     <div id="voiceinfo" class="voiceinfo" aria-live="polite"></div>
     <button type="button" id="slow" class="toggle" aria-pressed="false">ゆっくり</button>
   </div>
 </header>
 <main>
-  <p class="hint">カードを押すと鳴ります。何度でも。聞こえない時は音量と消音（マナーモード）を確かめてください。ホーム画面に追加すると毎日すぐ開けます。</p>
+  <p class="hint">カードを押すと鳴ります。何度でも。聞こえない時は音量と消音（マナーモード）を確かめてください。ホーム画面に追加すると毎日すぐ開けます（iPhone: 共有ボタン → ホーム画面に追加）。</p>
   <p id="langnote" class="langnote"></p>
-  <details id="howto" class="howto" hidden><summary>声が機械っぽい時は → もっと自然な声にする（1回だけ）</summary><p id="howtobody"></p></details>
+  <details id="howto" class="howto" hidden><summary id="howtosum">声が機械っぽい時は → もっと自然な声にする（言語ごとに1回）</summary><p id="howtobody"></p></details>
   <ol id="list" class="list" aria-label="フレーズ一覧"></ol>
   <p id="loading" class="loading">読み込み中…</p>
 </main>

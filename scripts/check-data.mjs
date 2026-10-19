@@ -13,7 +13,7 @@ if (codes.length !== EXPECT.languages) errs.push(`言語が ${codes.length} 件�
 for (const c of EXPECT.codes) if (!codes.includes(c)) errs.push(`言語 ${c} が無い`)
 for (const l of d.languages) if (!Array.isArray(l.bcp47) || !l.bcp47.length || !l.nameJa) errs.push(`言語 ${l.code} に bcp47/nameJa が無い`)
 if (d.phrases.length !== EXPECT.phrases) errs.push(`フレーズが ${d.phrases.length} 件（あるべき ${EXPECT.phrases}）`)
-const seen = new Set(); let count = 0
+const seen = new Set(); let count = 0; let altCount = 0
 d.phrases.forEach((p, i) => {
   if (p.n !== i + 1) errs.push(`${i + 1} 番目の n が ${p.n}`)
   if (seen.has(p.n)) errs.push(`n=${p.n} が重複`); seen.add(p.n)
@@ -26,6 +26,8 @@ d.phrases.forEach((p, i) => {
     if (!x.ja || !x.ja.trim()) errs.push(`n=${p.n} ${c} の ja が空`)
     if (!('template' in x) || !x.template) errs.push(`n=${p.n} ${c} の template が無い`)
     if (!('audio' in x)) errs.push(`n=${p.n} ${c} に audio 欄が無い`)
+    if (c !== 'en' && x.note && /\bJapanese\b/.test(x.note)) errs.push(`n=${p.n} ${c}: 注に英単語 Japanese（その言語の語で書く）`)
+    if (!p.ja.includes('〇〇') && x.template && x.example && x.template !== x.example) altCount++
     if (p.ja.includes('〇〇') && x.template && !x.template.includes('〇〇')) errs.push(`n=${p.n} ${c}: 原文は〇〇入りなのに template に〇〇が無い`)
     if (x.example && x.example.includes('〇〇')) errs.push(`n=${p.n} ${c}: example に〇〇が残っている（読み上げられない）`)
     if (x.ja && x.ja.includes('〇〇')) errs.push(`n=${p.n} ${c}: ja（例文の訳）に〇〇が残っている`)
@@ -33,7 +35,7 @@ d.phrases.forEach((p, i) => {
     if (x.audio && !/^audio\/[^\s]+$/.test(x.audio)) errs.push(`n=${p.n} ${c}: audio は空か audio/ 配下の相対パスだけ（${x.audio}）`)
   }
 })
-console.log(`言語 ${codes.length}/${EXPECT.languages}・フレーズ ${d.phrases.length}/${EXPECT.phrases}・表現 ${count}/${EXPECT.languages * EXPECT.phrases}`)
+console.log(`言語 ${codes.length}/${EXPECT.languages}・フレーズ ${d.phrases.length}/${EXPECT.phrases}・表現 ${count}/${EXPECT.languages * EXPECT.phrases}・〇〇なしで「別の言い方」を持つ物 ${altCount}件`)
 if (errs.length) { console.error('× ' + errs.length + ' 件'); for (const e of errs) console.error('  - ' + e); process.exit(1) }
 if (count === 0) { console.error('対象0件'); process.exit(2) }
 console.log('○ check-data: 異常なし')

@@ -73,8 +73,9 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
         const c = cards.nth(i)
         expect((await c.locator('.text').innerText()).trim().length, `${code} ${i + 1} 本文`).toBeGreaterThan(0)
         expect((await c.locator('.ja').innerText()).trim().length, `${code} ${i + 1} 訳`).toBeGreaterThan(0)
-        if (data.phrases[i].ja.includes('〇〇')) await expect(c.locator('.tpl'), `${code} ${i + 1} 型`).toContainText('言い換えの型')
-        else if (data.phrases[i].langs[code].template !== data.phrases[i].langs[code].example) await expect(c.locator('.tpl'), `${code} ${i + 1} 別の言い方`).toContainText('別の言い方')
+        const tpl = data.phrases[i].langs[code].template, ex = data.phrases[i].langs[code].example
+        if (tpl.includes('〇〇')) await expect(c.locator('.tpl'), `${code} ${i + 1} 型`).toContainText('言い換えの型')
+        else if (tpl !== ex) await expect(c.locator('.tpl'), `${code} ${i + 1} 別の言い方`).toContainText('別の言い方')
       }
       const def = data.languages.find(l => l.code === code)
       if (def.note) await expect(page.locator('#langnote')).toHaveText(def.note)
@@ -99,6 +100,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(calls[0].rate).toBeCloseTo(0.9)
     await expect(page.locator('#voiceinfo')).toContainText('Karen')
     await expect(page.locator('#voiceinfo')).toContainText('オーストラリア英語')
+    await expect(page.locator('#voiceinfo')).toHaveText(/の声が無いので代用$/)
     // ゆっくり
     await page.locator('#slow').click()
     await card.click()
@@ -166,6 +168,19 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(slow.height).toBeGreaterThanOrEqual(44)
     const top = await page.locator('.top').boundingBox()
     expect(top.height, '固定の帯は画面の3割以内').toBeLessThan(844 * 0.3)
+  })
+
+  test('AC5b 声が無い案内が出ている時も、固定の帯は 250px 以内', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH([{ name: 'Samantha', lang: 'en-US', default: true }]))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    await page.locator('.tab[data-lang="th"]').click()
+    await expect(page.locator('#notice')).toBeVisible()
+    const top = await page.locator('.top').boundingBox()
+    console.log('固定の帯の高さ（案内あり・タイ語）:', Math.round(top.height), 'px')
+    expect(top.height).toBeLessThanOrEqual(250)
+    await expect(page.locator('#howto')).toBeVisible()
+    await expect(page.locator('#howtosum')).toContainText('【タイ語】の声の足し方')
     expect(await page.locator('meta[name="viewport"]').count()).toBe(1)
     expect(await page.locator('#tabs').getAttribute('role')).toBe('tablist')
   })
@@ -179,6 +194,10 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeVisible()
     await expect(page.locator('#notice')).toContainText('タイ語')
     await expect(page.locator('#notice')).toContainText('設定')
+    expect((await page.locator('.top').boundingBox()).height, '案内ありの帯は画面の3割以内').toBeLessThan(844 * 0.3)
+    await page.locator('#noticehow').click()
+    expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
+    await expect(page.locator('#howtosum')).toContainText('【タイ語】の声の足し方')
     await page.locator('.card').first().click()
     await page.waitForTimeout(200)
     expect(errors).toEqual([])
@@ -222,7 +241,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeHidden()
   })
 
-  test('AC7d 閉じた案内は言語ごとに覚え、別の案内を閉じても出し直さない。声が無い間は「声: なし」が残る', async ({ page }) => {
+  test('AC7d 閉じた「声が無い」の案内は言語ごとに覚えて出し直さない。失敗の知らせは閉じても次に失敗すればまた出る。声が無い間は「声: なし」が残る', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH([{ name: 'Samantha', lang: 'en-US', default: true }]))
     await page.goto('/')
     await page.locator('.tab[data-lang="th"]').click()
@@ -238,6 +257,10 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await page.locator('.card').nth(1).click()
     await page.waitForTimeout(300)
     await expect(page.locator('#notice')).toBeHidden()   // 閉じたタイ語の案内は出し直さない
+    await page.evaluate(() => { window.__silent = true })
+    await page.locator('.card').nth(2).click()
+    await expect(page.locator('#notice')).toContainText('鳴りませんでした', { timeout: 7000 })   // 失敗の知らせは、また失敗すればまた出る
+    await page.evaluate(() => { window.__silent = false })
     await page.locator('.tab[data-lang="ru"]').click()
     await expect(page.locator('#notice')).toContainText('ロシア語')   // 別の言語の案内は出る
   })
@@ -308,25 +331,46 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(await pick('th', [{ name: 'Google Thai', lang: 'th-TH', localService: false }])).toBe('Google Thai')   // 端末内に無ければ通信する声
     expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Hayley', lang: 'en_NZ' }])).toBe('Hayley')
     expect(await pick('es', [{ name: 'Eddy (Spanish (Spain))', lang: 'es-ES', voiceURI: 'com.apple.eloquence.es-ES.Eddy' }, { name: 'Mónica', lang: 'es-ES', voiceURI: 'com.apple.voice.compact.es-ES.Monica' }])).toBe('Mónica')
+    expect(await pick('en', [{ name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.compact.en-AU.Karen' }, { name: 'Samantha', lang: 'en-US', voiceURI: 'com.apple.voice.premium.en-US.Samantha' }])).toBe('Samantha')   // 入れたプレミアムの声は簡易版の豪に勝つ
+    expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Samantha', lang: 'en-US' }])).toBe('Karen')   // 同じ質なら NZ に近い豪
+    expect(await pick('en', [{ name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.compact.en-AU.Karen' }, { name: 'Samantha', lang: 'en-US', voiceURI: 'com.apple.voice.compact.en-US.Samantha' }])).toBe('Karen')   // どちらも簡易版なら豪
+    expect(await pick('es', [{ name: 'Mónica', lang: 'es-ES', voiceURI: 'com.apple.voice.compact.es-ES.Monica' }, { name: 'Paulina', lang: 'es-MX', voiceURI: 'com.apple.voice.enhanced.es-MX.Paulina' }])).toBe('Paulina')   // 拡張の声は地域より先
+    expect(await pick('en', [{ name: 'Hayley', lang: 'en-NZ', voiceURI: 'com.apple.voice.compact.en-NZ.Hayley' }, { name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.enhanced.en-AU.Karen' }])).toBe('Hayley')   // NZ があれば必ず NZ
     expect(await pick('zh', [{ name: 'Sinji', lang: 'zh-HK' }, { name: 'Meijia', lang: 'zh-TW' }])).toBe('Meijia')
     expect(await pick('zh', [{ name: 'Sinji', lang: 'zh-HK' }, { name: 'Meijia', lang: 'zh-TW' }, { name: 'Tingting', lang: 'zh-CN' }])).toBe('Tingting')
     expect(await pick('zh', [{ name: 'Sinji', lang: 'zh-HK' }])).toBe(null)
   })
 
-  test('スクロール位置は言語ごとに覚え、次に開いた時も戻る', async ({ page }) => {
+  test('スクロール位置は言語ごとに覚え、初めて開く言語は今の位置を引き継ぎ、次に開いた時も戻る', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
     await page.evaluate(() => window.scrollTo(0, 1200))
     await page.waitForTimeout(600)
     // locator.click() は固定表示のタブを「本来の位置」へスクロールしてから押す（試験の都合）ので、指で押すのと同じ素の click を送る
     await page.locator('.tab[data-lang="zh"]').dispatchEvent('click')
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50)
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)   // 初めて開く中国語は英語の位置を引き継ぐ
+    await page.evaluate(() => window.scrollTo(0, 300))
+    await page.waitForTimeout(600)
     await page.locator('.tab[data-lang="en"]').dispatchEvent('click')
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)   // 英語は自分の位置
+    await page.locator('.tab[data-lang="zh"]').dispatchEvent('click')
+    await expect.poll(() => page.evaluate(() => Math.abs(window.scrollY - 300) < 40)).toBe(true)   // 中国語は自分の位置
     await page.waitForTimeout(600)
     await page.reload()
     await expect(page.locator('.card')).toHaveCount(30)
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
+    await expect.poll(() => page.evaluate(() => Math.abs(window.scrollY - 300) < 40)).toBe(true)
+  })
+
+  test('読み上げの機能そのものが無いブラウザでは、開いた時から案内が出て、言語を切り替えても残る', async ({ page }) => {
+    await page.addInitScript(() => { Object.defineProperty(window, 'speechSynthesis', { value: undefined, configurable: true }) })
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    await expect(page.locator('#notice')).toContainText('対応していません')
+    await page.locator('.tab[data-lang="ko"]').click()
+    await expect(page.locator('#notice')).toContainText('対応していません')
+    await page.locator('.card').first().click()
+    await expect(page.locator('.card').first()).not.toHaveClass(/playing/)
   })
 
   test('言語とゆっくりの選択は次に開いた時も残る', async ({ page }) => {
