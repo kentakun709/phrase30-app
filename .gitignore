@@ -1,0 +1,40 @@
+# 画像・フォント等の大容量ファイル置き場（git管理外・ローカルのみ）
+# 案件の画像はこの log/ に入れる。GitHubには上がらない
+log/
+
+# 大容量メディアはgit管理しない
+assets/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.mov
+*.m4a
+*.mp3
+*.wav
+*.psd
+*.ai
+*.zip
+*.otf
+*.ttf
+
+# 秘密情報
+.env
+.env.*
+*credentials*
+*secret*
+*.pem
+creds.json
+
+# 環境ごみ
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# 作業台の中身は git に載せない（箱だけ残す）。閉じる時に kiroku/AI出力 へ移す
+作業中/*
+!作業中/.gitkeep

@@ -1,0 +1,4 @@
+# 追記だけの申し送り・記録にだけ使う（コード・設定には付けない）
+docs/CURRENT.md merge=union
+docs/LOOP_LOG.md merge=union
+docs/DECISIONS.md merge=union
