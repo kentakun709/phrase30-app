@@ -100,7 +100,9 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     const card = page.locator('.card').first()
     await card.click()
     await expect(card).toHaveClass(/playing/)
+    await expect(page.locator('#detail'), '押したマスが欄に隠れても分かるように、欄も光る').toHaveClass(/playing/)
     await expect(card).not.toHaveClass(/playing/, { timeout: 2000 })
+    await expect(page.locator('#detail')).not.toHaveClass(/playing/)
     await card.click()
     await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(2)
     const calls = await page.evaluate(() => window.__calls.filter(c => c.type === 'speak'))
@@ -171,6 +173,9 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
       expect(num.y + num.height, '番号は本文の上').toBeLessThanOrEqual(text.y + 1)
       expect(icon.x, 'アイコンは番号の右').toBeGreaterThan(num.x + num.width)
       expect(icon.x + icon.width, 'アイコンはマスの中').toBeLessThanOrEqual(card0.x + card0.width + 1)
+      const hs = await page.locator('.card').evaluateAll(es => es.map(e => ({ h: e.getBoundingClientRect().height, ja: e.querySelector('.ja').getBoundingClientRect().height })))
+      expect(Math.min(...hs.map(x => x.h)), `${code} 30マスすべて 44px 以上`).toBeGreaterThanOrEqual(44)
+      expect(Math.min(...hs.map(x => x.ja)), `${code} 訳が描かれている`).toBeGreaterThan(0)
     }
     const box = await page.locator('.card').first().boundingBox()
     expect(box.height).toBeGreaterThanOrEqual(44)
@@ -188,16 +193,22 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('.card')).toHaveCount(30)
     await page.locator('.tab[data-lang="th"]').click()
     await expect(page.locator('#notice')).toBeVisible()
-    const h1 = (await page.locator('#dock').boundingBox()).height
-    console.log('欄の高さ（一覧が空・タイ語）:', Math.round(h1), 'px')
-    expect(h1).toBeLessThanOrEqual(844 * 0.4)
+    const dockOK = async (label) => {   // 欄は画面の4割以内で、中にスクロールが出ない（中身が隠れない）
+      const m = await page.locator('#dock').evaluate(e => ({ h: e.getBoundingClientRect().height, sh: e.scrollHeight, ch: e.clientHeight }))
+      console.log(`欄の高さ（${label}）:`, Math.round(m.h), 'px')
+      expect(m.h, label).toBeLessThanOrEqual(844 * 0.4)
+      expect(m.sh, `${label}: 欄の中にスクロールが出ない`).toBeLessThanOrEqual(m.ch + 1)
+    }
+    await dockOK('一覧が空・タイ語')
     await page.evaluate(() => { window.__silent = true })
     await page.locator('.card[data-n="8"]').dispatchEvent('click')
     await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
     await expect(page.locator('#detail .tpl')).toContainText('言い換えの型')
-    const h2 = (await page.locator('#dock').boundingBox()).height
-    console.log('欄の高さ（鳴らない＋声なし＋8番の型と注）:', Math.round(h2), 'px')
-    expect(h2).toBeLessThanOrEqual(844 * 0.4)
+    await dockOK('鳴らない＋声なし＋8番の型と注')
+    await page.setViewportSize({ width: 390, height: 664 })   // iPhone Safari で実際に見える高さの目安（上下のバーを除く）。数字を残すだけで合否にしない（次版で詰める）
+    await page.waitForTimeout(200)
+    const m664 = await page.locator('#dock').evaluate(e => ({ h: Math.round(e.getBoundingClientRect().height), sh: e.scrollHeight, ch: e.clientHeight }))
+    console.log('欄（高さ664の画面・最長の状態）:', JSON.stringify(m664), '上限 40% =', Math.round(664 * 0.4), 'px')
     expect((await page.locator('.top').boundingBox()).height, '固定の帯は画面の3割以内').toBeLessThan(844 * 0.3)
   })
 
@@ -242,7 +253,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(note.y + note.height, '言語の説明は枠より上').toBeLessThanOrEqual((await page.locator('#board').boundingBox()).y + 1)
   })
 
-  test('AC5b 声が無い案内が出ている時も、固定の帯は 250px 以内', async ({ page }) => {
+  test('AC5b 声が無い案内は欄の中にあり、帯は 130px 以内。案内のボタンは押せる高さで、下へ送っても画面の中', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH([{ name: 'Samantha', lang: 'en-US', default: true }]))
     await page.goto('/')
     await expect(page.locator('.card')).toHaveCount(30)
@@ -273,14 +284,19 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeVisible()
     await expect(page.locator('#notice')).toContainText('タイ語')
     await expect(page.locator('#notice')).toContainText('設定')
-    expect((await page.locator('#dock').boundingBox()).height, '案内ありの欄は画面の4割以内').toBeLessThanOrEqual(844 * 0.4)
+    const dm = await page.locator('#dock').evaluate(e => ({ h: e.getBoundingClientRect().height, sh: e.scrollHeight, ch: e.clientHeight }))
+    expect(dm.h, '案内ありの欄は画面の4割以内').toBeLessThanOrEqual(844 * 0.4); expect(dm.sh, '欄の中にスクロールが出ない').toBeLessThanOrEqual(dm.ch + 1)
     await page.locator('#noticehow').click()
     expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
     await expect(page.locator('#howtosum')).toContainText('【タイ語】の声の足し方')
     await page.locator('.card').first().click()
     await page.waitForTimeout(200)
     expect(errors).toEqual([])
-    // 声が後から入った（voiceschanged）→ 案内が消え、声の名前が出る
+    // 鳴らなかった知らせが出ている最中に声が後から入った（voiceschanged）→ その知らせも案内も消え、声の名前が出る
+    await page.evaluate(() => { window.__silent = true })
+    await page.locator('.card').nth(1).click()
+    await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
+    await page.evaluate(() => { window.__silent = false })
     expect(await page.locator('#howto').evaluate(el => el.open), '声が無い間は手順が開いている').toBe(true)
     await page.evaluate(() => window.__fireVoices([{ name: 'Samantha', lang: 'en-US' }, { name: 'Kanya', lang: 'th-TH' }]))
     await expect(page.locator('#notice')).toBeHidden()
@@ -299,6 +315,11 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toContainText('設定')
     await expect(page.locator('#voiceinfo')).toContainText('読み込み中')
     expect(await page.locator('#howto').evaluate(el => el.open), '一覧が空の間は手順を開かない（届いた時に画面が跳ばないように）').toBe(false)
+    await page.evaluate(() => window.scrollTo(0, 600))
+    await page.waitForTimeout(200)
+    const nb0 = await page.locator('#notice').boundingBox()
+    expect(nb0.y).toBeGreaterThanOrEqual(0); expect(nb0.y + nb0.height, '一覧が空のまま下へ送っても案内は画面の中').toBeLessThanOrEqual(844)
+    await page.evaluate(() => window.scrollTo(0, 0))
     await page.evaluate(() => window.__fireVoices([{ name: 'Karen', lang: 'en-AU' }]))
     await expect(page.locator('#notice')).toBeHidden()
     expect(await page.locator('#howto').evaluate(el => el.open)).toBe(false)
@@ -402,9 +423,9 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeHidden()
   })
 
-  const rects = (pg) => pg.locator('.card').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { n: Number(e.dataset.n), x: Math.round(r.x), y: Math.round(r.y), r: Math.round(r.right), b: Math.round(r.bottom), num: e.querySelector('.num').textContent.trim(), text: e.querySelector('.text').textContent.trim(), ja: e.querySelector('.ja').textContent.trim() } }))
+  const rects = (pg) => pg.locator('.card').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { n: Number(e.dataset.n), x: Math.round(r.x), y: Math.round(r.y), r: Math.round(r.right), b: Math.round(r.bottom), num: e.querySelector('.num').textContent.trim(), text: e.querySelector('.text').textContent.trim(), ja: e.querySelector('.ja').textContent.trim(), jaH: e.querySelector('.ja').getBoundingClientRect().height } }))
   const rect = (pg, sel) => pg.locator(sel).evaluate(e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, r: r.right, b: r.bottom, h: r.height } })
-  const inside = (cells, board) => { for (const c of cells) { expect(c.x, `${c.n} 枠の中（左）`).toBeGreaterThanOrEqual(board.x - 1); expect(c.r, `${c.n} 枠の中（右）`).toBeLessThanOrEqual(board.r + 1); expect(c.y, `${c.n} 枠の中（上）`).toBeGreaterThanOrEqual(board.y - 1); expect(c.b, `${c.n} 枠の中（下）`).toBeLessThanOrEqual(board.b + 1); expect(c.num, `${c.n} 番号`).toMatch(/^\d\d/); expect(c.text.length, `${c.n} 文`).toBeGreaterThan(0); expect(c.ja.length, `${c.n} 訳`).toBeGreaterThan(0) } }
+  const inside = (cells, board) => { for (const c of cells) { expect(c.x, `${c.n} 枠の中（左）`).toBeGreaterThanOrEqual(board.x - 1); expect(c.r, `${c.n} 枠の中（右）`).toBeLessThanOrEqual(board.r + 1); expect(c.y, `${c.n} 枠の中（上）`).toBeGreaterThanOrEqual(board.y - 1); expect(c.b, `${c.n} 枠の中（下）`).toBeLessThanOrEqual(board.b + 1); expect(c.num, `${c.n} 番号`).toMatch(/^\d\d/); expect(c.text.length, `${c.n} 文`).toBeGreaterThan(0); expect(c.ja.length, `${c.n} 訳`).toBeGreaterThan(0); expect(c.jaH, `${c.n} 訳が描かれている`).toBeGreaterThan(0) } }
 
   test('AC10 言語の選択は一番上の帯にあり下へ送っても残る。30フレーズは1つの枠の中に表の形（幅599まで2列×15・600から3列×10）。押した文の欄と案内は押した瞬間に画面の中', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
@@ -430,7 +451,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     const top2 = await rect(page, '.top'), tabs2 = await rect(page, '#tabs')
     expect(Math.round(top2.y), '帯の上端は 0').toBe(0)
     expect(tabs2.y).toBeGreaterThanOrEqual(0); expect(tabs2.b, 'タブは画面の上 130px 以内').toBeLessThan(130)
-    expect(await page.evaluate(() => { const el = document.elementFromPoint(195, 70); return !!(el && el.closest('#tabs')) }), '画面 y=70 にあるのは言語タブ').toBe(true)
+    expect(await page.evaluate(() => { const r = document.querySelector('.tab[data-lang="zh"]').getBoundingClientRect(); const el = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return !!(el && el.closest('.tab')) }), '帯の高さにあるのは言語タブ').toBe(true)
     const yBefore = await page.evaluate(() => window.scrollY)
     await page.locator('.tab[data-lang="ko"]').click()   // 固定が効いていれば、普通の click でも画面は飛ばない（同じ段を引き継ぐので ±1段まで）
     await expect(page.locator('.tab[data-lang="ko"]')).toHaveAttribute('aria-selected', 'true')
@@ -439,24 +460,30 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(Math.round((await rect(page, '.top')).y), '押した後も帯は上端').toBe(0)
     await page.locator('.tab[data-lang="en"]').click()
     await page.waitForTimeout(200)
-    // 下まで送った状態で押して鳴らなくても、知らせ（帯の中）と欄（下端）は画面の中
+    // 20番の段を帯の直下に送り（欄は画面の下端に留まっている）、押して鳴らなくても、知らせと欄（下端）は画面の中
+    await page.evaluate(() => { const el = document.querySelector('.card[data-n="20"]'); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - document.querySelector('.top').getBoundingClientRect().height - 8) })
+    await page.waitForTimeout(200)
+    expect(Math.round((await rect(page, '#dock')).b), '欄は画面の下端に留まっている').toBe(844)
     await page.evaluate(() => { window.__silent = true })
-    await page.locator('.card[data-n="20"]').dispatchEvent('click')
+    await page.locator('.card[data-n="20"]').click()
     await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
-    const notice = await rect(page, '#notice'), d2 = await rect(page, '#detail .dtext')
-    expect(notice.y).toBeGreaterThanOrEqual(0); expect(notice.b, '知らせは画面の中').toBeLessThanOrEqual(844)
+    const notice = await rect(page, '#notice'), d2 = await rect(page, '#detail .dtext'), topNow = await rect(page, '.top')
+    expect(notice.y, '知らせは帯の下').toBeGreaterThanOrEqual(topNow.b - 1); expect(notice.b, '知らせは画面の中').toBeLessThanOrEqual(844)
     expect(d2.y).toBeGreaterThanOrEqual(0); expect(d2.b, '欄は画面の中').toBeLessThanOrEqual(844)
     await expect(page.locator('#detail .dtext')).toHaveText(data.phrases[19].langs.en.example)
     // 列の境目: 599 までは2列、600 から3列
     await page.evaluate(() => { window.__silent = false })
     await page.setViewportSize({ width: 599, height: 844 })
     await page.waitForTimeout(100)
-    expect(new Set((await rects(page)).map(c => c.x)).size, '幅599は2列').toBe(2)
+    const c599 = await rects(page)
+    expect(new Set(c599.map(c => c.x)).size, '幅599は2列').toBe(2)
+    expect(c599[0].y, '幅599でも1番と16番が同じ段').toBe(c599[15].y)
     await page.setViewportSize({ width: 600, height: 844 })
     await page.waitForTimeout(100)
     const c600 = await rects(page)
     expect(new Set(c600.map(c => c.x)).size, '幅600は3列').toBe(3)
     expect(c600[0].y).toBe(c600[10].y); expect(c600[10].y).toBe(c600[20].y)
+    inside(c600, await rect(page, '#board'))
     expect(await page.evaluate(() => document.documentElement.scrollWidth), '幅600で横スクロールなし').toBeLessThanOrEqual(600)
     // 一番下まで送ると欄は本来の位置＝枠のすぐ下
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
@@ -483,7 +510,9 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
       const d = await rect(page, '#detail .dtext'); expect(d.y).toBeGreaterThanOrEqual(0); expect(d.b, '欄は画面の中').toBeLessThanOrEqual(800)
       await page.evaluate(() => window.scrollTo(0, 400))
       await page.waitForTimeout(200)
-      if (await page.evaluate(() => window.scrollY) > 100) expect(Math.round((await rect(page, '.top')).y), '帯の上端は 0').toBe(0)
+      expect(await page.evaluate(() => window.scrollY), '送れている').toBeGreaterThan(100)
+      expect(Math.round((await rect(page, '.top')).y), '帯の上端は 0').toBe(0)
+      const t2 = await rect(page, '#tabs'); expect(t2.y).toBeGreaterThanOrEqual(0); expect(t2.b, 'タブは画面の上 130px 以内').toBeLessThan(130)
     })
   })
 
@@ -507,7 +536,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(await pick('es', [{ name: 'Mónica', lang: 'es-ES' }, { name: 'Diego', lang: 'es-AR', voiceURI: 'com.apple.voice.premium.es-AR.Diego' }])).toBe('Diego')   // 普通の西よりプレミアムの亜
     expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Samantha', lang: 'en-US', default: true }])).toBe('Karen')   // 既定の声は最後の決め手
     expect(await pick('en', [{ name: 'Zulu', lang: 'en-AU' }, { name: 'Alpha', lang: 'en-AU' }])).toBe('Alpha')   // 完全に同点なら名前の順（列挙順に左右されない）
-    // 簡易版の声の時は、欄の「声を良くする」から手順へ飛べる
+    // 簡易版の声の時は、欄の「もっと自然な声に」から手順へ飛べる
     await page.evaluate(() => window.__fireVoices([{ name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.compact.en-AU.Karen' }]))
     await page.locator('.tab[data-lang="en"]').click()
     await expect(page.locator('#voiceinfo')).toContainText('簡易版')

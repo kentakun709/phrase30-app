@@ -108,6 +108,7 @@
       $voicehow.hidden = true;
     } else {
       hideNotice('novoice');
+      if (state.noticeKey === 'silent') hideNotice('silent');   // 声が後から届いたら「鳴りませんでした」も消す（周回7 東条）
       var vl = normLang(state.voice.lang), first = normLang(def.bcp47[0]);
       var txt = '声: ' + state.voice.name + '・' + langJa(vl) + (isCompact(state.voice) ? '・簡易版' : '');
       $voicehow.hidden = !isCompact(state.voice);   // 簡易版の時は、欄の「もっと自然な声に」から手順へ飛べる
@@ -130,6 +131,7 @@
 
   function setPlaying(n) {
     state.playing = n;
+    $('detail').classList.toggle('playing', n !== null && n === state.detailN);   // 押したマスが欄に隠れても、欄の番号が光る
     var cards = $list.querySelectorAll('.card');
     for (var i = 0; i < cards.length; i++) {
       var on = Number(cards[i].getAttribute('data-n')) === n;
