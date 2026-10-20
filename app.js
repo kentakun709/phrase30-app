@@ -263,7 +263,7 @@
   function readingHtml(it, cls) {
     if (!it.reading) return '';
     var tag = state.lang === 'zh' ? 'zh-Latn-pinyin' : state.lang + '-fonipa';   // 読み上げソフトに「読みの表記」だと伝える
-    return '<span class="' + cls + '" lang="' + tag + '">' + esc(it.reading) + '</span>';
+    return '<span class="' + cls + '" lang="' + tag + '" aria-hidden="true">' + esc(it.reading) + '</span>';   // 目で見る補助。画面の読み上げ機能ではボタン名に記号を混ぜない
   }
   // 押した文（欄 #dock の中）: 大きい字・訳・注・言い換えの型（マスには入れない＝表を軽く保つ）。欄を押すと同じ文がもう一度鳴る
   function renderDetail() {

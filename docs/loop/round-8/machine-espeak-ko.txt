@@ -1,0 +1,31 @@
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 ko・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（崩れて使えない。照合に使っていない）
+ 1	이름이 뭐예요?	ˈiɾɯmˌimwˈʌjejˌo	／ /iɾɯmi mwʌjejo/
+ 2	어디에서 오셨어요?	ˈʌdiˌesʌ ˈosjʌs-ˌʌjo	／ /ʌdiesʌ oɕʌs͈ʌjo/
+ 3	어디 사세요?	ˈʌdi sˈɐsejˌo	／ /ʌdi sasejo/
+ 4	잘 지내세요?	tɕˈɐɫ tɕˈinɛsˌejo	／ /tɕal tɕinɛsejo/
+ 5	민수 씨는요?	mˈinsus-ˈinɯnjˌo	／ /minsu ɕ͈inɯnjo/
+ 6	만나서 반가워요.	mˈɐnnɐsˌʌpˈɐnqɐwˌʌjo	／ /mannasʌ panɡawʌjo/
+ 7	무슨 일 하세요?	musˈɯnˈiɫ hˈɐsejˌo	／ /musɯn nil hasejo/
+ 8	영어 할 줄 아세요?	jˈʌŋʌ hˈɐɫ tɕˈuɫ ˈɐsejˌo	／ /jʌŋʌ hal tɕ͈ul asejo/
+ 9	왜 한국어를 공부하세요?	wˈɛ hˈɐnquqˌʌɾɯɫ ɡˈoŋbuhˌɐsejˌo	／ /wɛ hanɡuɡʌɾɯl koŋbuhasejo/
+10	여행 가고 싶어서요.	jʌhˈɛŋ ɡˈɐqo sˈiphʌsˌʌjo	／ /jʌhɛŋ kaɡo ɕipʰʌsʌjo/
+11	한국어 배운 지 얼마나 됐어요?	hˈɐnquqˌʌ pɛˈun tɕˈi ˈʌɫmɐnˌɐ dwˈɛs-ʌjˌo	／ /hanɡuɡʌ pɛun tɕi ʌlmana twɛs͈ʌjo/
+12	취미가 뭐예요?	tʃhwˈimiqˌɐmwˈʌjejˌo	／ /tɕʰwimiɡa mwʌjejo/
+13	일본에 가 보신 적 있으세요?	ˈiɫbonˌe ɡˈɐ posˈin tɕˈʌq ˈis-ɯsˌejo	／ /ilbone ka poɕin tɕʌk is͈ɯsejo/
+14	사진 찍어도 돼요?	sɐdʑˈin tɕˈiqʌdˌo dwˈɛjo	／ /sadʑin tɕ͈iɡʌdo twɛjo/
+15	여기 언제 오셨어요?	jˈʌqi ˈʌndʑe ˈosjʌs-ˌʌjo	／ /jʌɡi ʌndʑe oɕʌs͈ʌjo/
+16	초밥 좋아하세요?	tʃhobˈɐp tɕˈoɐhˌɐsejˌo	／ /tɕʰobap tɕoahasejo/
+17	'대박'이 무슨 뜻이에요?	dˈɛbɐqˌimusˈɯn t-ˈɯsiˌejo	／ /tɛbaɡi musɯn t͈ɯɕiejo/
+18	수영할 줄 아세요?	sujˈʌŋhɐɫ tɕˈuɫ ˈɐsejˌo	／ /sujʌŋhal tɕ͈ul asejo/
+19	와이파이 있어요?	wˈɐiphˌɐi ˈis-ʌjˌo	／ /waipʰai is͈ʌjo/
+20	다시 한번 말씀해 주세요.	dˈɐsi hˈɐnbʌnmˈɐɫs-ɯmhˌɛ tɕˈusejˌo	／ /taɕi hanbʌn mals͈ɯmhɛ tɕusejo/
+21	이거 얼마예요?	ˈiqʌ ˈʌɫmɐjˌejo	／ /iɡʌ ʌlmajejo/
+22	역에 가고 싶어요.	jˈʌqe ɡˈɐqo sˈiphʌjˌo	／ /jʌɡe kaɡo ɕipʰʌjo/
+23	공항까지 어떻게 가요?	ɡˈoŋhɐŋq-ˌɐdʑi ʌt-ˈʌt-khe ɡˈɐjo	／ /koŋhaŋk͈adʑi ʌt͈ʌkʰe kajo/
+24	어느 버스예요?	ˈʌnɯ pˈʌsɯjˌejo	／ /ʌnɯ pʌsɯjejo/
+25	저분은 누구세요?	tɕˈʌbunˌɯnnˈuqusˌejo	／ /tɕʌbunɯn nuɡusejo/
+26	지금 몇 시예요?	tɕiqˈɯmmjˈʌt sˈijejˌo	／ /tɕiɡɯm mjʌt ɕ͈ijejo/
+27	추천 메뉴가 뭐예요?	tʃhˈutʃhʌnmˈenjuqˌɐmwˈʌjejˌo	／ /tɕʰutɕʰʌn menjuɡa mwʌjejo/
+28	이거 주세요.	ˈiqʌ tɕˈusejˌo	／ /iɡʌ tɕusejo/
+29	계산해 주세요.	ɡjesˈɐnhɛ tɕˈusejˌo	／ /kjesanhɛ tɕusejo/
+30	좀 도와주시겠어요?	tɕˈom dˈowɐdʑˌusiqˌes-ʌjˌo	／ /tɕom towadʑuɕiɡes͈ʌjo/

@@ -1,0 +1,31 @@
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 ru・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（強勢の位置の照合に使った）
+ 1	Как вас зовут?	kˈɑk vˈɑs zʌvˈut	／ /kak vaz zɐˈvut/
+ 2	Откуда вы?	ʌtkˈuda vˈy	／ /ɐtˈkudə vɨ/
+ 3	Где вы живёте?	ɡdʲˈe vˈy ʒyvʲˈɵtʲi	／ /ɡdʲe vɨ ʐɨˈvʲotʲɪ/
+ 4	Как дела?	kˈɑk dʲˈeɭa	／ /kaɡ dʲɪˈla/
+ 5	А вы?	a vˈy	／ /a vɨ/
+ 6	Очень приятно.	ˈotʃʲin prʲiˈjatnʌ	／ /ˈotɕɪnʲ prʲɪˈjatnə/
+ 7	Кем вы работаете?	kʲˈem vˈy rabˈotʌjitʲi	／ /kʲem vɨ rɐˈbotəjɪtʲɪ/
+ 8	Вы говорите по-английски?	vˈy ɡʌvʌrʲˈitʲi pˈoanɡɭʲˈijskʲɪ	／ /vɨ ɡəvɐˈrʲitʲɪ pəɐnˈɡlʲijskʲɪ/
+ 9	Почему вы учите русский?	pʌtʃʲimˈu vˈy utʃʲˈitʲi rˈusskʲij	／ /pətɕɪˈmu vɨ ˈutɕɪtʲɪ ˈruskʲɪj/
+10	Потому что я хочу путешествовать.	pʌtʌmˈu ʃto ˈja xʌtʃʲˈu putʲiʃˈɛstvʌvʌtʲ	／ /pətɐˈmu ʂtə ja xɐˈtɕu pʊtʲɪˈʂɛstvəvətʲ/
+11	Как давно вы учите русский?	kˈɑk davnˈo vˈy utʃʲˈitʲi rˈusskʲij	／ /kaɡ dɐvˈno vɨ ˈutɕɪtʲɪ ˈruskʲɪj/
+12	Чем вы увлекаетесь?	tʃʲˈem vˈy uvɭʲikˈɑjitʲisʲ	／ /tɕem vɨ ʊvlʲɪˈkajɪtʲɪsʲ/
+13	Вы когда-нибудь были в Японии?	vˈy kʌɡdˈɑnʲibˈutʲ bˌyɭʲɪ v japˈonʲiɪ	／ /vɨ kɐɡˈdanʲɪbʊtʲ ˈbɨlʲɪ v jɪˈponʲɪɪ/
+14	Можно сделать фото?	mˈoʒnʌ ʑdʲˈeɭʌtʲ fˈotʌ	／ /ˈmoʐnə ˈzdʲelətʲ ˈfotə/
+15	Когда вы сюда приехали?	kʌɡdˈɑ vˈy sʲu"dˈɑ prʲijˈexʌɭʲɪ	／ /kɐɡˈda vɨ sʲʊˈda prʲɪˈjexəlʲɪ/
+16	Вы любите суши?	vˈy ɭʲu"bʲˈitʲi sˈuʃy	／ /vɨ ˈlʲubʲɪtʲɪ ˈsuʂɨ/
+17	Что значит «ладно»?	ʃto znˈɑtʃʲit ɭˈɑdnʌ	／ /ʂto ˈznatɕɪt ˈladnə/
+18	Вы умеете плавать?	vˈy umʲˈejitʲi pɭˈɑvʌtʲ	／ /vɨ ʊˈmʲejɪtʲɪ ˈplavətʲ/
+19	У вас есть вай-фай?	u vˈɑs jestʲ vˈajfˈɑj	／ /u vas jesʲtʲ vajˈfaj/
+20	Повторите, пожалуйста.	pʌftʌrʲˈitʲi pʌʒˈɑɭusta	／ /pəftɐˈrʲitʲɪ pɐˈʐalʊstə/
+21	Сколько это стоит?	skˈoɭkʌ ˈɛtʌ stʌˈit	／ /ˈskolʲkə ˈɛtə ˈstoɪt/
+22	Я хочу поехать на вокзал.	ˈja xʌtʃʲˈu pʌjˈexʌtʲ nə vʌɡzˈɑɭ	／ /ja xɐˈtɕu pɐˈjexətʲ nə vɐɡˈzal/
+23	Как добраться до аэропорта?	kˈɑk dʌbrˈɑtsˌʌ dˈo aɛrʌpˈorta	／ /kaɡ dɐˈbratsə də ɐɪrɐˈportə/
+24	Какой это автобус?	kakˈoj ˈɛtʌ aftˈobus	／ /kɐˈkoj ˈɛtə ɐfˈtobʊs/
+25	Кто это?	ktˈo ˈɛtʌ	／ /kto ˈɛtə/
+26	Который час?	kʌtˈoryj tʃʲˈɑs	／ /kɐˈtorɨj tɕas/
+27	Какое блюдо вы посоветуете?	kakˈojɪ bɭʲˈu"dʌ vˈy pʌsʌvʲˈetujitʲi	／ /kɐˈkojə ˈblʲudə vɨ pəsɐˈvʲetʊjɪtʲɪ/
+28	Мне вот это, пожалуйста.	mnʲˈe vˈot ˈɛtʌ pʌʒˈɑɭusta	／ /mnʲe vot ˈɛtə pɐˈʐalʊstə/
+29	Счёт, пожалуйста.	ɕˈɵt pʌʒˈɑɭusta	／ /ɕːot pɐˈʐalʊstə/
+30	Вы не могли бы мне помочь?	vˈy nʲɪ mʌɡɭʲˌɪ by mnʲˈe pʌmˈotʃʲ	／ /vɨ nʲɪ mɐˈɡlʲi bɨ mnʲe pɐˈmotɕ/

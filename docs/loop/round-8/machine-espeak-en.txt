@@ -1,0 +1,31 @@
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 en-gb-x-rp・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（強勢の位置の照合に使った）
+ 1	What's your name?	wˌɒts jɔː nˈeɪm	／ /ˈwɒts jə ˈneɪm/
+ 2	Where are you from?	wˈeəɹ ɑː juː fɹɒm	／ /ˈweər ə ju ˈfrɒm/
+ 3	Where do you live?	wˌeə dˈuː juː lˈɪv	／ /ˈweə də ju ˈlɪv/
+ 4	How's it going?	hˌaʊz ɪt ɡˈəʊɪŋ	／ /ˈhaʊz ɪt ˈɡəʊɪŋ/
+ 5	How about you?	hˌaʊ ɐbˈaʊt juː	／ /ˈhaʊ əˈbaʊt ˈjuː/
+ 6	Nice to meet you.	nˈaɪs tə mˈiːt juː	／ /ˈnaɪs tə ˈmiːt ju/
+ 7	What do you do?	wˌɒt dˈuː juː dˈuː	／ /ˈwɒt də ju ˈduː/
+ 8	Do you speak Japanese?	dˈuː juː spˈiːk dʒˌæpənˈiːz	／ /də ju ˈspiːk dʒæpəˈniːz/
+ 9	Why are you learning English?	wˌaɪ ɑː juː lˈɜːnɪŋ ˈɪŋɡlɪʃ	／ /ˈwaɪ ə ju ˈlɜːnɪŋ ˈɪŋɡlɪʃ/
+10	Because I want to travel.	bɪkˈɒz aɪ wˈɒnt tə tɹˈævəl	／ /bɪˈkɒz aɪ ˈwɒnt tə ˈtrævəl/
+11	How long have you been learning English?	hˌaʊ lˈɒŋ hæv juː bˌiːn lˈɜːnɪŋ ˈɪŋɡlɪʃ	／ /ˈhaʊ ˈlɒŋ həv ju bɪn ˈlɜːnɪŋ ˈɪŋɡlɪʃ/
+12	What do you do for fun?	wˌɒt dˈuː juː dˈuː fɔː fˈʌn	／ /ˈwɒt də ju ˈduː fə ˈfʌn/
+13	Have you ever been to Japan?	hæv juː ˈɛvɐ bˌiːn tə dʒəpˈæn	／ /həv ju ˈevə bɪn tə dʒəˈpæn/
+14	Can I take a photo?	kæn aɪ tˈeɪk ɐ fˈəʊtəʊ	／ /kən aɪ ˈteɪk ə ˈfəʊtəʊ/
+15	When did you get here?	wˌɛn dˈɪd juː ɡɛt hˈiə	／ /ˈwen dɪd ju ˈɡet ˈhɪə/
+16	Do you like sushi?	dˈuː juː lˈaɪk sˈuːʃɪ	／ /də ju ˈlaɪk ˈsuːʃi/
+17	What does "sweet as" mean?	wˌɒt dˈʌz swˈiːt æz mˈiːn	／ /ˈwɒt dəz ˈswiːt æz ˈmiːn/
+18	Can you swim?	kæn juː swˈɪm	／ /kən ju ˈswɪm/
+19	Do you have Wi-Fi?	dˈuː juː hæv wˈaɪfˌaɪ	／ /də ju ˈhæv ˈwaɪfaɪ/
+20	Sorry, could you say that again?	sˈɒɹɪ kʊd juː sˈeɪ ðæt ɐɡˈɛn	／ /ˈsɒri kəd ju ˈseɪ ðæt əˈɡen/
+21	How much is this?	hˌaʊ mˈʌtʃ ɪz ðˈɪs	／ /ˈhaʊ ˈmʌtʃ ɪz ˈðɪs/
+22	I'd like to go to the station.	aɪd lˈaɪk tə ɡˌəʊ tə ðə stˈeɪʃən	／ /aɪd ˈlaɪk tə ˈɡəʊ tə ðə ˈsteɪʃən/
+23	How do I get to the airport?	hˌaʊ dˈuː aɪ ɡɛt tə ðɪ ˈeəpɔːt	／ /ˈhaʊ də aɪ ˈɡet tə ði ˈeəpɔːt/
+24	Which bus is it?	wˌɪtʃ bˈʌs ɪz ɪt	／ /ˈwɪtʃ ˈbʌs ɪz ɪt/
+25	Who is that?	hˌuː ɪz ðˈæt	／ /ˈhuː ɪz ˈðæt/
+26	What time is it?	wˌɒt tˈaɪm ɪz ɪt	／ /ˈwɒt ˈtaɪm ɪz ɪt/
+27	What dish would you recommend?	wˌɒt dˈɪʃ wʊd juː ɹˌɛkəmˈɛnd	／ /ˈwɒt ˈdɪʃ wəd ju rekəˈmend/
+28	I'll have this one, please.	aɪl hæv ðˈɪswˌɒn plˈiːz	／ /aɪl ˈhæv ˈðɪs wʌn ˈpliːz/
+29	Can I get the bill, please?	kæn aɪ ɡɛt ðə bˈɪl plˈiːz	／ /kən aɪ ˈɡet ðə ˈbɪl ˈpliːz/
+30	Could you help me?	kʊd juː hˈɛlp mˌiː	／ /kəd ju ˈhelp mi/

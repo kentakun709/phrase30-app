@@ -16,6 +16,8 @@ if (d.phrases.length !== EXPECT.phrases) errs.push(`フレーズが ${d.phrases.
 // AC11 読み: 中国語はピンイン（声調記号つき・漢字なし）、ほかは / / で囲んだ発音記号（IPA に特有の文字を含む）
 const TONE_RE = /[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/
 const HANZI_RE = /[\u3400-\u9fff]/
+const QUOTE_RE = /["“”'‘’「」«»]/   // 読みには引用符を付けない（約束）
+const SCRIPT_RE = /[\u0400-\u04ff\uac00-\ud7af\u0e00-\u0e7f\u3400-\u9fff]/   // zh 以外の読みにキリル・ハングル・タイ文字・漢字が混じらない
 const IPA_RE = /[əɪʊɛɔʃʒθðŋɾˈːɐɨʂʐɕʑʌɯʔɤɒæʝɲɡ\u02b0\u02b2\u0300-\u036f]/
 const seen = new Set(); let count = 0; let altCount = 0; let readingCount = 0
 d.phrases.forEach((p, i) => {
@@ -31,6 +33,8 @@ d.phrases.forEach((p, i) => {
     if (!('template' in x) || !x.template) errs.push(`n=${p.n} ${c} の template が無い`)
     if (!('audio' in x)) errs.push(`n=${p.n} ${c} に audio 欄が無い`)
     if (!x.reading || !x.reading.trim()) errs.push(`n=${p.n} ${c} の reading（読み）が空`)
+    else if (QUOTE_RE.test(x.reading)) errs.push(`n=${p.n} ${c}: 読みに引用符がある（${x.reading}）`)
+    else if (c !== 'zh' && SCRIPT_RE.test(x.reading)) errs.push(`n=${p.n} ${c}: 発音記号にその言語の文字が混じっている（${x.reading}）`)
     else if (c === 'zh') {
       if (HANZI_RE.test(x.reading)) errs.push(`n=${p.n} zh: 読みに漢字が入っている（${x.reading}）`)
       else if (!TONE_RE.test(x.reading)) errs.push(`n=${p.n} zh: 読みに声調記号が無い（${x.reading}）`)

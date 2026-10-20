@@ -1,0 +1,31 @@
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 es・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（強勢の位置の照合に使った）
+ 1	¿Cómo te llamas?	kˈomo te ʎˈamas	／ /ˈkomo te ˈʝamas/
+ 2	¿De dónde eres?	de ðˈonde ˈeɾes	／ /de ˈdonde ˈeɾes/
+ 3	¿Dónde vives?	dˈonde βˈiβes	／ /ˈdonde ˈbibes/
+ 4	¿Cómo estás?	kˈomo estˈas	／ /ˈkomo esˈtas/
+ 5	¿Y tú?	i tˈu	／ /i ˈtu/
+ 6	Mucho gusto.	mˈutʃo ɣˈusto	／ /ˈmutʃo ˈɡusto/
+ 7	¿A qué te dedicas?	a kˈe te ðeðˈikas	／ /a ˈke te deˈdikas/
+ 8	¿Habla inglés?	ˈaβla iŋɡlˈes	／ /ˈabla inˈɡles/
+ 9	¿Por qué estudias español?	poɾ kˈe estˈuðjas ˌespaɲˈol	／ /poɾ ˈke esˈtudjas espaˈɲol/
+10	Porque quiero viajar.	pˌoɾke kjˈeɾo βjaxˈaɾ	／ /ˈpoɾke ˈkjeɾo bjaˈxaɾ/
+11	¿Cuánto tiempo llevas estudiando español?	kwˈanto tjˈempo ʎˈeβas ˌestuðjˈando ˌespaɲˈol	／ /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/
+12	¿Qué haces en tu tiempo libre?	kˈe ˈaθes en tu tjˈempo lˈiβɾe	／ /ˈke ˈaθes en tu ˈtjempo ˈlibɾe/
+13	¿Alguna vez has estado en Japón?	alɣˈuna βˈeθ ˈas estˈaðo en xapˈon	／ /alˈɡuna ˈbeθ as esˈtado en xaˈpon/
+14	¿Puedo tomar una foto?	pwˈeðo tomˈaɾ ˈuna fˈoto	／ /ˈpwedo toˈmaɾ ˈuna ˈfoto/
+15	¿Cuándo llegaste?	kwˈando ʎeɣˈaste	／ /ˈkwando ʝeˈɡaste/
+16	¿Te gusta el sushi?	te ɣˈusta el sˈusi	／ /te ˈɡusta el ˈsuʃi/
+17	¿Qué significa "vale"?	kˈe sˌiɡnifˈika bˈale	／ /ˈke siɡniˈfika ˈbale/
+18	¿Sabes nadar?	sˈaβes naðˈaɾ	／ /ˈsabes naˈdaɾ/
+19	¿Tienen wifi?	tjˈenen wˈifi	／ /ˈtjenen ˈwifi/
+20	¿Puede repetirlo, por favor?	pwˈeðe rˌepetˈiɾlo poɾ faβˈoɾ	／ /ˈpwede repeˈtiɾlo poɾ faˈboɾ/
+21	¿Cuánto cuesta esto?	kwˈanto kwˈesta ˈesto	／ /ˈkwanto ˈkwesta ˈesto/
+22	Quiero ir a la estación.	kjˈeɾo ˈiɾ a la ˌestaθjˈon	／ /ˈkjeɾo ˈiɾ a la estaˈθjon/
+23	¿Cómo llego al aeropuerto?	kˈomo ʎˈeɣo al ˌaeɾopwˈeɾto	／ /ˈkomo ˈʝeɡo al aeɾoˈpweɾto/
+24	¿Qué autobús es?	kˈe ˌaʊtoβˈus ˈes	／ /ˈke awtoˈbus es/
+25	¿Quién es esa persona?	kjˈen ˈes ˈesa peɾsˈona	／ /ˈkjen es ˈesa peɾˈsona/
+26	¿Qué hora es?	kˈe ˈoɾa ˈes	／ /ˈke ˈoɾa es/
+27	¿Qué plato me recomienda?	kˈe plˈato me rˌekomjˈɛnda	／ /ˈke ˈplato me rekoˈmjenda/
+28	Esto, por favor.	ˈesto poɾ faβˈoɾ	／ /ˈesto poɾ faˈboɾ/
+29	La cuenta, por favor.	la kwˈɛnta poɾ faβˈoɾ	／ /la ˈkwenta poɾ faˈboɾ/
+30	¿Me podría ayudar?	me poðɾˈia ˌaʝuðˈaɾ	／ /me poˈdɾia aʝuˈdaɾ/
