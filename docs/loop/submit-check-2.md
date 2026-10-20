@@ -1,6 +1,6 @@
 # 納品前の機械チェック（送信2・作る側が自分でもう一度実行した記録・2026-10-20 12:5x〜13:0x）
 
-対象: HEAD 8f50840（周回7 合格＋審査後の直し）。公開版 https://kentakun709.github.io/phrase30-app/ は 12:42:40 に4ファイル cmp 一致・HTTP/2 200。
+対象: HEAD 08abe1b（周回7 合格＋審査後の直し＋東条の検収の2点）。公開版 https://kentakun709.github.io/phrase30-app/ は 12:56:48 に4ファイル cmp 一致・HTTP/2 200。試験は 08abe1b でも 22本×2周 44/44（13:1x）。
 
 | 完成の条件 | ○ | 何で確かめたか（日時・出力・場所） |
 |---|---|---|
@@ -17,4 +17,4 @@
 
 - 秘密情報スキャン: 成果物と commit 範囲に token／APIキー／creds なし（13:0x）
 - 引き継ぎ: 未commit なし・push 済み（8f50840）・CURRENT.md 更新済み
-- 東条（Codex）の納品検収: docs/loop/round-7/codex-kenshu.md（結果は紙に1行）
+- 東条（Codex）の納品検収: 1回目（8f50840）不可＝2点 → 直して再検収（08abe1b）**可**（docs/loop/round-7/codex-kenshu.md）
