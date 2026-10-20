@@ -155,6 +155,38 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(cards.nth(4)).not.toHaveClass(/playing/, { timeout: 2000 })
   })
 
+  test('AC11 どの言語でも30マスすべてに読み（中国語はピンイン・ほかは発音記号）が常時見え、押した文の欄にも出る。幅390で横スクロールなし・マスは44px以上で枠の中', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    const board = await page.locator('#board').boundingBox()
+    for (const code of CODES) {
+      await page.locator(`.tab[data-lang="${code}"]`).click()
+      await expect(page.locator('.card').first().locator('.text')).toHaveText(data.phrases[0].langs[code].example)
+      const rs = await page.locator('.card').evaluateAll(es => es.map(e => {
+        const r = e.querySelector('.reading'); const b = e.getBoundingClientRect(); const rb = r && r.getBoundingClientRect()
+        return { text: r ? r.textContent : '', lang: r ? r.getAttribute('lang') : '', h: rb ? rb.height : 0, cardH: b.height, x: b.x, right: b.right,
+          order: r ? (e.querySelector('.text').getBoundingClientRect().bottom <= rb.top + 1 && rb.bottom <= e.querySelector('.ja').getBoundingClientRect().top + 1) : false }
+      }))
+      expect(rs.length).toBe(30)
+      rs.forEach((r, i) => {
+        expect(r.text, `${code} ${i + 1}番の読み`).toBe(data.phrases[i].langs[code].reading)
+        expect(r.h, `${code} ${i + 1}番の読みが描かれている`).toBeGreaterThan(0)
+        expect(r.order, `${code} ${i + 1}番: 文 → 読み → 訳 の順`).toBe(true)
+        expect(r.cardH, `${code} ${i + 1}番のマスは44px以上`).toBeGreaterThanOrEqual(44)
+        expect(r.x, `${code} ${i + 1}番は枠の中（左）`).toBeGreaterThanOrEqual(board.x - 1)
+        expect(r.right, `${code} ${i + 1}番は枠の中（右）`).toBeLessThanOrEqual(board.x + board.width + 1)
+        expect(r.lang, `${code} 読みの言語の印`).toBe(code === 'zh' ? 'zh-Latn-pinyin' : `${code}-fonipa`)
+      })
+      const sw = await page.evaluate(() => document.documentElement.scrollWidth)
+      expect(sw, `${code} の横幅`).toBeLessThanOrEqual(390)
+    }
+    // 押した文の欄にも同じ読み
+    await page.locator('.tab[data-lang="zh"]').click()
+    await page.locator('.card[data-n="1"]').click()
+    await expect(page.locator('#detail .dreading')).toHaveText(data.phrases[0].langs.zh.reading)
+  })
+
   test('AC5 幅390pxで横スクロールが出ず、カードとタブは44px以上、本文は広い列にある', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')

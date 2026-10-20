@@ -250,6 +250,7 @@
       var sec = sections.filter(function (q) { return q.from === p.n; })[0];   // 区切り（1・13・20番）の名前は最初のマスの番号の横に
       b.innerHTML = '<span class="num">' + (p.n < 10 ? '0' + p.n : p.n) + (sec ? ' <span class="sec">' + esc(sec.title) + '</span>' : '') + '</span>' + SPEAKER_SVG +
         '<span class="text" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span>' +
+        readingHtml(it, 'reading') +
         '<span class="ja">' + esc(it.ja) + '</span>';
       b.addEventListener('click', function () { play(p.n); });
       li.appendChild(b);
@@ -258,12 +259,19 @@
     $langnote.textContent = def.note || '';
     renderDetail();
   }
+  // 読み（Kenta 2026-10-20 の赤）: 中国語はピンイン、ほかは発音記号（IPA）。押さなくても見えるようマスに常時出す
+  function readingHtml(it, cls) {
+    if (!it.reading) return '';
+    var tag = state.lang === 'zh' ? 'zh-Latn-pinyin' : state.lang + '-fonipa';   // 読み上げソフトに「読みの表記」だと伝える
+    return '<span class="' + cls + '" lang="' + tag + '">' + esc(it.reading) + '</span>';
+  }
   // 押した文（欄 #dock の中）: 大きい字・訳・注・言い換えの型（マスには入れない＝表を軽く保つ）。欄を押すと同じ文がもう一度鳴る
   function renderDetail() {
     var n = state.detailN;
     if (!n) { $dbody.innerHTML = '<span class="dhint">マスを押すと鳴ります（何度でも）。押した文と、言い換えの型・注はここに出ます。</span>'; return; }
     var p = state.data.phrases[n - 1], it = p.langs[state.lang], def = langDef();
     var html = '<div class="dhead"><span class="dnum">' + (n < 10 ? '0' + n : n) + '</span><span class="dtext" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span></div>' +
+      readingHtml(it, 'dreading') +
       '<span class="dja">' + esc(it.ja) + '</span>';
     if (it.note) html += '<span class="note">' + esc(it.note) + '</span>';
     if (it.template && it.template !== it.example) {

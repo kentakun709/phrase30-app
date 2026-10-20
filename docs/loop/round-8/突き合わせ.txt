@@ -1,0 +1,268 @@
+全180件: 一致 91・強勢/長音/声調だけ違う 47・音が違う 42
+zh  2 [強勢・長音・声調だけ違う] 你是哪里人？
+    私  : nǐ shì nǎli rén
+    東条: nǐ shì nǎlǐ rén
+zh  3 [強勢・長音・声調だけ違う] 你住在哪里？
+    私  : nǐ zhù zài nǎli
+    東条: nǐ zhù zài nǎlǐ
+zh 19 [音が違う] 有Wi-Fi吗？
+    私  : yǒu Wi-Fi ma
+    東条: yǒu wāifāi ma
+en  2 [音が違う] Where are you from?
+    私  : /weər ə ju ˈfrɒm/
+    東条: /ˈweə ə ju ˈfrɒm/
+en  3 [強勢・長音・声調だけ違う] Where do you live?
+    私  : /weə də ju ˈlɪv/
+    東条: /ˈweə də ju ˈlɪv/
+en  4 [強勢・長音・声調だけ違う] How's it going?
+    私  : /haʊz ɪt ˈɡəʊɪŋ/
+    東条: /ˈhaʊz ɪt ˈɡəʊɪŋ/
+en  5 [強勢・長音・声調だけ違う] How about you?
+    私  : /haʊ əˈbaʊt ˈjuː/
+    東条: /ˈhaʊ əbaʊt ˈju/
+en  7 [強勢・長音・声調だけ違う] What do you do?
+    私  : /wɒt də ju ˈduː/
+    東条: /ˈwɒt də ju ˈduː/
+en 11 [音が違う] How long have you been learning English?
+    私  : /haʊ ˈlɒŋ həv ju bɪn ˈlɜːnɪŋ ˈɪŋɡlɪʃ/
+    東条: /ˈhaʊ ˈlɒŋ əv ju bɪn ˈlɜːnɪŋ ˈɪŋɡlɪʃ/
+en 12 [強勢・長音・声調だけ違う] What do you do for fun?
+    私  : /wɒt də ju ˈduː fə ˈfʌn/
+    東条: /ˈwɒt də ju ˈduː fə ˈfʌn/
+en 13 [音が違う] Have you ever been to Japan?
+    私  : /həv ju ˈevə bɪn tə dʒəˈpæn/
+    東条: /əv ju ˈevə bɪn tə dʒəˈpæn/
+en 15 [強勢・長音・声調だけ違う] When did you get here?
+    私  : /wen dɪd ju ˈɡet ˈhɪə/
+    東条: /ˈwen dɪd ju ˈɡet ˈhɪə/
+en 17 [強勢・長音・声調だけ違う] What does "sweet as" mean?
+    私  : /wɒt dəz ˈswiːt æz ˈmiːn/
+    東条: /ˈwɒt dəz ˈswiːt æz ˈmiːn/
+en 19 [強勢・長音・声調だけ違う] Do you have Wi-Fi?
+    私  : /də ju ˈhæv ˈwaɪfaɪ/
+    東条: /də ju hæv ˈwaɪ faɪ/
+en 21 [強勢・長音・声調だけ違う] How much is this?
+    私  : /haʊ ˈmʌtʃ ɪz ˈðɪs/
+    東条: /ˈhaʊ ˈmʌtʃ ɪz ˈðɪs/
+en 23 [強勢・長音・声調だけ違う] How do I get to the airport?
+    私  : /haʊ də aɪ ˈɡet tə ði ˈeəpɔːt/
+    東条: /ˈhaʊ də aɪ ˈɡet tə ði ˈeəpɔːt/
+en 24 [強勢・長音・声調だけ違う] Which bus is it?
+    私  : /wɪtʃ ˈbʌs ɪz ɪt/
+    東条: /ˈwɪtʃ ˈbʌs ɪz ɪt/
+en 25 [強勢・長音・声調だけ違う] Who is that?
+    私  : /huː ɪz ˈðæt/
+    東条: /ˈhuː ɪz ˈðæt/
+en 26 [強勢・長音・声調だけ違う] What time is it?
+    私  : /wɒt ˈtaɪm ɪz ɪt/
+    東条: /ˈwɒt ˈtaɪm ɪz ɪt/
+en 27 [強勢・長音・声調だけ違う] What dish would you recommend?
+    私  : /wɒt ˈdɪʃ wəd ju rekəˈmend/
+    東条: /ˈwɒt ˈdɪʃ wəd ju rekəˈmend/
+en 28 [強勢・長音・声調だけ違う] I'll have this one, please.
+    私  : /aɪl ˈhæv ˈðɪs wʌn ˈpliːz/
+    東条: /aɪl ˈhæv ðɪs ˈwʌn pliːz/
+en 29 [強勢・長音・声調だけ違う] Can I get the bill, please?
+    私  : /kən aɪ ˈɡet ðə ˈbɪl ˈpliːz/
+    東条: /kən aɪ ˈɡet ðə ˈbɪl pliːz/
+ko  1 [音が違う] 이름이 뭐예요?
+    私  : /iɾɯmi mwʌejo/
+    東条: /iɾɯmi mwʌjejo/
+ko  4 [音が違う] 잘 지내세요?
+    私  : /tɕal dʑinesejo/
+    東条: /tɕal tɕinɛsejo/
+ko  5 [音が違う] 민수 씨는요?
+    私  : /minsu ɕ͈inɯnjo/
+    東条: /minsu s͈inɯnjo/
+ko  9 [音が違う] 왜 한국어를 공부하세요?
+    私  : /we hanɡuɡʌɾɯl koŋbuhasejo/
+    東条: /wɛ hanɡuɡʌɾɯl koŋbuhasejo/
+ko 10 [音が違う] 여행 가고 싶어서요.
+    私  : /jʌheŋ kaɡo ɕipʰʌsʌjo/
+    東条: /jʌhɛŋ kaɡo ɕipʰʌsʌjo/
+ko 11 [音が違う] 한국어 배운 지 얼마나 됐어요?
+    私  : /hanɡuɡʌ peun dʑi ʌlmana twes͈ʌjo/
+    東条: /hanɡuɡʌ pɛun tɕi ʌlmana twɛs͈ʌjo/
+ko 12 [音が違う] 취미가 뭐예요?
+    私  : /tɕʰwimiɡa mwʌejo/
+    東条: /tɕʰwimiɡa mwʌjejo/
+ko 13 [音が違う] 일본에 가 보신 적 있으세요?
+    私  : /ilbone ka boɕin tɕʌk is͈ɯsejo/
+    東条: /ilbone ka poɕin tɕʌɡ is͈ɯsejo/
+ko 14 [音が違う] 사진 찍어도 돼요?
+    私  : /sadʑin tɕ͈iɡʌdo twejo/
+    東条: /sadʑin tɕ͈iɡʌdo twɛjo/
+ko 16 [強勢・長音・声調だけ違う] 초밥 좋아하세요?
+    私  : /tɕʰobap tɕoahasejo/
+    東条: /tɕʰobap̚ tɕ͈oahasejo/
+ko 17 [音が違う] '대박'이 무슨 뜻이에요?
+    私  : /tebaɡi musɯn t͈ɯɕiejo/
+    東条: /tɛbaɡi musɯn t͈ɯɕiejo/
+ko 20 [音が違う] 다시 한번 말씀해 주세요.
+    私  : /taɕi hanbʌn mals͈ɯmhe dʑusejo/
+    東条: /taɕi hanbʌn mals͈ɯmhe tɕusejo/
+ko 21 [音が違う] 이거 얼마예요?
+    私  : /iɡʌ ʌlmaejo/
+    東条: /iɡʌ ʌlmajejo/
+ko 24 [音が違う] 어느 버스예요?
+    私  : /ʌnɯ pʌsɯejo/
+    東条: /ʌnɯ pʌsɯjejo/
+ko 26 [音が違う] 지금 몇 시예요?
+    私  : /tɕiɡɯm mjʌt ɕ͈iejo/
+    東条: /tɕiɡɯm mjʌt̚ s͈ijejo/
+ko 27 [音が違う] 추천 메뉴가 뭐예요?
+    私  : /tɕʰutɕʰʌn menjuɡa mwʌejo/
+    東条: /tɕʰutɕʰʌn menjuɡa mwʌjejo/
+ko 28 [音が違う] 이거 주세요.
+    私  : /iɡʌ dʑusejo/
+    東条: /iɡʌ tɕusejo/
+ko 29 [音が違う] 계산해 주세요.
+    私  : /kesanhe dʑusejo/
+    東条: /kjesanhe tɕusejo/
+ko 30 [音が違う] 좀 도와주시겠어요?
+    私  : /tɕom dowadʑuɕiɡes͈ʌjo/
+    東条: /tɕom towadʑuɕiɡes͈ʌjo/
+es  5 [強勢・長音・声調だけ違う] ¿Y tú?
+    私  : /i ˈtu/
+    東条: /i tu/
+es  7 [強勢・長音・声調だけ違う] ¿A qué te dedicas?
+    私  : /a ˈke te deˈdikas/
+    東条: /a ke te deˈdikas/
+es  9 [強勢・長音・声調だけ違う] ¿Por qué estudias español?
+    私  : /poɾ ˈke esˈtudjas espaˈɲol/
+    東条: /poɾ ke esˈtudjas espaˈɲol/
+es 11 [強勢・長音・声調だけ違う] ¿Cuánto tiempo llevas estudiando español?
+    私  : /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/
+    東条: /ˈkwanto ˈtjempo ˈʝebas estudˈjando espaˈɲol/
+es 12 [音が違う] ¿Qué haces en tu tiempo libre?
+    私  : /ˈke ˈaθes en tu ˈtjempo ˈlibɾe/
+    東条: /ke ˈases en tu ˈtjempo ˈlibɾe/
+es 13 [音が違う] ¿Alguna vez has estado en Japón?
+    私  : /alˈɡuna ˈbeθ as esˈtado en xaˈpon/
+    東条: /alˈɡuna bes as esˈtado en xaˈpon/
+es 16 [音が違う] ¿Te gusta el sushi?
+    私  : /te ˈɡusta el ˈsusi/
+    東条: /te ˈɡusta el ˈsuʃi/
+es 17 [強勢・長音・声調だけ違う] ¿Qué significa "vale"?
+    私  : /ˈke siɡniˈfika ˈbale/
+    東条: /ke siɡniˈfika ˈbale/
+es 22 [音が違う] Quiero ir a la estación.
+    私  : /ˈkjeɾo ˈiɾ a la estaˈθjon/
+    東条: /ˈkjeɾo iɾ a la estaˈsjon/
+es 24 [音が違う] ¿Qué autobús es?
+    私  : /ˈke awtoˈbus es/
+    東条: /ke autoˈbus es/
+es 25 [強勢・長音・声調だけ違う] ¿Quién es esa persona?
+    私  : /ˈkjen es ˈesa peɾˈsona/
+    東条: /kjen es ˈesa peɾˈsona/
+es 26 [強勢・長音・声調だけ違う] ¿Qué hora es?
+    私  : /ˈke ˈoɾa es/
+    東条: /ke ˈoɾa es/
+es 27 [強勢・長音・声調だけ違う] ¿Qué plato me recomienda?
+    私  : /ˈke ˈplato me rekoˈmjenda/
+    東条: /ke ˈplato me rekoˈmjenda/
+ru  1 [音が違う] Как вас зовут?
+    私  : /ˈkak vas zɐˈvut/
+    東条: /kak vɐs zɐˈvut/
+ru  3 [音が違う] Где вы живёте?
+    私  : /ˈɡdʲe vɨ ʐɨˈvʲotʲɪ/
+    東条: /ɡdʲe vɨ ʐɨˈvʲɵtʲe/
+ru  4 [音が違う] Как дела?
+    私  : /ˈkak dʲɪˈla/
+    東条: /kaɡ dʲɪˈla/
+ru  5 [強勢・長音・声調だけ違う] А вы?
+    私  : /a ˈvɨ/
+    東条: /a vɨ/
+ru  7 [音が違う] Кем вы работаете?
+    私  : /ˈkʲem vɨ rɐˈbotəjɪtʲɪ/
+    東条: /kʲem vɨ rɐˈbotəjɪtʲe/
+ru  8 [音が違う] Вы говорите по-английски?
+    私  : /vɨ ɡəvɐˈrʲitʲɪ pɐ ɐnˈɡlʲiskʲɪ/
+    東条: /vɨ ɡəvɐˈrʲitʲe pə ɐnˈɡlʲijskʲɪ/
+ru  9 [音が違う] Почему вы учите русский?
+    私  : /pətɕɪˈmu vɨ ˈutɕɪtʲɪ ˈruskʲɪj/
+    東条: /pətɕɪˈmu vɨ ʊˈtɕitʲe ˈruskʲɪj/
+ru 10 [音が違う] Потому что я хочу путешествовать.
+    私  : /pətɐˈmu ʂtə ja xɐˈtɕu pʊtʲɪˈʂɛstvəvətʲ/
+    東条: /pətɐˈmu ʂtə ja xɐˈtɕu pʊtʲɪˈʂestvəvətʲ/
+ru 11 [音が違う] Как давно вы учите русский?
+    私  : /ˈkak dɐvˈno vɨ ˈutɕɪtʲɪ ˈruskʲɪj/
+    東条: /kaɡ dɐvˈno vɨ ʊˈtɕitʲe ˈruskʲɪj/
+ru 12 [強勢・長音・声調だけ違う] Чем вы увлекаетесь?
+    私  : /ˈtɕem vɨ ʊvlʲɪˈkajɪtʲɪsʲ/
+    東条: /tɕem vɨ ʊvlʲɪˈkajɪtʲɪsʲ/
+ru 16 [音が違う] Вы любите суши?
+    私  : /vɨ ˈlʲubʲɪtʲɪ ˈsuʂɨ/
+    東条: /vɨ ˈlʲubʲɪtʲe ˈsuʂɨ/
+ru 17 [強勢・長音・声調だけ違う] Что значит «ладно»?
+    私  : /ˈʂto ˈznatɕɪt ˈladnə/
+    東条: /ʂto ˈznatɕɪt ˈladnə/
+ru 18 [音が違う] Вы умеете плавать?
+    私  : /vɨ ʊˈmʲejɪtʲɪ ˈplavətʲ/
+    東条: /vɨ ʊˈmejɪtʲe ˈplavətʲ/
+ru 19 [音が違う] У вас есть вай-фай?
+    私  : /u ˈvas jestʲ vajˈfaj/
+    東条: /u vɐs jesʲtʲ vajˈfaj/
+ru 20 [音が違う] Повторите, пожалуйста.
+    私  : /pəftɐˈrʲitʲɪ pɐˈʐalʊstə/
+    東条: /pəftɐˈrʲitʲe pɐˈʐalʊstə/
+ru 23 [音が違う] Как добраться до аэропорта?
+    私  : /ˈkak dɐˈbratsə də ɐɛrɐˈportə/
+    東条: /kaɡ dɐˈbrat͡sə də ɐɪrɐˈportə/
+ru 25 [強勢・長音・声調だけ違う] Кто это?
+    私  : /ˈkto ˈɛtə/
+    東条: /kto ˈɛtə/
+ru 26 [強勢・長音・声調だけ違う] Который час?
+    私  : /kɐˈtorɨj ˈtɕas/
+    東条: /kɐˈtorɨj tɕas/
+ru 27 [音が違う] Какое блюдо вы посоветуете?
+    私  : /kɐˈkojə ˈblʲudə vɨ pəsɐˈvʲetʊjɪtʲɪ/
+    東条: /kɐˈkoje ˈblʲudə vɨ pəsɐˈvetʊjɪtʲe/
+ru 28 [強勢・長音・声調だけ違う] Мне вот это, пожалуйста.
+    私  : /mnʲe ˈvot ˈɛtə pɐˈʐalʊstə/
+    東条: /mnʲe vot ˈɛtə pɐˈʐalʊstə/
+ru 29 [音が違う] Счёт, пожалуйста.
+    私  : /ˈɕːot pɐˈʐalʊstə/
+    東条: /ɕːɵt pɐˈʐalʊstə/
+ru 30 [強勢・長音・声調だけ違う] Вы не могли бы мне помочь?
+    私  : /vɨ nʲɪ mɐɡˈlʲi bɨ mnʲe pɐˈmotɕ/
+    東条: /vɨ nʲɪ mɐˈɡlʲi bɨ mnʲe pɐˈmotɕ/
+th  4 [強勢・長音・声調だけ違う] สบายดีไหมครับ
+    私  : /sàbaːj diː máj kʰráp/
+    東条: /sà.baːj diː mǎj kʰráp/
+th  6 [強勢・長音・声調だけ違う] ยินดีที่ได้รู้จักครับ
+    私  : /jin diː tʰîː dâj rúː tɕàk kʰráp/
+    東条: /jin diː tʰîː dâːj rúː.tɕàk kʰráp/
+th  8 [強勢・長音・声調だけ違う] คุณพูดภาษาอังกฤษได้ไหมครับ
+    私  : /kʰun pʰûːt pʰaːsǎː ʔaŋkrìt dâj máj kʰráp/
+    東条: /kʰun pʰûːt pʰaː.sǎː ʔaŋ.krìt dâːj mǎj kʰráp/
+th  9 [強勢・長音・声調だけ違う] ทำไมคุณถึงเรียนภาษาไทยครับ
+    私  : /tʰammaj kʰun tʰɯ̌ŋ rian pʰaːsǎː tʰaj kʰráp/
+    東条: /tʰam.maj kʰun tʰɯ̌ŋ riːan pʰaː.sǎː tʰaj kʰráp/
+th 11 [強勢・長音・声調だけ違う] คุณเรียนภาษาไทยมานานแค่ไหนแล้วครับ
+    私  : /kʰun rian pʰaːsǎː tʰaj maː naːn kʰɛ̂ː nǎj lɛ́ːw kʰráp/
+    東条: /kʰun riːan pʰaː.sǎː tʰaj maː naːn kʰɛ̂ː nǎj lɛ́ːw kʰráp/
+th 13 [強勢・長音・声調だけ違う] คุณเคยไปญี่ปุ่นไหมครับ
+    私  : /kʰun kʰɤːj paj jîːpùn máj kʰráp/
+    東条: /kʰun kʰɤːj paj jîː.pùn mǎj kʰráp/
+th 14 [強勢・長音・声調だけ違う] ถ่ายรูปได้ไหมครับ
+    私  : /tʰàːj rûːp dâj máj kʰráp/
+    東条: /tʰàːj rûːp dâːj mǎj kʰráp/
+th 16 [強勢・長音・声調だけ違う] คุณชอบซูชิไหมครับ
+    私  : /kʰun tɕʰɔ̂ːp suːtɕʰíʔ máj kʰráp/
+    東条: /kʰun tɕʰɔ̂ːp suː.tɕʰíʔ mǎj kʰráp/
+th 18 [強勢・長音・声調だけ違う] คุณว่ายน้ำเป็นไหมครับ
+    私  : /kʰun wâːj náːm pen máj kʰráp/
+    東条: /kʰun wâːj náːm pen mǎj kʰráp/
+th 19 [強勢・長音・声調だけ違う] มีไวไฟไหมครับ
+    私  : /miː waj faj máj kʰráp/
+    東条: /miː waj.faj mǎj kʰráp/
+th 20 [強勢・長音・声調だけ違う] ช่วยพูดอีกครั้งได้ไหมครับ
+    私  : /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâj máj kʰráp/
+    東条: /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâːj mǎj kʰráp/
+th 27 [強勢・長音・声調だけ違う] มีเมนูอะไรแนะนำไหมครับ
+    私  : /miː meːnuː ʔàraj nɛ́ʔnam máj kʰráp/
+    東条: /miː meː.nuː ʔà.raj nɛ́ʔ.nam mǎj kʰráp/
+th 30 [強勢・長音・声調だけ違う] ช่วยหน่อยได้ไหมครับ
+    私  : /tɕʰûaj nɔ̀j dâj máj kʰráp/
+    東条: /tɕʰûaj nɔ̀j dâːj mǎj kʰráp/
