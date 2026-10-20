@@ -7,7 +7,7 @@
     noVoice: false, slow: false, gen: 0, watchdog: null, dismissed: {}, noticeKey: '', busyCancelAt: 0, scroll: {}, howtoAuto: false, howtoOpened: {}, detailN: 0 };
   var $ = function (id) { return document.getElementById(id); };
   var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticebody'), $noticeclose = $('noticeclose'), $noticehow = $('noticehow');
-  var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody'), $howtosum = $('howtosum'), $voicehow = $('voicehow');
+  var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $legendsum = $('legendsum'), $legendlist = $('legendlist'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody'), $howtosum = $('howtosum'), $voicehow = $('voicehow');
   var $dbody = $('dbody');
 
   var SPEAKER_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
@@ -124,9 +124,10 @@
   function showNotice(key, text) {
     if (state.dismissed[key]) return;              // 閉じた案内は、同じ件では出し直さない
     state.noticeKey = key; $noticetext.textContent = text; $notice.hidden = false;
+    $notice.parentNode.classList.add('has-notice');   // 案内が出ている間は欄の読みを隠す（:has は古い iOS で効かないのでクラスで）
     $noticehow.hidden = !/^(novoice|err|silent)/.test(key);   // 声の足し方へ飛ぶボタン（声の問題の時だけ）
   }
-  function hideNotice(prefix) { if (!prefix || state.noticeKey.indexOf(prefix) === 0) { $notice.hidden = true; $noticetext.textContent = ''; state.noticeKey = ''; } }
+  function hideNotice(prefix) { if (!prefix || state.noticeKey.indexOf(prefix) === 0) { $notice.hidden = true; $noticetext.textContent = ''; state.noticeKey = ''; $notice.parentNode.classList.remove('has-notice'); } }
   function hideFailNotices(keys) { keys.forEach(function (k) { if (state.noticeKey === k) hideNotice(k); }); }
 
   function setPlaying(n) {
@@ -257,12 +258,18 @@
       $list.appendChild(li);
     });
     $langnote.textContent = def.note || '';
+    renderLegend(def);
     renderDetail();
+  }
+  // 記号の読み方（周回9 judge）: その言語の読みに出る記号を全部。既定は閉じる。言語を切り替えたら中身だけ差し替える
+  function renderLegend(def) {
+    $legendsum.textContent = '記号の読み方（' + (def.code === 'zh' ? 'ピンイン' : '発音記号') + '）';
+    $legendlist.innerHTML = (def.legend || []).map(function (e) { return '<dt>' + esc(e[0]) + '</dt><dd>' + esc(e[1]) + '</dd>'; }).join('');
   }
   // 読み（Kenta 2026-10-20 の赤）: 中国語はピンイン、ほかは発音記号（IPA）。押さなくても見えるようマスに常時出す
   function readingHtml(it, cls) {
     if (!it.reading) return '';
-    var tag = state.lang === 'zh' ? 'zh-Latn-pinyin' : state.lang + '-fonipa';   // 読み上げソフトに「読みの表記」だと伝える
+    var tag = state.lang === 'zh' ? 'zh-Latn-pinyin' : state.lang + '-fonipa';   // lang は字体を選ぶための印（画面の読み上げ機能には aria-hidden で読ませない）
     return '<span class="' + cls + '" lang="' + tag + '" aria-hidden="true">' + esc(it.reading) + '</span>';   // 目で見る補助。画面の読み上げ機能ではボタン名に記号を混ぜない
   }
   // 押した文（欄 #dock の中）: 大きい字・訳・注・言い換えの型（マスには入れない＝表を軽く保つ）。欄を押すと同じ文がもう一度鳴る

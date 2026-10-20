@@ -1,4 +1,4 @@
-# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 ru・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（強勢の位置の照合に使った）
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 ru・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回10 時点）（強勢の位置の照合に使った）
  1	Как вас зовут?	kˈɑk vˈɑs zʌvˈut	／ /kak vaz zɐˈvut/
  2	Откуда вы?	ʌtkˈuda vˈy	／ /ɐtˈkudə vɨ/
  3	Где вы живёте?	ɡdʲˈe vˈy ʒyvʲˈɵtʲi	／ /ɡdʲe vɨ ʐɨˈvʲotʲɪ/
@@ -11,7 +11,7 @@
 10	Потому что я хочу путешествовать.	pʌtʌmˈu ʃto ˈja xʌtʃʲˈu putʲiʃˈɛstvʌvʌtʲ	／ /pətɐˈmu ʂtə ja xɐˈtɕu pʊtʲɪˈʂɛstvəvətʲ/
 11	Как давно вы учите русский?	kˈɑk davnˈo vˈy utʃʲˈitʲi rˈusskʲij	／ /kaɡ dɐvˈno vɨ ˈutɕɪtʲɪ ˈruskʲɪj/
 12	Чем вы увлекаетесь?	tʃʲˈem vˈy uvɭʲikˈɑjitʲisʲ	／ /tɕem vɨ ʊvlʲɪˈkajɪtʲɪsʲ/
-13	Вы когда-нибудь были в Японии?	vˈy kʌɡdˈɑnʲibˈutʲ bˌyɭʲɪ v japˈonʲiɪ	／ /vɨ kɐɡˈdanʲɪbʊtʲ ˈbɨlʲɪ v jɪˈponʲɪɪ/
+13	Вы когда-нибудь были в Японии?	vˈy kʌɡdˈɑnʲibˈutʲ bˌyɭʲɪ v japˈonʲiɪ	／ /vɨ kɐɡˈdanʲɪbʊdʲ ˈbɨlʲɪ v jɪˈponʲɪɪ/
 14	Можно сделать фото?	mˈoʒnʌ ʑdʲˈeɭʌtʲ fˈotʌ	／ /ˈmoʐnə ˈzdʲelətʲ ˈfotə/
 15	Когда вы сюда приехали?	kʌɡdˈɑ vˈy sʲu"dˈɑ prʲijˈexʌɭʲɪ	／ /kɐɡˈda vɨ sʲʊˈda prʲɪˈjexəlʲɪ/
 16	Вы любите суши?	vˈy ɭʲu"bʲˈitʲi sˈuʃy	／ /vɨ ˈlʲubʲɪtʲɪ ˈsuʂɨ/

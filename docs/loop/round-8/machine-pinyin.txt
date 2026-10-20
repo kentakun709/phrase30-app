@@ -1,4 +1,4 @@
-# pypinyin 0.55.0（Style.TONE・1字ずつ・多音字は既定の1つ目）。番号・example・機械の出力 ／ 決定版（周回9 時点）
+# pypinyin 0.55.0（Style.TONE・1字ずつ・多音字は既定の1つ目）。番号・example・機械の出力 ／ 決定版（周回10 時点）
  1	你叫什么名字？	nǐ jiào shén me míng zì ？	／ nǐ jiào shénme míngzi	差
  2	你是哪里人？	nǐ shì nǎ lǐ rén ？	／ nǐ shì nǎli rén	差
  3	你住在哪里？	nǐ zhù zài nǎ lǐ ？	／ nǐ zhù zài nǎli	差
@@ -29,4 +29,4 @@
 28	我要这个。	wǒ yào zhè ge 。	／ wǒ yào zhège	一致
 29	麻烦买单。	má fán mǎi dān 。	／ máfan mǎidān	差
 30	可以帮我一下吗？	kě yǐ bāng wǒ yī xià ma ？	／ kěyǐ bāng wǒ yíxià ma	差
-# 差 14件（理由は docs/DECISIONS.md「周回8〜9」の zh）
+# 差 14件（種類と理由は docs/DECISIONS.md「周回8〜9」の zh）

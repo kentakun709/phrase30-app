@@ -1,4 +1,4 @@
-# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 es・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（強勢の位置の照合に使った）
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 es・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回10 時点）（強勢の位置の照合に使った）
  1	¿Cómo te llamas?	kˈomo te ʎˈamas	／ /ˈkomo te ˈʝamas/
  2	¿De dónde eres?	de ðˈonde ˈeɾes	／ /de ˈdonde ˈeɾes/
  3	¿Dónde vives?	dˈonde βˈiβes	／ /ˈdonde ˈbibes/
@@ -8,7 +8,7 @@
  7	¿A qué te dedicas?	a kˈe te ðeðˈikas	／ /a ˈke te deˈdikas/
  8	¿Habla inglés?	ˈaβla iŋɡlˈes	／ /ˈabla inˈɡles/
  9	¿Por qué estudias español?	poɾ kˈe estˈuðjas ˌespaɲˈol	／ /poɾ ˈke esˈtudjas espaˈɲol/
-10	Porque quiero viajar.	pˌoɾke kjˈeɾo βjaxˈaɾ	／ /ˈpoɾke ˈkjeɾo bjaˈxaɾ/
+10	Porque quiero viajar.	pˌoɾke kjˈeɾo βjaxˈaɾ	／ /poɾke ˈkjeɾo bjaˈxaɾ/
 11	¿Cuánto tiempo llevas estudiando español?	kwˈanto tjˈempo ʎˈeβas ˌestuðjˈando ˌespaɲˈol	／ /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/
 12	¿Qué haces en tu tiempo libre?	kˈe ˈaθes en tu tjˈempo lˈiβɾe	／ /ˈke ˈaθes en tu ˈtjempo ˈlibɾe/
 13	¿Alguna vez has estado en Japón?	alɣˈuna βˈeθ ˈas estˈaðo en xapˈon	／ /alˈɡuna ˈbeθ as esˈtado en xaˈpon/

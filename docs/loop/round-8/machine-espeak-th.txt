@@ -1,4 +1,4 @@
-# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 th・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（崩れて使えない。照合に使っていない）
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 th・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回10 時点）（崩れて使えない。照合に使っていない）
  1	คุณชื่ออะไรครับ	khˌu2na2chˈueː ʔˌaʔasai2ɹˈa2khaɜrmb	／ /kʰun tɕʰɯ̂ː ʔàraj kʰráp/
  2	คุณมาจากไหนครับ	khˌu2na2mˌaɜschaɜskˌai5ha2nˈa2khaɜrmb	／ /kʰun maː tɕàːk nǎj kʰráp/
  3	บ้านคุณอยู่ที่ไหนครับ	b snˌa2khu2naʔˈa2juː ths ˌai5ha2nˈa2khaɜrmb	／ /bâːn kʰun jùː tʰîːnǎj kʰráp/

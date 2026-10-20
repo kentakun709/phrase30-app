@@ -1,4 +1,4 @@
-# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 en-gb-x-rp・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回9 時点）（強勢の位置の照合に使った）
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 en-gb-x-rp・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回10 時点）（強勢の位置の照合に使った）
  1	What's your name?	wˌɒts jɔː nˈeɪm	／ /ˈwɒts jə ˈneɪm/
  2	Where are you from?	wˈeəɹ ɑː juː fɹɒm	／ /ˈweər ə ju ˈfrɒm/
  3	Where do you live?	wˌeə dˈuː juː lˈɪv	／ /ˈweə də ju ˈlɪv/
