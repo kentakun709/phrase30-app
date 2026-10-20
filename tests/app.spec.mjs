@@ -478,6 +478,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     const c599 = await rects(page)
     expect(new Set(c599.map(c => c.x)).size, '幅599は2列').toBe(2)
     expect(c599[0].y, '幅599でも1番と16番が同じ段').toBe(c599[15].y)
+    inside(c599, await rect(page, '#board'))
     await page.setViewportSize({ width: 600, height: 844 })
     await page.waitForTimeout(100)
     const c600 = await rects(page)

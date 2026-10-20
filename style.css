@@ -70,6 +70,7 @@ body{max-width:960px;margin:0 auto}
 .detail{padding:8px 12px 6px;font-size:13px;line-height:1.45;color:var(--sub)}
 .detail .dbody{cursor:pointer}
 .detail .dhead{display:flex;gap:8px;align-items:baseline;color:var(--ink)}
+.detail.playing{background:var(--play-bg)}
 .detail.playing .dnum{color:var(--play);font-weight:700}
 .detail .dnum{font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums}
 .detail .dtext{font-size:18px;font-weight:700;line-height:1.3;overflow-wrap:break-word}
