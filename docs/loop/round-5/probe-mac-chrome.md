@@ -11,3 +11,16 @@
 
 - 試験: `npm run check` ○・Playwright 19本×2周 **38 passed**（固定帯: 案内あり 235px）
 - 画面: log/phrase30-en-390.png・log/phrase30-th-390.png（git外）
+
+## 審査後の直し（a244b16）での取り直し（2026-10-20 11:4x）
+
+| 言語 | 声 | lang | 結果 | 所要 |
+|---|---|---|---|---|
+| en | Catherine | en-AU | ○ | 2.1秒 |
+| zh | Li-Mu | zh-CN | ○ | 2.5秒 |
+| ko | Yuna | ko-KR | ○ | 2.0秒 |
+| es | Mónica | es-ES | ○ | 1.6秒 |
+| ru | Milena | ru-RU | ○ | 1.9秒 |
+| th | Kanya | th-TH | ○ | 1.9秒 |
+
+- 試験: Playwright 20本×2周 **40 passed**
