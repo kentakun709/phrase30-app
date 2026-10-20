@@ -228,8 +228,10 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#detail .dreading')).toBeVisible()
     // 記号の読み方: 既定は閉じている・開いても横スクロールなし・押せる高さ
     await expect(page.locator('#legend')).not.toHaveAttribute('open', '')
+    expect(await page.locator('#legendsum').evaluate(e => getComputedStyle(e, '::before').content), '閉じている時は ▶').toContain('▶')
     await page.locator('#legendsum').click()
     await expect(page.locator('#legendlist')).toBeVisible()
+    expect(await page.locator('#legendsum').evaluate(e => getComputedStyle(e, '::before').content), '開いたら ▼').toContain('▼')
     expect((await page.locator('#legendsum').boundingBox()).height).toBeGreaterThanOrEqual(44)
     for (const w of [390, 320]) { await page.setViewportSize({ width: w, height: 844 }); expect(await page.evaluate(() => document.documentElement.scrollWidth), `幅${w}で記号の一覧を開いても横スクロールなし`).toBeLessThanOrEqual(w) }
   })

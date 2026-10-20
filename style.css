@@ -35,6 +35,9 @@ body{max-width:960px;margin:0 auto}
 /* 記号の読み方（開閉）: 言語の説明のすぐ下。押せる高さ 44px */
 .legend{margin:4px 12px 0;font-size:12px;color:var(--ink)}
 .legend summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--accent);font-weight:600}
+.legend summary::before{content:"▶";font-size:10px;margin-right:6px}
+.legend[open] summary::before{content:"▼"}
+.legend .ipa{font-family:var(--ipa)}
 .legend dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0 0 6px;padding:8px 10px;background:var(--card);border:1px solid var(--line);border-radius:8px;line-height:1.45}
 .legend dt{font-family:var(--ipa);font-weight:600;white-space:nowrap}
 .legend dd{margin:0;opacity:.85}

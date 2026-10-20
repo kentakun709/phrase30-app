@@ -28,7 +28,7 @@ cd phrase30-app && python3 -m http.server 8000
   - 声の選び方: **端末内の声（localService）から選ぶ**（通信する声は端末内に無い時だけ）。その中で上から順に比べる（足し算ではない）: 英語は NZ の声があれば必ず NZ → 自然さ（名前・識別名に premium／enhanced／拡張／プレミアム なら +5、compact −3、eloquence／Eddy などの機械声 −10）→ 地域の近さ（英語なら豪 → 英 → 愛 → 米）→ 端末の既定の声 → 名前の順（列挙順に左右されない）。中国語は香港の広東語の声を使わず、台湾の声は普通話の声が無い時だけ
 - `data/phrases.json` … 30フレーズ×6言語＋小見出し（`sections`）。各項目は `template`（原文の型・〇〇入り）と `example`（読み上げる具体例）と `reading`（example の読み。表記の約束は `docs/調査/2026-10-20_読みの表記の約束.md`・決め方は `docs/DECISIONS.md`）と `ja`（日本語訳・例文の訳）と `note`（一言）を分けて持つ。タイ語の例文は男性の丁寧形（文末 ครับ）。`audio` 欄に音声ファイルの**同じサイト内の相対パス**（例 `audio/th/01.mp3`）を入れると、Web Speech API の代わりにそれを鳴らす（高品質TTSで事前生成した音声への差し替え口。読めない時は案内を出して読み上げに戻る）。音声ファイルの置き場は `audio/`（git に載せる）
 - `scripts/check-data.mjs`・`scripts/check-no-external.mjs` … 件数（6・30・180）と中身の点検、外部通信・鍵・課金・外部URLの audio が無いことの点検（`npm run check`）
-- `tests/app.spec.mjs` … Playwright 23本（周回8で読みの試験 AC11 を足した）（この Mac の Chrome・幅390。見た目の試験 AC10b は幅1024。`PW_PORT` で受け口の番号を変えられる）。読み上げは差し替えて呼び出しの順番を見る。`scripts/probe-voices.mjs` は本物の読み上げで言語ごとの声と再生を記録する（音が出る）
+- `tests/app.spec.mjs` … Playwright 24本（周回8で読みの試験 AC11 を足した）（この Mac の Chrome・幅390。見た目の試験 AC10b は幅1024。`PW_PORT` で受け口の番号を変えられる）。読み上げは差し替えて呼び出しの順番を見る。`scripts/probe-voices.mjs` は本物の読み上げで言語ごとの声と再生を記録する（音が出る）
 
 ## 既知の制約（ベータ）
 - `overflow-x:hidden` は html だけに付ける（body に付けると帯と欄の sticky が効かない。周回6で発覚）

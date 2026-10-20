@@ -264,7 +264,7 @@
   // 記号の読み方（周回9 judge）: その言語の読みに出る記号を全部。既定は閉じる。言語を切り替えたら中身だけ差し替える
   function renderLegend(def) {
     $legendsum.textContent = '記号の読み方（' + (def.code === 'zh' ? 'ピンイン' : '発音記号') + '）';
-    $legendlist.innerHTML = (def.legend || []).map(function (e) { return '<dt>' + esc(e[0]) + '</dt><dd>' + esc(e[1]) + '</dd>'; }).join('');
+    $legendlist.innerHTML = (def.legend || []).map(function (e) { return '<dt>' + esc(e[0]) + '</dt><dd>' + e[1].split(/([A-Za-z\u0250-\u02ff\u0300-\u036f\u1d00-\u1dbf]+)/).map(function (s, i) { return i % 2 ? '<span class="ipa">' + esc(s) + '</span>' : esc(s); }).join('') + '</dd>'; }).join('');
   }
   // 読み（Kenta 2026-10-20 の赤）: 中国語はピンイン、ほかは発音記号（IPA）。押さなくても見えるようマスに常時出す
   function readingHtml(it, cls) {

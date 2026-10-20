@@ -55,7 +55,7 @@ d.phrases.forEach((p, i) => {
   }
 })
 // 記号の読み方（legend）の網羅: その言語の読みに出る記号（NFD で a-z・空白・/ 以外の1字ずつ）が全部、どれかの見出しに入っている。j は必ず・w は読みに出る言語だけ。zh は声調の印4つと q x zh ch sh z c r ü e
-const ZH_KEYS = ['\u0304', '\u0301', '\u030c', '\u0300', 'q', 'x', 'zh', 'ch', 'sh', 'z', 'c', 'r', 'ü', 'e']
+const ZH_KEYS = ['j', 'ian', '\u0304', '\u0301', '\u030c', '\u0300', 'q', 'x', 'zh', 'ch', 'sh', 'z', 'c', 'r', 'ü', 'e']
 const legendLine = []
 for (const l of d.languages) {
   const keys = (l.legend || []).map(e => e[0].normalize('NFD'))
