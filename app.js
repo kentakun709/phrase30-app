@@ -8,7 +8,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticebody'), $noticeclose = $('noticeclose'), $noticehow = $('noticehow');
   var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody'), $howtosum = $('howtosum'), $voicehow = $('voicehow');
-  var $detail = $('detail'), $legend = $('legend');
+  var $dbody = $('dbody');
 
   var SPEAKER_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
   var LANG_JA = { 'en-nz': 'ニュージーランド英語', 'en-au': 'オーストラリア英語', 'en-gb': 'イギリス英語', 'en-ie': 'アイルランド英語', 'en-us': 'アメリカ英語',
@@ -95,7 +95,7 @@
     if (state.noVoice) {
       $howto.hidden = false;
       if (state.voices.length === 0) {
-        showNotice('novoice-empty:' + def.code, '声の一覧をまだ読めていません。カードを1回押してください。【' + def.nameJa + '】の声は設定で足せます。');
+        showNotice('novoice-empty:' + def.code, '声の一覧をまだ読めていません。マスを1回押してください。【' + def.nameJa + '】の声は設定で足せます。');
         $voiceinfo.textContent = '声: 読み込み中';
       } else {
         showNotice('novoice:' + def.code, 'この端末には【' + def.nameJa + '】の音声が入っていません。端末の設定で足せます。');
@@ -110,7 +110,7 @@
       hideNotice('novoice');
       var vl = normLang(state.voice.lang), first = normLang(def.bcp47[0]);
       var txt = '声: ' + state.voice.name + '・' + langJa(vl) + (isCompact(state.voice) ? '・簡易版' : '');
-      $voicehow.hidden = !isCompact(state.voice);   // 簡易版の時は、帯から手順へ飛べる
+      $voicehow.hidden = !isCompact(state.voice);   // 簡易版の時は、欄の「もっと自然な声に」から手順へ飛べる
       if (LANG_JA[vl] && LANG_JA[first] && LANG_JA[vl] !== LANG_JA[first]) {
         var hasFirst = state.voices.some(function (v) { var l = normLang(v.lang); return (l === first || l.indexOf(first + '-') === 0) && v.localService !== false; });
         txt += hasFirst ? '。より自然な声を選びました' : '。' + LANG_JA[first] + 'の声が無いので代用';
@@ -245,21 +245,21 @@
       var li = document.createElement('li');
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'card'; b.setAttribute('data-n', String(p.n)); b.setAttribute('aria-pressed', 'false');
-      b.innerHTML = '<span class="num">' + (p.n < 10 ? '0' + p.n : p.n) + '</span>' + SPEAKER_SVG +
+      var sec = sections.filter(function (q) { return q.from === p.n; })[0];   // 区切り（1・13・20番）の名前は最初のマスの番号の横に
+      b.innerHTML = '<span class="num">' + (p.n < 10 ? '0' + p.n : p.n) + (sec ? ' <span class="sec">' + esc(sec.title) + '</span>' : '') + '</span>' + SPEAKER_SVG +
         '<span class="text" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span>' +
         '<span class="ja">' + esc(it.ja) + '</span>';
       b.addEventListener('click', function () { play(p.n); });
       li.appendChild(b);
       $list.appendChild(li);
     });
-    $legend.innerHTML = sections.map(function (sec) { return '<span class="section">' + esc(sec.from + '〜' + sec.to + ' ' + sec.title) + '</span>'; }).join('');
     $langnote.textContent = def.note || '';
     renderDetail();
   }
-  // 押した文の欄（枠のすぐ下）: 大きい字・訳・注・言い換えの型（マスには入れない＝表を軽く保つ）
+  // 押した文（欄 #dock の中）: 大きい字・訳・注・言い換えの型（マスには入れない＝表を軽く保つ）。欄を押すと同じ文がもう一度鳴る
   function renderDetail() {
     var n = state.detailN;
-    if (!n) { $detail.innerHTML = '<span class="dhint">マスを押すと鳴ります（何度でも）。押した文の言い換えの型と注はここに出ます。</span>'; return; }
+    if (!n) { $dbody.innerHTML = '<span class="dhint">マスを押すと鳴ります（何度でも）。押した文と、言い換えの型・注はここに出ます。</span>'; return; }
     var p = state.data.phrases[n - 1], it = p.langs[state.lang], def = langDef();
     var html = '<div class="dhead"><span class="dnum">' + (n < 10 ? '0' + n : n) + '</span><span class="dtext" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span></div>' +
       '<span class="dja">' + esc(it.ja) + '</span>';
@@ -269,7 +269,7 @@
         ? '<span class="tpl">言い換えの型: ' + esc(it.template) + '（' + esc(p.ja) + '）</span>'
         : '<span class="tpl">別の言い方（鳴るのは上の文）: ' + esc(it.template) + '</span>';
     }
-    $detail.innerHTML = html;
+    $dbody.innerHTML = html;
   }
 
   function topOffset() { var top = document.querySelector('.top'); return top ? top.getBoundingClientRect().height : 0; }
@@ -305,7 +305,7 @@
   }
   function saveScroll() {
     state.scroll[state.lang] = window.scrollY || 0;
-    try { localStorage.setItem('phrase30.scroll', JSON.stringify(state.scroll)); } catch (e) { /* */ }
+    try { localStorage.setItem('phrase30.scroll.v2', JSON.stringify(state.scroll)); /* 周回6で並びが変わったので鍵を変えた（送信1の版の位置を戻さない） */ } catch (e) { /* */ }
   }
 
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -313,7 +313,7 @@
   function init(data) {
     state.data = data;
     var saved = null, slow = null, scroll = null;
-    try { saved = localStorage.getItem('phrase30.lang'); slow = localStorage.getItem('phrase30.slow'); scroll = JSON.parse(localStorage.getItem('phrase30.scroll') || '{}'); } catch (e) { /* */ }
+    try { saved = localStorage.getItem('phrase30.lang'); slow = localStorage.getItem('phrase30.slow'); scroll = JSON.parse(localStorage.getItem('phrase30.scroll.v2') || '{}'); } catch (e) { /* */ }
     if (saved && data.languages.some(function (l) { return l.code === saved; })) state.lang = saved;
     if (scroll && typeof scroll === 'object') state.scroll = scroll;
     setSlow(slow === '1');
@@ -330,6 +330,7 @@
       try { window.scrollTo(0, Math.max(0, $howto.getBoundingClientRect().top + (window.scrollY || 0) - topOffset() - 8)); } catch (e) { /* */ }
     };
     $noticehow.addEventListener('click', goHowto);
+    $dbody.addEventListener('click', function () { if (state.detailN) play(state.detailN); });   // 欄の文を押しても鳴る（大きく出ている物ほど押したくなる）
     $voicehow.addEventListener('click', goHowto);
     $noticeclose.addEventListener('click', function () { if (/^(nosynth|novoice)/.test(state.noticeKey)) state.dismissed[state.noticeKey] = true; hideNotice(''); });   // 失敗の知らせは次に失敗すればまた出す
     document.addEventListener('visibilitychange', function () { if (document.hidden) stopAll(); });

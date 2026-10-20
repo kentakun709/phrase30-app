@@ -27,7 +27,7 @@
     "cmn-CN",
     "zh"
    ],
-   "note": "中国本土の標準語（簡体字）。普通話の声が無ければ台湾の声で代用"
+   "note": "中国本土の標準語（簡体字・普通話）"
   },
   {
    "code": "ko",
@@ -1157,8 +1157,8 @@
     },
     "es": {
      "template": "¿Cómo llego a 〇〇?",
-     "example": "¿Cómo llego a la playa?",
-     "ja": "ビーチまではどうやって行きますか？",
+     "example": "¿Cómo llego al aeropuerto?",
+     "ja": "空港まではどうやって行きますか？",
      "note": "",
      "audio": ""
     },

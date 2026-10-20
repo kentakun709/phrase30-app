@@ -3,7 +3,7 @@ const PORT = process.env.PW_PORT || '8787'   // 2つの試験を同時に回す�
 // スマホ幅（iPhone 13 相当 390×844）で、この Mac の Chrome を使う（ブラウザの追加ダウンロード不要）
 export default defineConfig({
   testDir: 'tests',
-  timeout: 30000,
+  timeout: 60000,   // 冷間起動でページの用意に30秒を超えることがある（周回6 東条）
   retries: 0,
   reporter: [['list']],
   use: {

@@ -63,7 +63,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
   })
 
   test('AC2 どの言語でも30マスすべてに本文と日本語訳があり、押すと〇〇入りの型が枠の下の欄に見え、言語の説明が出る', async ({ page }) => {
-    test.setTimeout(120000)
+    test.setTimeout(90000)
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
     await expect(page.locator('#detail')).toContainText('マスを押すと鳴ります')
@@ -71,12 +71,14 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
       await page.locator(`.tab[data-lang="${code}"]`).click()
       const cards = page.locator('.card')
       await expect(cards).toHaveCount(30)
+      const cells = await cards.evaluateAll(els => els.map(e => ({ num: e.querySelector('.num').textContent.trim(), text: e.querySelector('.text').textContent.trim(), ja: e.querySelector('.ja').textContent.trim() })))
       for (let i = 0; i < 30; i++) {
-        const c = cards.nth(i)
-        expect((await c.locator('.text').innerText()).trim().length, `${code} ${i + 1} 本文`).toBeGreaterThan(0)
-        expect((await c.locator('.ja').innerText()).trim().length, `${code} ${i + 1} 訳`).toBeGreaterThan(0)
+        expect(cells[i].num, `${code} ${i + 1} 番号`).toMatch(/^\d\d/)
+        expect(cells[i].text.length, `${code} ${i + 1} 本文`).toBeGreaterThan(0)
+        expect(cells[i].ja.length, `${code} ${i + 1} 訳`).toBeGreaterThan(0)
         const tpl = data.phrases[i].langs[code].template, ex = data.phrases[i].langs[code].example, note = data.phrases[i].langs[code].note
         if (tpl.includes('〇〇') || tpl !== ex || note) {
+          const c = cards.nth(i)
           await c.dispatchEvent('click')
           await expect(page.locator('#detail .dtext'), `${code} ${i + 1} 欄の本文`).toHaveText(ex)
           await expect(page.locator('#detail .dja'), `${code} ${i + 1} 欄の訳`).toHaveText(data.phrases[i].langs[code].ja)
@@ -88,7 +90,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
       const def = data.languages.find(l => l.code === code)
       if (def.note) await expect(page.locator('#langnote')).toHaveText(def.note)
     }
-    await expect(page.locator('.section')).toHaveCount(data.sections.length)
+    await expect(page.locator('.card .sec')).toHaveCount(data.sections.length)   // 区切りの名前は 1・13・20番のマスの番号の横
   })
 
   test('AC3 カードを押すと読み上げが呼ばれ、同じカードをもう一度押すとまた呼ばれる（英語は en-AU 等を選ぶ）', async ({ page }) => {
@@ -180,21 +182,23 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(top.height, '固定の帯は画面の3割以内').toBeLessThan(844 * 0.3)
   })
 
-  test('AC5c 一番長い案内（声の一覧が空・鳴らない＋声なし）でも、固定の帯は画面の3割以内', async ({ page }) => {
+  test('AC5c 一番長い状態（声の一覧が空・鳴らない＋声なし・8番の型と注）でも、欄は画面の4割以内で、帯は3割以内', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH([]))
     await page.goto('/')
     await expect(page.locator('.card')).toHaveCount(30)
     await page.locator('.tab[data-lang="th"]').click()
     await expect(page.locator('#notice')).toBeVisible()
-    const h1 = (await page.locator('.top').boundingBox()).height
-    console.log('固定の帯の高さ（一覧が空・タイ語）:', Math.round(h1), 'px')
-    expect(h1).toBeLessThan(844 * 0.3)
+    const h1 = (await page.locator('#dock').boundingBox()).height
+    console.log('欄の高さ（一覧が空・タイ語）:', Math.round(h1), 'px')
+    expect(h1).toBeLessThanOrEqual(844 * 0.4)
     await page.evaluate(() => { window.__silent = true })
-    await page.locator('.card').first().click()
+    await page.locator('.card[data-n="8"]').dispatchEvent('click')
     await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
-    const h2 = (await page.locator('.top').boundingBox()).height
-    console.log('固定の帯の高さ（鳴らない＋声なし）:', Math.round(h2), 'px')
-    expect(h2).toBeLessThan(844 * 0.3)
+    await expect(page.locator('#detail .tpl')).toContainText('言い換えの型')
+    const h2 = (await page.locator('#dock').boundingBox()).height
+    console.log('欄の高さ（鳴らない＋声なし＋8番の型と注）:', Math.round(h2), 'px')
+    expect(h2).toBeLessThanOrEqual(844 * 0.4)
+    expect((await page.locator('.top').boundingBox()).height, '固定の帯は画面の3割以内').toBeLessThan(844 * 0.3)
   })
 
   test('声が無い言語の「声の足し方」は言語ごとに1回だけ自動で開き、閉じたら押しても開き直さない', async ({ page }) => {
@@ -233,7 +237,9 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5)
     const note = await page.locator('#langnote').boundingBox()
     const top = await page.locator('.top').boundingBox()
-    expect(note.y, '言語の説明は帯の下に見えている').toBeGreaterThan(top.y + top.height - 1)
+    expect(note.y - (top.y + top.height), '言語の説明は帯のすぐ下（0〜40px）').toBeGreaterThanOrEqual(-1)
+    expect(note.y - (top.y + top.height)).toBeLessThan(40)
+    expect(note.y + note.height, '言語の説明は枠より上').toBeLessThanOrEqual((await page.locator('#board').boundingBox()).y + 1)
   })
 
   test('AC5b 声が無い案内が出ている時も、固定の帯は 250px 以内', async ({ page }) => {
@@ -243,8 +249,15 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await page.locator('.tab[data-lang="th"]').click()
     await expect(page.locator('#notice')).toBeVisible()
     const top = await page.locator('.top').boundingBox()
-    console.log('固定の帯の高さ（案内あり・タイ語）:', Math.round(top.height), 'px')
-    expect(top.height).toBeLessThanOrEqual(250)
+    console.log('固定の帯の高さ（案内はもう帯に無い）:', Math.round(top.height), 'px')
+    expect(top.height).toBeLessThanOrEqual(130)
+    expect((await page.locator('#noticehow').boundingBox()).height, '「声の足し方を見る」は押せる高さ').toBeGreaterThanOrEqual(44)
+    // 下まで送っても、案内（欄の中）は画面の中にある
+    await page.evaluate(() => window.scrollTo(0, 600))
+    await page.waitForTimeout(200)
+    const nb = await page.locator('#notice').boundingBox()
+    expect(nb.y).toBeGreaterThanOrEqual(0); expect(nb.y + nb.height, '案内は画面の中').toBeLessThanOrEqual(844)
+    await page.evaluate(() => window.scrollTo(0, 0))
     await expect(page.locator('#howto')).toBeVisible()
     await expect(page.locator('#howtosum')).toContainText('【タイ語】の声の足し方')
     expect(await page.locator('meta[name="viewport"]').count()).toBe(1)
@@ -260,7 +273,7 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeVisible()
     await expect(page.locator('#notice')).toContainText('タイ語')
     await expect(page.locator('#notice')).toContainText('設定')
-    expect((await page.locator('.top').boundingBox()).height, '案内ありの帯は画面の3割以内').toBeLessThan(844 * 0.3)
+    expect((await page.locator('#dock').boundingBox()).height, '案内ありの欄は画面の4割以内').toBeLessThanOrEqual(844 * 0.4)
     await page.locator('#noticehow').click()
     expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
     await expect(page.locator('#howtosum')).toContainText('【タイ語】の声の足し方')
@@ -389,43 +402,89 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeHidden()
   })
 
-  test('AC10 言語の選択は一番上にあり、30フレーズは1つの枠の中に表の形（スマホ 2列×15・幅1024で原本と同じ3列×10）、押した文の型と注は枠のすぐ下', async ({ page, browser }) => {
+  const rects = (pg) => pg.locator('.card').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { n: Number(e.dataset.n), x: Math.round(r.x), y: Math.round(r.y), r: Math.round(r.right), b: Math.round(r.bottom), num: e.querySelector('.num').textContent.trim(), text: e.querySelector('.text').textContent.trim(), ja: e.querySelector('.ja').textContent.trim() } }))
+  const rect = (pg, sel) => pg.locator(sel).evaluate(e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, r: r.right, b: r.bottom, h: r.height } })
+  const inside = (cells, board) => { for (const c of cells) { expect(c.x, `${c.n} 枠の中（左）`).toBeGreaterThanOrEqual(board.x - 1); expect(c.r, `${c.n} 枠の中（右）`).toBeLessThanOrEqual(board.r + 1); expect(c.y, `${c.n} 枠の中（上）`).toBeGreaterThanOrEqual(board.y - 1); expect(c.b, `${c.n} 枠の中（下）`).toBeLessThanOrEqual(board.b + 1); expect(c.num, `${c.n} 番号`).toMatch(/^\d\d/); expect(c.text.length, `${c.n} 文`).toBeGreaterThan(0); expect(c.ja.length, `${c.n} 訳`).toBeGreaterThan(0) } }
+
+  test('AC10 言語の選択は一番上の帯にあり下へ送っても残る。30フレーズは1つの枠の中に表の形（幅599まで2列×15・600から3列×10）。押した文の欄と案内は押した瞬間に画面の中', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
     await expect(page.locator('.card')).toHaveCount(30)
-    const rects = (pg) => pg.locator('.card').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { n: Number(e.dataset.n), x: Math.round(r.x), y: Math.round(r.y), r: Math.round(r.right), b: Math.round(r.bottom) } }))
-    const rect = (pg, sel) => pg.locator(sel).evaluate(e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, r: r.right, b: r.bottom } })
     const tabs = await rect(page, '#tabs'), board = await rect(page, '#board')
     expect(tabs.b, '言語タブは枠より上').toBeLessThanOrEqual(board.y + 1)
     expect(tabs.y, '言語タブは画面の一番上の帯').toBeLessThan(80)
     const cells = await rects(page)
-    expect(new Set(cells.map(c => c.x)).size, 'スマホ幅は2列').toBe(2)
+    expect(new Set(cells.map(c => c.x)).size, '幅390は2列').toBe(2)
     expect(cells[0].y, '1番と16番が同じ段（上から下へ 1〜15・16〜30）').toBe(cells[15].y)
     expect(cells[0].x).toBeLessThan(cells[15].x)
-    for (const c of cells) {
-      expect(c.x, `${c.n} 枠の中（左）`).toBeGreaterThanOrEqual(board.x - 1)
-      expect(c.r, `${c.n} 枠の中（右）`).toBeLessThanOrEqual(board.r + 1)
-      expect(c.y, `${c.n} 枠の中（上）`).toBeGreaterThanOrEqual(board.y - 1)
-      expect(c.b, `${c.n} 枠の中（下）`).toBeLessThanOrEqual(board.b + 1)
-    }
+    inside(cells, board)
+    // 押した瞬間に、欄（文・訳・型）が画面の中に見える（画面を送っていない状態）
     await page.locator('.card[data-n="8"]').dispatchEvent('click')
     await expect(page.locator('#detail .tpl')).toContainText('言い換えの型')
-    const detail = await rect(page, '#detail')
-    expect(detail.y, '押した文の欄は枠のすぐ下').toBeGreaterThanOrEqual(board.b - 1)
-    expect(detail.y - board.b).toBeLessThan(40)
-    // 幅1024（PC・タブレット横）: 原本と同じ3列×10。1・11・21番が同じ段
-    const ctx = await browser.newContext({ viewport: { width: 1024, height: 800 } })
-    const p2 = await ctx.newPage()
-    await p2.addInitScript(MOCK_SYNTH(VOICES_ALL))
-    await p2.goto(`http://127.0.0.1:${process.env.PW_PORT || '8787'}/`)
-    await expect(p2.locator('.card')).toHaveCount(30)
-    const c2 = await rects(p2), b2 = await rect(p2, '#board')
-    expect(new Set(c2.map(c => c.x)).size, '幅1024は3列').toBe(3)
-    expect(c2[0].y).toBe(c2[10].y); expect(c2[10].y).toBe(c2[20].y)
-    expect(c2[0].x).toBeLessThan(c2[10].x); expect(c2[10].x).toBeLessThan(c2[20].x)
-    expect(c2[9].b, '10番は枠の下端まで').toBeLessThanOrEqual(b2.b + 1)
-    expect(c2.every(c => c.x >= b2.x - 1 && c.r <= b2.r + 1)).toBe(true)
-    await ctx.close()
+    const tpl = await rect(page, '#detail .tpl'), dtext = await rect(page, '#detail .dtext')
+    expect(dtext.y, '欄の文は画面の中').toBeGreaterThanOrEqual(0); expect(tpl.b, '欄の型は画面の中').toBeLessThanOrEqual(844)
+    // 下へ送っても帯（タブ）は画面の一番上に残る（周回6で、body の overflow-x:hidden のせいで残っていなかった）
+    await page.evaluate(() => window.scrollTo(0, 1200))
+    await page.waitForTimeout(200)
+    expect(await page.evaluate(() => window.scrollY), '送れている').toBeGreaterThan(600)
+    const top2 = await rect(page, '.top'), tabs2 = await rect(page, '#tabs')
+    expect(Math.round(top2.y), '帯の上端は 0').toBe(0)
+    expect(tabs2.y).toBeGreaterThanOrEqual(0); expect(tabs2.b, 'タブは画面の上 130px 以内').toBeLessThan(130)
+    expect(await page.evaluate(() => { const el = document.elementFromPoint(195, 70); return !!(el && el.closest('#tabs')) }), '画面 y=70 にあるのは言語タブ').toBe(true)
+    const yBefore = await page.evaluate(() => window.scrollY)
+    await page.locator('.tab[data-lang="ko"]').click()   // 固定が効いていれば、普通の click でも画面は飛ばない（同じ段を引き継ぐので ±1段まで）
+    await expect(page.locator('.tab[data-lang="ko"]')).toHaveAttribute('aria-selected', 'true')
+    await page.waitForTimeout(200)
+    expect(Math.abs((await page.evaluate(() => window.scrollY)) - yBefore), 'タブを押しても画面が飛ばない（同じ段を引き継ぐので1段ぶんまで）').toBeLessThan(260)
+    expect(Math.round((await rect(page, '.top')).y), '押した後も帯は上端').toBe(0)
+    await page.locator('.tab[data-lang="en"]').click()
+    await page.waitForTimeout(200)
+    // 下まで送った状態で押して鳴らなくても、知らせ（帯の中）と欄（下端）は画面の中
+    await page.evaluate(() => { window.__silent = true })
+    await page.locator('.card[data-n="20"]').dispatchEvent('click')
+    await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
+    const notice = await rect(page, '#notice'), d2 = await rect(page, '#detail .dtext')
+    expect(notice.y).toBeGreaterThanOrEqual(0); expect(notice.b, '知らせは画面の中').toBeLessThanOrEqual(844)
+    expect(d2.y).toBeGreaterThanOrEqual(0); expect(d2.b, '欄は画面の中').toBeLessThanOrEqual(844)
+    await expect(page.locator('#detail .dtext')).toHaveText(data.phrases[19].langs.en.example)
+    // 列の境目: 599 までは2列、600 から3列
+    await page.evaluate(() => { window.__silent = false })
+    await page.setViewportSize({ width: 599, height: 844 })
+    await page.waitForTimeout(100)
+    expect(new Set((await rects(page)).map(c => c.x)).size, '幅599は2列').toBe(2)
+    await page.setViewportSize({ width: 600, height: 844 })
+    await page.waitForTimeout(100)
+    const c600 = await rects(page)
+    expect(new Set(c600.map(c => c.x)).size, '幅600は3列').toBe(3)
+    expect(c600[0].y).toBe(c600[10].y); expect(c600[10].y).toBe(c600[20].y)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth), '幅600で横スクロールなし').toBeLessThanOrEqual(600)
+    // 一番下まで送ると欄は本来の位置＝枠のすぐ下
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+    await page.waitForTimeout(200)
+    const bEnd = await rect(page, '#board'), dEnd = await rect(page, '#dock')
+    expect(dEnd.y - bEnd.b, '欄は枠のすぐ下（本来の位置）').toBeGreaterThanOrEqual(-1)
+    expect(dEnd.y - bEnd.b).toBeLessThan(40)
+  })
+
+  test.describe('幅1024（PC・タブレット横）', () => {
+    test.use({ viewport: { width: 1024, height: 800 }, isMobile: false, hasTouch: false })
+    test('AC10b 原本と同じ3列×10（1・11・21番が同じ段）で、30マスすべてが枠の中。帯は送っても残る', async ({ page }) => {
+      await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+      await page.goto('/')
+      await expect(page.locator('.card')).toHaveCount(30)
+      const c2 = await rects(page), b2 = await rect(page, '#board')
+      expect(new Set(c2.map(c => c.x)).size, '幅1024は3列').toBe(3)
+      expect(c2[0].y).toBe(c2[10].y); expect(c2[10].y).toBe(c2[20].y)
+      expect(c2[0].x).toBeLessThan(c2[10].x); expect(c2[10].x).toBeLessThan(c2[20].x)
+      inside(c2, b2)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1024)
+      await page.locator('.card[data-n="17"]').dispatchEvent('click')
+      await expect(page.locator('#detail .dtext')).toHaveText(data.phrases[16].langs.en.example)
+      const d = await rect(page, '#detail .dtext'); expect(d.y).toBeGreaterThanOrEqual(0); expect(d.b, '欄は画面の中').toBeLessThanOrEqual(800)
+      await page.evaluate(() => window.scrollTo(0, 400))
+      await page.waitForTimeout(200)
+      if (await page.evaluate(() => window.scrollY) > 100) expect(Math.round((await rect(page, '.top')).y), '帯の上端は 0').toBe(0)
+    })
   })
 
   test('声の選び方: 端末内の声を優先し、機械っぽい名前は避け、中国語は香港の声を使わず台湾の声は最後の手段', async ({ page }) => {
@@ -448,11 +507,16 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     expect(await pick('es', [{ name: 'Mónica', lang: 'es-ES' }, { name: 'Diego', lang: 'es-AR', voiceURI: 'com.apple.voice.premium.es-AR.Diego' }])).toBe('Diego')   // 普通の西よりプレミアムの亜
     expect(await pick('en', [{ name: 'Karen', lang: 'en-AU' }, { name: 'Samantha', lang: 'en-US', default: true }])).toBe('Karen')   // 既定の声は最後の決め手
     expect(await pick('en', [{ name: 'Zulu', lang: 'en-AU' }, { name: 'Alpha', lang: 'en-AU' }])).toBe('Alpha')   // 完全に同点なら名前の順（列挙順に左右されない）
-    // 簡易版の声の時は、帯の「もっと自然な声に」から手順へ飛べる
+    // 簡易版の声の時は、欄の「声を良くする」から手順へ飛べる
     await page.evaluate(() => window.__fireVoices([{ name: 'Karen', lang: 'en-AU', voiceURI: 'com.apple.voice.compact.en-AU.Karen' }]))
     await page.locator('.tab[data-lang="en"]').click()
     await expect(page.locator('#voiceinfo')).toContainText('簡易版')
     await expect(page.locator('#voicehow')).toBeVisible()
+    await page.evaluate(() => window.scrollTo(0, 600))
+    await page.waitForTimeout(200)
+    const vb = await page.locator('#voicehow').boundingBox()
+    expect(vb.height, '押せる高さ').toBeGreaterThanOrEqual(44)
+    expect(vb.y).toBeGreaterThanOrEqual(0); expect(vb.y + vb.height, '下へ送っても「もっと自然な声に」は画面の中').toBeLessThanOrEqual(844)
     await page.locator('#voicehow').click()
     expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
     expect(await pick('en', [{ name: 'Alpha', lang: 'en-AU' }, { name: 'Zulu', lang: 'en-AU' }])).toBe('Alpha')
@@ -479,9 +543,12 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     const n0 = await firstVisible(), y0 = await page.evaluate(() => window.scrollY)
     expect(n0, '一覧の中まで下りている').toBeGreaterThan(1)
     expect(y0).toBeGreaterThan(200)
-    // locator.click() は固定表示のタブを「本来の位置」へスクロールしてから押す（試験の都合）ので、指で押すのと同じ素の click を送る
+    // 指で押すのと同じ素の click を送る（locator.click は押す前に要素を画面内へ送る動きをするため、位置の試験では使わない）
     await page.locator('.tab[data-lang="zh"]').dispatchEvent('click')
     await expect.poll(firstVisible).toBe(n0)   // 初めて開く中国語は、英語で見えていた番号を引き継ぐ
+    const gap = await page.evaluate(n => document.querySelector(`.card[data-n="${n}"]`).getBoundingClientRect().top - document.querySelector('.top').getBoundingClientRect().height, n0)
+    expect(gap, '引き継いだ番号のマスは帯のすぐ下（0〜20px）').toBeGreaterThanOrEqual(-1)
+    expect(gap).toBeLessThan(20)
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(200)
     await page.evaluate(() => window.scrollTo(0, 120))
     await page.waitForTimeout(600)
