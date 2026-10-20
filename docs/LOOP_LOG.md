@@ -69,3 +69,12 @@
 - 画面写し（A群の後）: log/r7b-phone.png・log/r7b-phone-scrolled.png・log/r7b-phone-th.png・log/r7b-pc-bottom.png（一番下まで送って30マスと欄が同時に写る）
 - 周回6〜7 合計の所要: 作る 約50分／審査 約70分／裁定 約20分。判子③（11:1x）から約2時間
 
+
+## 周回 8 — 2026-10-20 22:5x〜（作る側の記録。Kenta 判子③の赤 2回目＝読み）
+- Kentaの赤: 1件（K1 原文「これ　発音記号と中国語はピン音も載せようか」2026-10-20 22:36 端末）→ 完成の条件に AC11 を足した（本人由来の軽微・要件更新 45dc633→f8dbb8f）
+- 入れた物: data/phrases.json の各言語に `reading`（180件。中国語＝ピンイン・ほか＝IPA）／マスの「文 → 読み → 訳」の3段目に `.reading`（12px・薄い色・`lang` は zh-Latn-pinyin／<code>-fonipa）／押した文の欄にも `.dreading`／check-data に AC11（読み 180/180・ピンインに漢字なし＋声調記号・IPA は / / と IPA の文字）／Playwright「AC11」（6言語×30マスの読みの一致・描画・順番・44px・枠の中・横スクロールなし・欄の読み）
+- 読みの作り方: ハヤトと東条（Codex）が独立に180件 → 突き合わせ（一致91・表記の差47・音の差42）→ 言語ごとの規則で決定（DECISIONS.md「2026-10-20 周回8」）。機械（pypinyin 0.55・espeak-ng 1.52）は照合用（タイ語・韓国語は崩れて使えず）
+- 作業は枝 round-8（本番の main には合格後に入れる。前の周までは main に直接入れていた）
+- 実行テスト: `npm run check` ○（読み 180/180）・**Playwright 23本×2周 46 passed**（1.6分）
+- 画面写し: log/r8-phone-zh.png・r8-phone-th.png・r8-phone-en.png・r8-phone-ko.png（幅390・1番を押した状態）・r8-pc-ru.png（幅1024）
+- 審査: 検査官・構造の読み手・使う人役・東条（Codex）を並べて依頼（互いの出力は見せない）
