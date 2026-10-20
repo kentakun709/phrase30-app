@@ -10,23 +10,29 @@
 </head>
 <body>
 <header class="top">
-  <h1 class="title">30フレーズ <span class="beta">ベータ</span></h1>
-  <nav id="tabs" class="tabs" role="tablist" aria-label="言語"></nav>
-  <div id="notice" class="notice" role="status" hidden><span class="ntext" id="noticetext"><span id="noticebody"></span> <button type="button" class="nlink" id="noticehow" hidden>声の足し方を見る</button></span><button type="button" class="nclose" id="noticeclose" aria-label="閉じる">×</button></div>
-  <div class="controls">
-    <div id="voiceinfo" class="voiceinfo" aria-live="polite"></div>
-    <button type="button" id="voicehow" class="nlink small" hidden>もっと自然な声に</button>
+  <div class="titlerow">
+    <h1 class="title">30フレーズ <span class="beta">ベータ</span></h1>
     <button type="button" id="slow" class="toggle" aria-pressed="false">ゆっくり</button>
   </div>
+  <nav id="tabs" class="tabs" role="tablist" aria-label="言語"></nav>
 </header>
 <main>
-  <p class="hint">カードを押すと鳴ります。何度でも。聞こえない時は音量と消音（マナーモード）を確かめてください。ホーム画面に追加すると毎日すぐ開けます（iPhone: 共有ボタン → ホーム画面に追加）。</p>
+  <div id="notice" class="notice" role="status" hidden><span class="ntext" id="noticetext"><span id="noticebody"></span> <button type="button" class="nlink" id="noticehow" hidden>声の足し方を見る</button></span><button type="button" class="nclose" id="noticeclose" aria-label="閉じる">×</button></div>
+  <section id="board" class="board" aria-label="フレーズ一覧">
+    <ol id="list" class="list" aria-label="フレーズ一覧"></ol>
+    <p id="loading" class="loading">読み込み中…</p>
+    <div class="boardfoot">
+      <div id="voiceinfo" class="voiceinfo" aria-live="polite"></div>
+      <button type="button" id="voicehow" class="nlink small" hidden>もっと自然な声に</button>
+    </div>
+  </section>
+  <div id="detail" class="detail" aria-live="polite"></div>
+  <p id="legend" class="legend"></p>
   <p id="langnote" class="langnote"></p>
   <details id="howto" class="howto" hidden><summary id="howtosum">声が機械っぽい時は → もっと自然な声にする（言語ごとに1回）</summary><p id="howtobody"></p></details>
-  <ol id="list" class="list" aria-label="フレーズ一覧"></ol>
-  <p id="loading" class="loading">読み込み中…</p>
 </main>
 <footer class="foot">
+  <p>聞こえない時は音量と消音（マナーモード）を確かめてください。ホーム画面に追加すると毎日すぐ開けます（iPhone: 共有ボタン → ホーム画面に追加）。</p>
   <p>音声は端末の読み上げ機能（登録・課金なし）。声の有無と質は端末によって違い、6言語すべての音質は保証していません。訳はAIが作り、ネイティブの検品はこれからです（ベータ）。</p>
 </footer>
 <script src="app.js"></script>

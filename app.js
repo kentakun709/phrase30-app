@@ -4,10 +4,11 @@
   'use strict';
   var synth = window.speechSynthesis || null;
   var state = { data: null, lang: 'en', voices: [], voice: null, playing: null, utter: null, audioEl: null,
-    noVoice: false, slow: false, gen: 0, watchdog: null, dismissed: {}, noticeKey: '', busyCancelAt: 0, scroll: {}, howtoAuto: false, howtoOpened: {} };
+    noVoice: false, slow: false, gen: 0, watchdog: null, dismissed: {}, noticeKey: '', busyCancelAt: 0, scroll: {}, howtoAuto: false, howtoOpened: {}, detailN: 0 };
   var $ = function (id) { return document.getElementById(id); };
   var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticebody'), $noticeclose = $('noticeclose'), $noticehow = $('noticehow');
   var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody'), $howtosum = $('howtosum'), $voicehow = $('voicehow');
+  var $detail = $('detail'), $legend = $('legend');
 
   var SPEAKER_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
   var LANG_JA = { 'en-nz': 'ニュージーランド英語', 'en-au': 'オーストラリア英語', 'en-gb': 'イギリス英語', 'en-ie': 'アイルランド英語', 'en-us': 'アメリカ英語',
@@ -215,6 +216,7 @@
 
   function play(n) {
     var item = state.data.phrases[n - 1].langs[state.lang], def = langDef();
+    state.detailN = n; renderDetail();          // 押した文を枠の下の欄に（型・注はここ）
     stopAll();                                     // 前の音声を止め、読み上げの列を空にしてから鳴らす（溜めない・止めた直後 80ms は空ける）
     hideFailNotices(['audiofail']);                // 前のファイルの知らせは、次を押したら消す（また失敗すればまた出る）
     if (item.audio) { playFile(item.audio, item, n, def); return; }
@@ -234,38 +236,46 @@
     });
   }
 
+  // 枠（四角形）の中の表: 1マス＝番号・その言語の文・日本語訳（常時表示）。並びは CSS の列（スマホ 2列×15・幅600以上 3列×10）
   function renderList() {
     $list.innerHTML = '';
     var def = langDef(), sections = state.data.sections || [];
     state.data.phrases.forEach(function (p) {
-      var sec = sections.filter(function (s) { return s.from === p.n; })[0];
-      if (sec) { var h = document.createElement('li'); h.className = 'section'; h.textContent = sec.title + '（' + sec.from + '〜' + sec.to + '）'; $list.appendChild(h); }
       var it = p.langs[state.lang];
       var li = document.createElement('li');
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'card'; b.setAttribute('data-n', String(p.n)); b.setAttribute('aria-pressed', 'false');
-      var html = '<span class="num">' + (p.n < 10 ? '0' + p.n : p.n) + '</span>' +
+      b.innerHTML = '<span class="num">' + (p.n < 10 ? '0' + p.n : p.n) + '</span>' + SPEAKER_SVG +
         '<span class="text" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span>' +
         '<span class="ja">' + esc(it.ja) + '</span>';
-      if (it.note) html += '<span class="note">' + esc(it.note) + '</span>';
-      if (it.template && it.template !== it.example) {
-        html += it.template.indexOf('〇〇') >= 0
-          ? '<span class="tpl">言い換えの型: ' + esc(it.template) + '（' + esc(p.ja) + '）</span>'
-          : '<span class="tpl">別の言い方（鳴るのは上の文）: ' + esc(it.template) + '</span>';
-      }
-      html += SPEAKER_SVG;
-      b.innerHTML = html;
       b.addEventListener('click', function () { play(p.n); });
       li.appendChild(b);
       $list.appendChild(li);
     });
+    $legend.innerHTML = sections.map(function (sec) { return '<span class="section">' + esc(sec.from + '〜' + sec.to + ' ' + sec.title) + '</span>'; }).join('');
     $langnote.textContent = def.note || '';
+    renderDetail();
+  }
+  // 押した文の欄（枠のすぐ下）: 大きい字・訳・注・言い換えの型（マスには入れない＝表を軽く保つ）
+  function renderDetail() {
+    var n = state.detailN;
+    if (!n) { $detail.innerHTML = '<span class="dhint">マスを押すと鳴ります（何度でも）。押した文の言い換えの型と注はここに出ます。</span>'; return; }
+    var p = state.data.phrases[n - 1], it = p.langs[state.lang], def = langDef();
+    var html = '<div class="dhead"><span class="dnum">' + (n < 10 ? '0' + n : n) + '</span><span class="dtext" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span></div>' +
+      '<span class="dja">' + esc(it.ja) + '</span>';
+    if (it.note) html += '<span class="note">' + esc(it.note) + '</span>';
+    if (it.template && it.template !== it.example) {
+      html += it.template.indexOf('〇〇') >= 0
+        ? '<span class="tpl">言い換えの型: ' + esc(it.template) + '（' + esc(p.ja) + '）</span>'
+        : '<span class="tpl">別の言い方（鳴るのは上の文）: ' + esc(it.template) + '</span>';
+    }
+    $detail.innerHTML = html;
   }
 
   function topOffset() { var top = document.querySelector('.top'); return top ? top.getBoundingClientRect().height : 0; }
   function visibleFirstCard() {   // 帯のすぐ下に見えている最初のカードの番号
     var cards = $list.querySelectorAll('.card'), h = topOffset(), i;
-    for (i = 0; i < cards.length; i++) { if (cards[i].getBoundingClientRect().bottom > h + 1) return Number(cards[i].getAttribute('data-n')); }
+    for (i = 0; i < cards.length; i++) { if (cards[i].getBoundingClientRect().bottom > h + 10) return Number(cards[i].getAttribute('data-n')); }   // 10px 以上見えているマスだけ（表のマスは隙間が 1px なので、上の段の縁を数えない）
     return 0;
   }
   function scrollToCard(n) {

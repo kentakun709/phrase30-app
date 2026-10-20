@@ -62,9 +62,11 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     }
   })
 
-  test('AC2 どの言語でも30枚すべてに本文と日本語訳があり、〇〇入りは型も見え、言語の説明が出る', async ({ page }) => {
+  test('AC2 どの言語でも30マスすべてに本文と日本語訳があり、押すと〇〇入りの型が枠の下の欄に見え、言語の説明が出る', async ({ page }) => {
+    test.setTimeout(120000)
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
+    await expect(page.locator('#detail')).toContainText('マスを押すと鳴ります')
     for (const code of CODES) {
       await page.locator(`.tab[data-lang="${code}"]`).click()
       const cards = page.locator('.card')
@@ -73,9 +75,15 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
         const c = cards.nth(i)
         expect((await c.locator('.text').innerText()).trim().length, `${code} ${i + 1} 本文`).toBeGreaterThan(0)
         expect((await c.locator('.ja').innerText()).trim().length, `${code} ${i + 1} 訳`).toBeGreaterThan(0)
-        const tpl = data.phrases[i].langs[code].template, ex = data.phrases[i].langs[code].example
-        if (tpl.includes('〇〇')) await expect(c.locator('.tpl'), `${code} ${i + 1} 型`).toContainText('言い換えの型')
-        else if (tpl !== ex) await expect(c.locator('.tpl'), `${code} ${i + 1} 別の言い方`).toContainText('別の言い方（鳴るのは上の文）')
+        const tpl = data.phrases[i].langs[code].template, ex = data.phrases[i].langs[code].example, note = data.phrases[i].langs[code].note
+        if (tpl.includes('〇〇') || tpl !== ex || note) {
+          await c.dispatchEvent('click')
+          await expect(page.locator('#detail .dtext'), `${code} ${i + 1} 欄の本文`).toHaveText(ex)
+          await expect(page.locator('#detail .dja'), `${code} ${i + 1} 欄の訳`).toHaveText(data.phrases[i].langs[code].ja)
+          if (tpl.includes('〇〇')) await expect(page.locator('#detail .tpl'), `${code} ${i + 1} 型`).toContainText('言い換えの型')
+          else if (tpl !== ex) await expect(page.locator('#detail .tpl'), `${code} ${i + 1} 別の言い方`).toContainText('別の言い方（鳴るのは上の文）')
+          if (note) await expect(page.locator('#detail .note'), `${code} ${i + 1} 注`).toHaveText(note)
+        }
       }
       const def = data.languages.find(l => l.code === code)
       if (def.note) await expect(page.locator('#langnote')).toHaveText(def.note)
@@ -151,14 +159,16 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
       await page.locator(`.tab[data-lang="${code}"]`).click()
       const sw = await page.evaluate(() => document.documentElement.scrollWidth)
       expect(sw, `${code} の横幅`).toBeLessThanOrEqual(390)
-      // 列の崩れを捕まえる（周回1の画面で、本文がアイコンの右の細い列に落ちていた）
+      // マスの崩れを捕まえる（番号は上の行・アイコンは右上・本文はマスの幅いっぱい）
+      const card0 = await page.locator('.card').first().boundingBox()
       const text = await page.locator('.card').first().locator('.text').boundingBox()
       const icon = await page.locator('.card').first().locator('.icon').boundingBox()
       const num = await page.locator('.card').first().locator('.num').boundingBox()
-      expect(text.width, `${code} 本文の列の幅`).toBeGreaterThan(200)
-      expect(text.height, `${code} 本文が1〜2行に収まる`).toBeLessThan(60)
-      expect(num.x, '番号は左').toBeLessThan(text.x)
-      expect(icon.x, 'アイコンは本文の右').toBeGreaterThan(text.x + text.width - 1)
+      expect(text.width, `${code} 本文の幅（2列のマス）`).toBeGreaterThan(140)
+      expect(text.height, `${code} 本文が3行以内`).toBeLessThan(62)
+      expect(num.y + num.height, '番号は本文の上').toBeLessThanOrEqual(text.y + 1)
+      expect(icon.x, 'アイコンは番号の右').toBeGreaterThan(num.x + num.width)
+      expect(icon.x + icon.width, 'アイコンはマスの中').toBeLessThanOrEqual(card0.x + card0.width + 1)
     }
     const box = await page.locator('.card').first().boundingBox()
     expect(box.height).toBeGreaterThanOrEqual(44)
@@ -379,6 +389,45 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeHidden()
   })
 
+  test('AC10 言語の選択は一番上にあり、30フレーズは1つの枠の中に表の形（スマホ 2列×15・幅1024で原本と同じ3列×10）、押した文の型と注は枠のすぐ下', async ({ page, browser }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    const rects = (pg) => pg.locator('.card').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { n: Number(e.dataset.n), x: Math.round(r.x), y: Math.round(r.y), r: Math.round(r.right), b: Math.round(r.bottom) } }))
+    const rect = (pg, sel) => pg.locator(sel).evaluate(e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, r: r.right, b: r.bottom } })
+    const tabs = await rect(page, '#tabs'), board = await rect(page, '#board')
+    expect(tabs.b, '言語タブは枠より上').toBeLessThanOrEqual(board.y + 1)
+    expect(tabs.y, '言語タブは画面の一番上の帯').toBeLessThan(80)
+    const cells = await rects(page)
+    expect(new Set(cells.map(c => c.x)).size, 'スマホ幅は2列').toBe(2)
+    expect(cells[0].y, '1番と16番が同じ段（上から下へ 1〜15・16〜30）').toBe(cells[15].y)
+    expect(cells[0].x).toBeLessThan(cells[15].x)
+    for (const c of cells) {
+      expect(c.x, `${c.n} 枠の中（左）`).toBeGreaterThanOrEqual(board.x - 1)
+      expect(c.r, `${c.n} 枠の中（右）`).toBeLessThanOrEqual(board.r + 1)
+      expect(c.y, `${c.n} 枠の中（上）`).toBeGreaterThanOrEqual(board.y - 1)
+      expect(c.b, `${c.n} 枠の中（下）`).toBeLessThanOrEqual(board.b + 1)
+    }
+    await page.locator('.card[data-n="8"]').dispatchEvent('click')
+    await expect(page.locator('#detail .tpl')).toContainText('言い換えの型')
+    const detail = await rect(page, '#detail')
+    expect(detail.y, '押した文の欄は枠のすぐ下').toBeGreaterThanOrEqual(board.b - 1)
+    expect(detail.y - board.b).toBeLessThan(40)
+    // 幅1024（PC・タブレット横）: 原本と同じ3列×10。1・11・21番が同じ段
+    const ctx = await browser.newContext({ viewport: { width: 1024, height: 800 } })
+    const p2 = await ctx.newPage()
+    await p2.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await p2.goto(`http://127.0.0.1:${process.env.PW_PORT || '8787'}/`)
+    await expect(p2.locator('.card')).toHaveCount(30)
+    const c2 = await rects(p2), b2 = await rect(p2, '#board')
+    expect(new Set(c2.map(c => c.x)).size, '幅1024は3列').toBe(3)
+    expect(c2[0].y).toBe(c2[10].y); expect(c2[10].y).toBe(c2[20].y)
+    expect(c2[0].x).toBeLessThan(c2[10].x); expect(c2[10].x).toBeLessThan(c2[20].x)
+    expect(c2[9].b, '10番は枠の下端まで').toBeLessThanOrEqual(b2.b + 1)
+    expect(c2.every(c => c.x >= b2.x - 1 && c.r <= b2.r + 1)).toBe(true)
+    await ctx.close()
+  })
+
   test('声の選び方: 端末内の声を優先し、機械っぽい名前は避け、中国語は香港の声を使わず台湾の声は最後の手段', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
@@ -424,24 +473,26 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
     await expect(page.locator('.card')).toHaveCount(30)
-    const firstVisible = () => page.evaluate(() => { const h = document.querySelector('.top').getBoundingClientRect().height; for (const c of document.querySelectorAll('.card')) { if (c.getBoundingClientRect().bottom > h + 1) return Number(c.dataset.n) } return 0 })
-    await page.evaluate(() => { const el = document.querySelector('.card[data-n="20"]'); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - document.querySelector('.top').getBoundingClientRect().height - 8) })
+    const firstVisible = () => page.evaluate(() => { const h = document.querySelector('.top').getBoundingClientRect().height; for (const c of document.querySelectorAll('.card')) { if (c.getBoundingClientRect().bottom > h + 10) return Number(c.dataset.n) } return 0 })
+    await page.evaluate(() => { const el = document.querySelector('.card[data-n="7"]'); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - document.querySelector('.top').getBoundingClientRect().height - 8) })
     await page.waitForTimeout(600)
-    expect(await firstVisible()).toBe(20)
+    const n0 = await firstVisible(), y0 = await page.evaluate(() => window.scrollY)
+    expect(n0, '一覧の中まで下りている').toBeGreaterThan(1)
+    expect(y0).toBeGreaterThan(200)
     // locator.click() は固定表示のタブを「本来の位置」へスクロールしてから押す（試験の都合）ので、指で押すのと同じ素の click を送る
     await page.locator('.tab[data-lang="zh"]').dispatchEvent('click')
-    await expect.poll(firstVisible).toBe(20)   // 初めて開く中国語は、英語で見えていた番号（20）を引き継ぐ
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
-    await page.evaluate(() => window.scrollTo(0, 300))
+    await expect.poll(firstVisible).toBe(n0)   // 初めて開く中国語は、英語で見えていた番号を引き継ぐ
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(200)
+    await page.evaluate(() => window.scrollTo(0, 120))
     await page.waitForTimeout(600)
     await page.locator('.tab[data-lang="en"]').dispatchEvent('click')
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)   // 英語は自分の位置
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(200)   // 英語は自分の位置
     await page.locator('.tab[data-lang="zh"]').dispatchEvent('click')
-    await expect.poll(() => page.evaluate(() => Math.abs(window.scrollY - 300) < 40)).toBe(true)   // 中国語は自分の位置
+    await expect.poll(() => page.evaluate(() => Math.abs(window.scrollY - 120) < 40)).toBe(true)   // 中国語は自分の位置
     await page.waitForTimeout(600)
     await page.reload()
     await expect(page.locator('.card')).toHaveCount(30)
-    await expect.poll(() => page.evaluate(() => Math.abs(window.scrollY - 300) < 40)).toBe(true)
+    await expect.poll(() => page.evaluate(() => Math.abs(window.scrollY - 120) < 40)).toBe(true)
   })
 
   test('読み上げの機能そのものが無いブラウザでは、開いた時から案内が出て、言語を切り替えても残る', async ({ page }) => {
