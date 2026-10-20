@@ -198,6 +198,32 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await page.locator('.card').first().click()
     await page.waitForTimeout(200)
     expect(await page.locator('#howto').evaluate(el => el.open), '押しても開き直さない').toBe(false)
+    // 声の無い言語が2つ続いても同じ（開いたまま次の言語へ移り、閉じてから押しても開き直さない）
+    await page.locator('.tab[data-lang="ru"]').click()
+    expect(await page.locator('#howto').evaluate(el => el.open), 'ロシア語で最初の1回は自動で開く').toBe(true)
+    await page.locator('.tab[data-lang="ko"]').click()
+    expect(await page.locator('#howto').evaluate(el => el.open), '開いたまま韓国語へ').toBe(true)
+    await page.locator('#howtosum').click()
+    await page.locator('.card').first().click()
+    await page.waitForTimeout(200)
+    expect(await page.locator('#howto').evaluate(el => el.open), '閉じた後に押しても開き直さない').toBe(false)
+    // 見出しを手で押して開け直した物は、声が見つかっても畳まない
+    await page.locator('#howtosum').click()
+    await page.evaluate(() => window.__fireVoices([{ name: 'Samantha', lang: 'en-US' }, { name: 'Yuna', lang: 'ko-KR' }]))
+    await expect(page.locator('#voiceinfo')).toContainText('Yuna')
+    expect(await page.locator('#howto').evaluate(el => el.open), '手で開けた物は畳まない').toBe(true)
+  })
+
+  test('一番上にいる時に初めての言語を開くと、一番上のまま（言語の説明が隠れない）', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    await page.locator('.tab[data-lang="ko"]').dispatchEvent('click')
+    await page.waitForTimeout(200)
+    expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5)
+    const note = await page.locator('#langnote').boundingBox()
+    const top = await page.locator('.top').boundingBox()
+    expect(note.y, '言語の説明は帯の下に見えている').toBeGreaterThan(top.y + top.height - 1)
   })
 
   test('AC5b 声が無い案内が出ている時も、固定の帯は 250px 以内', async ({ page }) => {
@@ -248,10 +274,11 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toBeVisible()
     await expect(page.locator('#notice')).toContainText('英語')
     await expect(page.locator('#notice')).toContainText('設定')
-    expect(await page.locator('#howto').evaluate(el => el.open)).toBe(true)
+    await expect(page.locator('#voiceinfo')).toContainText('読み込み中')
+    expect(await page.locator('#howto').evaluate(el => el.open), '一覧が空の間は手順を開かない（届いた時に画面が跳ばないように）').toBe(false)
     await page.evaluate(() => window.__fireVoices([{ name: 'Karen', lang: 'en-AU' }]))
     await expect(page.locator('#notice')).toBeHidden()
-    expect(await page.locator('#howto').evaluate(el => el.open), '一覧が入ったら手順は畳まれる').toBe(false)
+    expect(await page.locator('#howto').evaluate(el => el.open)).toBe(false)
   })
 
   test('AC7c 読み上げが始まらない・例外になる時は、光ったままにせず案内を出す', async ({ page }) => {

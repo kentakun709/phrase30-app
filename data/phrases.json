@@ -50,7 +50,7 @@
     "es-AR",
     "es"
    ],
-   "note": "友達・同年代との会話は tú（1〜18番）。店や店員・目上の人には usted（19番は店に聞く Tienen、20・27・30番）。スペインでも中南米でも通じる言い方"
+   "note": "友達・同年代との会話は tú（1〜7・9〜18番）。店や店員・知らない人・目上の人には usted（8番、19番は店に聞く Tienen、20・27・30番）。スペインでも中南米でも通じる言い方"
   },
   {
    "code": "ru",
@@ -436,10 +436,10 @@
      "audio": ""
     },
     "es": {
-     "template": "¿Hablas 〇〇?",
-     "example": "¿Hablas inglés?",
+     "template": "¿Habla 〇〇?",
+     "example": "¿Habla inglés?",
      "ja": "英語を話せますか？",
-     "note": "旅先で相手に通じる言葉を聞く形。自分の言語なら〇〇に japonés を",
+     "note": "旅先で店の人などに聞く形（usted）。友達には ¿Hablas inglés?。日本語なら japonés",
      "audio": ""
     },
     "ru": {

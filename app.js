@@ -35,11 +35,10 @@
     if (/^(eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/.test(name)) s -= 10;
     if (/compact/.test(n)) s -= 3;
     if (/premium|enhanced|neural|natural|wavenet|journey|studio|siri|拡張|プレミアム/.test(n)) s += 5;
-    if (v.default) s += 1;
     return s;
   }
   function isCompact(v) { return /compact/.test((String(v.name || '') + ' ' + String(v.voiceURI || '')).toLowerCase()); }
-  // 声の選び方: 端末内の声（localService）だけで「地域の近さ＋声の質」の点数が最も高い物。無ければ通信する声も含めて同じ基準
+  // 声の選び方: 端末内の声（localService）から、下の順で比べて1つ選ぶ。無ければ通信する声も含めて同じ基準
   //   上から順に比べる（足し算ではない）: NZ があれば必ず → 自然さ（premium/enhanced +5・compact -3・機械声 -10）→ 地域の近さ（豪→英→愛→米）→ 端末の既定の声 → 名前
   //   → 普通の豪の声は普通の米の声に勝ち、拡張の米の声は普通や簡易版の豪の声に勝つ（要件「端末内の音声から自然な声を優先」「可能なら NZ」。周回3 judge・周回4 東条）
   function regionScore(def, l) {
@@ -47,15 +46,15 @@
     for (i = 0; i < prefs.length; i++) if (l === prefs[i] || l.indexOf(prefs[i] + '-') === 0) return prefs.length - i;   // 近い地域ほど大きい
     return 0;
   }
-  // 比べる順: ①英語なら NZ の声 ②自然さ（voiceScore） ③地域の近さ ④名前（同点でも列挙順に左右されない）
+  // 比べる順: ①英語なら NZ の声 ②自然さ（voiceScore） ③地域の近さ ④端末の既定の声 ⑤名前・識別名（同点でも列挙順に左右されない）
   function compareVoices(def, a, b) {
     var la = normLang(a.lang), lb = normLang(b.lang);
     var nzA = def.code === 'en' && regionScore(def, la) === def.bcp47.length ? 1 : 0, nzB = def.code === 'en' && regionScore(def, lb) === def.bcp47.length ? 1 : 0;
     if (nzA !== nzB) return nzB - nzA;
-    var qa = voiceScore(a) - (a.default ? 1 : 0), qb = voiceScore(b) - (b.default ? 1 : 0); if (qa !== qb) return qb - qa;   // 既定の声の +1 は最後に
+    var qa = voiceScore(a), qb = voiceScore(b); if (qa !== qb) return qb - qa;
     var ra = regionScore(def, la), rb = regionScore(def, lb); if (ra !== rb) return rb - ra;
     var da = a.default ? 1 : 0, db = b.default ? 1 : 0; if (da !== db) return db - da;
-    return String(a.name || '').localeCompare(String(b.name || ''));
+    return String((a.name || '') + '|' + (a.voiceURI || '') + '|' + (a.lang || '')).localeCompare(String((b.name || '') + '|' + (b.voiceURI || '') + '|' + (b.lang || '')));   // 同点は名前→識別名→lang で固定（列挙順に左右されない）
   }
   function pickVoice(def, voices) {
     var hard = def.code === 'zh' ? /(^|-)hk($|-)|^yue|hant-hk/ : null;      // 香港の広東語は使わない
@@ -93,14 +92,19 @@
     $howtosum.textContent = state.noVoice ? '【' + def.nameJa + '】の声の足し方' : '声が機械っぽい時は → もっと自然な声にする（言語ごとに1回）';
     if (!synth) { showNotice('nosynth', 'このブラウザは読み上げに対応していません。iPhone の Safari か Android の Chrome で開いてください。'); $voiceinfo.textContent = ''; return; }
     if (state.noVoice) {
+      $howto.hidden = false;
       if (state.voices.length === 0) {
         showNotice('novoice-empty:' + def.code, '声の一覧をまだ読めていません。カードを1回押してください。【' + def.nameJa + '】の声は設定で足せます。');
+        $voiceinfo.textContent = '声: 読み込み中';
       } else {
         showNotice('novoice:' + def.code, 'この端末には【' + def.nameJa + '】の音声が入っていません。端末の設定で足せます。');
+        $voiceinfo.textContent = '声: なし';
+        if (!state.howtoOpened[def.code]) {   // 一覧はあるのにその言語の声が無い時だけ、言語ごとに最初の1回だけ自動で開く（閉じたら押しても開き直さない）
+          state.howtoOpened[def.code] = true;
+          if (!$howto.open) { $howto.open = true; state.howtoAuto = true; }
+        }
       }
-      $voiceinfo.textContent = '声: なし'; $voicehow.hidden = true;
-      $howto.hidden = false;
-      if (!$howto.open && !state.howtoOpened[def.code]) { $howto.open = true; state.howtoAuto = true; state.howtoOpened[def.code] = true; }   // 言語ごとに最初の1回だけ自動で開く（閉じたら押しても開き直さない）
+      $voicehow.hidden = true;
     } else {
       hideNotice('novoice');
       var vl = normLang(state.voice.lang), first = normLang(def.bcp47[0]);
@@ -169,13 +173,12 @@
     var armWatchdog = function (second) {
       state.watchdog = setTimeout(function () {
         if (state.utter !== u || started) return;
-        var busy = false; try { busy = !!(synth.speaking || synth.pending); } catch (e) { /* */ }
-        if (busy && !second) { armWatchdog(true); return; }   // 声の読み込み待ちなら、もう1回だけ待つ
-        var speaking = false; try { speaking = !!synth.speaking; } catch (e) { /* */ }
-        if (speaking) {                                       // onstart が来ない端末でも、鳴っているなら黙って見守り、止まったら光を消す（上限30秒）
-          (function poll(k) { state.watchdog = setTimeout(function () { if (state.utter !== u) return; var sp = false; try { sp = !!synth.speaking; } catch (e) { /* */ } if (sp && k < 30) poll(k + 1); else setPlaying(null); }, 1000); })(0);
+        var sp = false, pe = false; try { sp = !!synth.speaking; pe = !!synth.pending; } catch (e) { /* */ }
+        if (sp) {                                             // onstart が来ない端末でも、鳴っているなら黙って見守り、止まったら光を消す（上限30秒）
+          (function poll(k) { state.watchdog = setTimeout(function () { if (state.utter !== u) return; var s2 = false; try { s2 = !!synth.speaking; } catch (e) { /* */ } if (s2 && k < 30) poll(k + 1); else setPlaying(null); }, 1000); })(0);
           return;
         }
+        if (pe && !second) { armWatchdog(true); return; }     // 声の読み込み待ちだけ、もう1回待つ
         setPlaying(null);
         showNotice('silent', state.noVoice
           ? '鳴りませんでした。この端末に【' + def.nameJa + '】の声が無いためです。端末の設定で足せます。'
@@ -270,7 +273,8 @@
     try { window.scrollTo(0, Math.max(0, el.getBoundingClientRect().top + (window.scrollY || 0) - topOffset() - 8)); } catch (e) { /* */ }
   }
   function setLang(code) {
-    var curY = window.scrollY || 0, curCard = state.data ? visibleFirstCard() : 0;
+    var inList = !!state.data && $list.getBoundingClientRect().top < topOffset();   // 一覧の中まで下りている時だけ番号で引き継ぐ（一番上なら一番上のまま）
+    var curY = window.scrollY || 0, curCard = inList ? visibleFirstCard() : 0;
     if (state.data) state.scroll[state.lang] = curY;
     state.lang = code;
     try { localStorage.setItem('phrase30.lang', code); } catch (e) { /* プライベートモード等 */ }
@@ -310,10 +314,10 @@
     if (synth && typeof synth.addEventListener === 'function') synth.addEventListener('voiceschanged', refreshVoices);
     else if (synth) synth.onvoiceschanged = refreshVoices;
     $slow.addEventListener('click', function () { setSlow(!state.slow); });
+    $howtosum.addEventListener('click', function () { state.howtoAuto = false; });   // 手で開け閉めした物は、自動では畳まない
     var goHowto = function () {
       $howto.hidden = false; $howto.open = true; state.howtoAuto = false;   // 自分で開けた物は、声が見つかっても畳まない
-      var top = document.querySelector('.top'), h = top ? top.getBoundingClientRect().height : 0;
-      try { window.scrollTo(0, Math.max(0, $howto.getBoundingClientRect().top + (window.scrollY || 0) - h - 8)); } catch (e) { /* */ }
+      try { window.scrollTo(0, Math.max(0, $howto.getBoundingClientRect().top + (window.scrollY || 0) - topOffset() - 8)); } catch (e) { /* */ }
     };
     $noticehow.addEventListener('click', goHowto);
     $voicehow.addEventListener('click', goHowto);
