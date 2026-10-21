@@ -130,7 +130,7 @@ ko 14 [音が違う] 사진 찍어도 돼요?
 ko 16 [強勢・長音・声調だけ違う] 초밥 좋아하세요?
     私  : /tɕʰobap tɕoahasejo/
     東条: /tɕʰobap̚ tɕ͈oahasejo/
-    決定: /tɕʰobap tɕoahasejo/｜ハヤト案｜좋 は平音（東条案の濃音は誤り）・̚ は使わない（約束 ko・共通）
+    決定: /tɕʰobap tɕ͈oahasejo/｜組み合わせ（周回10 で直した）｜詰まる音で終わる語のあとの平音は分かち書きを越えても濃音 /tɕ͈oa/（東条。周回8 の「東条案の濃音は誤り」はハヤトの誤り）＋̚ は使わない（ハヤト）（約束 ko・IPA）
 ko 17 [音が違う] '대박'이 무슨 뜻이에요?
     私  : /tebaɡi musɯn t͈ɯɕiejo/
     東条: /tɛbaɡi musɯn t͈ɯɕiejo/
@@ -150,7 +150,7 @@ ko 24 [音が違う] 어느 버스예요?
 ko 26 [音が違う] 지금 몇 시예요?
     私  : /tɕiɡɯm mjʌt ɕ͈iejo/
     東条: /tɕiɡɯm mjʌt̚ s͈ijejo/
-    決定: /tɕiɡɯm mjʌt ɕ͈ijejo/｜組み合わせ｜ㅆ は い の前で /ɕ͈/・終声 ㄷ の後の濃音化（ハヤト）＋예요 /jejo/（東条）・̚ は使わない（約束 ko・共通）
+    決定: /tɕiɡɯm mjʌt ɕ͈ijejo/｜組み合わせ｜ㅆ は い の前で /ɕ͈/・終声 ㄷ の後の濃音化（ハヤト）＋예요 /jejo/（東条）・̚ は使わない（約束 ko・IPA）
 ko 27 [音が違う] 추천 메뉴가 뭐예요?
     私  : /tɕʰutɕʰʌn menjuɡa mwʌejo/
     東条: /tɕʰutɕʰʌn menjuɡa mwʌjejo/
@@ -182,7 +182,7 @@ es  9 [強勢・長音・声調だけ違う] ¿Por qué estudias español?
 es 11 [強勢・長音・声調だけ違う] ¿Cuánto tiempo llevas estudiando español?
     私  : /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/
     東条: /ˈkwanto ˈtjempo ˈʝebas estudˈjando espaˈɲol/
-    決定: /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/｜ハヤト案｜ˈ は強い音節の頭 estuˈdjando（約束 共通）
+    決定: /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/｜ハヤト案｜ˈ は強い音節の頭 estuˈdjando（約束 IPA）
 es 12 [音が違う] ¿Qué haces en tu tiempo libre?
     私  : /ˈke ˈaθes en tu ˈtjempo ˈlibɾe/
     東条: /ke ˈases en tu ˈtjempo ˈlibɾe/
@@ -282,7 +282,7 @@ ru 20 [音が違う] Повторите, пожалуйста.
 ru 23 [音が違う] Как добраться до аэропорта?
     私  : /ˈkak dɐˈbratsə də ɐɛrɐˈportə/
     東条: /kaɡ dɐˈbrat͡sə də ɐɪrɐˈportə/
-    決定: /kaɡ dɐˈbratsə də ɐɪrɐˈportə/｜組み合わせ｜как＋有声子音 /kaɡ/・無強勢の э は /ɪ/（東条）＋つなぎ線 ͡ は使わない /ts/（ハヤト）（約束 ru・共通）
+    決定: /kaɡ dɐˈbratsə də ɐɪrɐˈportə/｜組み合わせ｜как＋有声子音 /kaɡ/・無強勢の э は /ɪ/（東条）＋つなぎ線 ͡ は使わない /ts/（ハヤト）（約束 ru・IPA）
 ru 25 [強勢・長音・声調だけ違う] Кто это?
     私  : /ˈkto ˈɛtə/
     東条: /kto ˈɛtə/
@@ -306,56 +306,56 @@ ru 29 [音が違う] Счёт, пожалуйста.
 ru 30 [強勢・長音・声調だけ違う] Вы не могли бы мне помочь?
     私  : /vɨ nʲɪ mɐɡˈlʲi bɨ mnʲe pɐˈmotɕ/
     東条: /vɨ nʲɪ mɐˈɡlʲi bɨ mnʲe pɐˈmotɕ/
-    決定: /vɨ nʲɪ mɐˈɡlʲi bɨ mnʲe pɐˈmotɕ/｜東条案｜ˈ は強い音節の頭 /mɐˈɡlʲi/（約束 共通）
+    決定: /vɨ nʲɪ mɐˈɡlʲi bɨ mnʲe pɐˈmotɕ/｜東条案｜ˈ は強い音節の頭 /mɐˈɡlʲi/（約束 IPA）
 th  4 [強勢・長音・声調だけ違う] สบายดีไหมครับ
     私  : /sàbaːj diː máj kʰráp/
     東条: /sà.baːj diː mǎj kʰráp/
-    決定: /sàbaːj diː máj kʰráp/｜ハヤト案｜疑問の ไหม は話し言葉の高声 /máj/（約束 th・共通）
+    決定: /sàbaːj diː máj kʰráp/｜ハヤト案｜疑問の ไหม は話し言葉の高声 /máj/（約束 th・IPA）
 th  6 [強勢・長音・声調だけ違う] ยินดีที่ได้รู้จักครับ
     私  : /jin diː tʰîː dâj rúː tɕàk kʰráp/
     東条: /jin diː tʰîː dâːj rúː.tɕàk kʰráp/
-    決定: /jindiː tʰîː dâj rúːtɕàk kʰráp/｜ハヤト案｜ได้ は /dâj/・区切り点は付けない（約束 th・共通）
+    決定: /jindiː tʰîː dâj rúːtɕàk kʰráp/｜ハヤト案｜ได้ は /dâj/・区切り点は付けない（約束 th・IPA）
 th  8 [強勢・長音・声調だけ違う] คุณพูดภาษาอังกฤษได้ไหมครับ
     私  : /kʰun pʰûːt pʰaːsǎː ʔaŋkrìt dâj máj kʰráp/
     東条: /kʰun pʰûːt pʰaː.sǎː ʔaŋ.krìt dâːj mǎj kʰráp/
-    決定: /kʰun pʰûːt pʰaːsǎː ʔaŋkrìt dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/・区切り点は付けない（約束 th・共通）
+    決定: /kʰun pʰûːt pʰaːsǎː ʔaŋkrìt dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/・区切り点は付けない（約束 th・IPA）
 th  9 [強勢・長音・声調だけ違う] ทำไมคุณถึงเรียนภาษาไทยครับ
     私  : /tʰammaj kʰun tʰɯ̌ŋ rian pʰaːsǎː tʰaj kʰráp/
     東条: /tʰam.maj kʰun tʰɯ̌ŋ riːan pʰaː.sǎː tʰaj kʰráp/
-    決定: /tʰammaj kʰun tʰɯ̌ŋ rian pʰaːsǎː tʰaj kʰráp/｜ハヤト案｜เรียน は /rian/・区切り点は付けない（約束 th・共通）
+    決定: /tʰammaj kʰun tʰɯ̌ŋ rian pʰaːsǎː tʰaj kʰráp/｜ハヤト案｜เรียน は /rian/・区切り点は付けない（約束 th・IPA）
 th 11 [強勢・長音・声調だけ違う] คุณเรียนภาษาไทยมานานแค่ไหนแล้วครับ
     私  : /kʰun rian pʰaːsǎː tʰaj maː naːn kʰɛ̂ː nǎj lɛ́ːw kʰráp/
     東条: /kʰun riːan pʰaː.sǎː tʰaj maː naːn kʰɛ̂ː nǎj lɛ́ːw kʰráp/
-    決定: /kʰun rian pʰaːsǎː tʰaj maː naːn kʰɛ̂ːnǎj lɛ́ːw kʰráp/｜ハヤト案｜เรียน は /rian/・区切り点は付けない（約束 th・共通）
+    決定: /kʰun rian pʰaːsǎː tʰaj maː naːn kʰɛ̂ːnǎj lɛ́ːw kʰráp/｜ハヤト案｜เรียน は /rian/・区切り点は付けない（約束 th・IPA）
 th 13 [強勢・長音・声調だけ違う] คุณเคยไปญี่ปุ่นไหมครับ
     私  : /kʰun kʰɤːj paj jîːpùn máj kʰráp/
     東条: /kʰun kʰɤːj paj jîː.pùn mǎj kʰráp/
-    決定: /kʰun kʰɤːj paj jîːpùn máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・共通）
+    決定: /kʰun kʰɤːj paj jîːpùn máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・IPA）
 th 14 [強勢・長音・声調だけ違う] ถ่ายรูปได้ไหมครับ
     私  : /tʰàːj rûːp dâj máj kʰráp/
     東条: /tʰàːj rûːp dâːj mǎj kʰráp/
-    決定: /tʰàːj rûːp dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・共通）
+    決定: /tʰàːj rûːp dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・IPA）
 th 16 [強勢・長音・声調だけ違う] คุณชอบซูชิไหมครับ
     私  : /kʰun tɕʰɔ̂ːp suːtɕʰíʔ máj kʰráp/
     東条: /kʰun tɕʰɔ̂ːp suː.tɕʰíʔ mǎj kʰráp/
-    決定: /kʰun tɕʰɔ̂ːp suːtɕʰíʔ máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・共通）
+    決定: /kʰun tɕʰɔ̂ːp suːtɕʰíʔ máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・IPA）
 th 18 [強勢・長音・声調だけ違う] คุณว่ายน้ำเป็นไหมครับ
     私  : /kʰun wâːj náːm pen máj kʰráp/
     東条: /kʰun wâːj náːm pen mǎj kʰráp/
-    決定: /kʰun wâːj náːm pen máj kʰráp/｜ハヤト案｜ไหม /máj/（約束 th・共通）
+    決定: /kʰun wâːj náːm pen máj kʰráp/｜ハヤト案｜ไหม /máj/（約束 th・IPA）
 th 19 [強勢・長音・声調だけ違う] มีไวไฟไหมครับ
     私  : /miː waj faj máj kʰráp/
     東条: /miː waj.faj mǎj kʰráp/
-    決定: /miː wajfaj máj kʰráp/｜ハヤト案｜ไหม /máj/・ไวไฟ は1語（周回9）（約束 th・共通）
+    決定: /miː wajfaj máj kʰráp/｜ハヤト案｜ไหม /máj/・ไวไฟ は1語（周回9）（約束 th・IPA）
 th 20 [強勢・長音・声調だけ違う] ช่วยพูดอีกครั้งได้ไหมครับ
     私  : /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâj máj kʰráp/
     東条: /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâːj mǎj kʰráp/
-    決定: /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・共通）
+    決定: /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・IPA）
 th 27 [強勢・長音・声調だけ違う] มีเมนูอะไรแนะนำไหมครับ
     私  : /miː meːnuː ʔàraj nɛ́ʔnam máj kʰráp/
     東条: /miː meː.nuː ʔà.raj nɛ́ʔ.nam mǎj kʰráp/
-    決定: /miː meːnuː ʔàraj nɛ́ʔnam máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・共通）
+    決定: /miː meːnuː ʔàraj nɛ́ʔnam máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・IPA）
 th 30 [強勢・長音・声調だけ違う] ช่วยหน่อยได้ไหมครับ
     私  : /tɕʰûaj nɔ̀j dâj máj kʰráp/
     東条: /tɕʰûaj nɔ̀j dâːj mǎj kʰráp/
-    決定: /tɕʰûaj nɔ̀j dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・共通）
+    決定: /tɕʰûaj nɔ̀j dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・IPA）
