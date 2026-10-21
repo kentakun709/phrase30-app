@@ -1,0 +1,31 @@
+# eSpeak NG text-to-speech: 1.52.0  Data at: /usr/local/Cellar/espeak-ng/1.52.0/share/espeak-ng-data・声 th・espeak-ng -q --ipa。番号・example・機械の出力 ／ 決定版（周回10 時点）（崩れて使えない。照合に使っていない）
+ 1	คุณชื่ออะไรครับ	khˌu2na2chˈueː ʔˌaʔasai2ɹˈa2khaɜrmb	／ /kʰun tɕʰɯ̂ː ʔàraj kʰráp/
+ 2	คุณมาจากไหนครับ	khˌu2na2mˌaɜschaɜskˌai5ha2nˈa2khaɜrmb	／ /kʰun maː tɕàːk nǎj kʰráp/
+ 3	บ้านคุณอยู่ที่ไหนครับ	b snˌa2khu2naʔˈa2juː ths ˌai5ha2nˈa2khaɜrmb	／ /bâːn kʰun jùː tʰîːnǎj kʰráp/
+ 4	สบายดีไหมครับ	sˌaɜba2sjˌaɜdsai5ha2mˈa2khaɜrmb	／ /sàbaːj diː máj kʰráp/
+ 5	แล้วคุณล่ะครับ	ˈae2l wa2khˈu2na2l skhˈaɜrmb	／ /lɛ́ːw kʰun lâʔ kʰráp/
+ 6	ยินดีที่ได้รู้จักครับ	jˈi2na2dsths ˈaiɜd ɹˈuː2 chmkˈa2khaɜrmb	／ /jindiː tʰîː dâj rúːtɕàk kʰráp/
+ 7	คุณทำงานอะไรครับ	khˌu2na2thˌa2snɡa2snˌaʔasai2ɹˈa2khaɜrmb	／ /kʰun tʰamŋaːn ʔàraj kʰráp/
+ 8	คุณพูดภาษาอังกฤษได้ไหมครับ	khˌu2na2phˌuːɜda2phˌa5ssa2sʔmnɡˌaɜkaɹˈa5saiɜd ˌai5ha2mˈa2khaɜrmb	／ /kʰun pʰûːt pʰaːsǎː ʔaŋkrìt dâj máj kʰráp/
+ 9	ทำไมคุณถึงเรียนภาษาไทยครับ	thˌa2sai2mˌa2khu2nˌa5thuˌe2nɡe2rsjˌa2na2phˌa5ssasˌai2tha2jˈa2khaɜrmb	／ /tʰammaj kʰun tʰɯ̌ŋ rian pʰaːsǎː tʰaj kʰráp/
+10	เพราะว่าอยากไปเที่ยวครับ	e2phˈa2ɹa2ssw sʔˌa2jaɜskˈaiɜpe2ths ja2wˈa2khaɜrmb	／ /pʰrɔ́ʔwâː jàːk paj tʰîaw kʰráp/
+11	คุณเรียนภาษาไทยมานานแค่ไหนแล้วครับ	khˌu2ne2rsjˌa2na2phˌa5ssasˌai2tha2jˌa2ma2sna2snˈae2kh ˌai5ha2nˈae2l wˈa2khaɜrmb	／ /kʰun rian pʰaːsǎː tʰaj maː naːn kʰɛ̂ːnǎj lɛ́ːw kʰráp/
+12	เวลาว่างชอบทำอะไรครับ	e2wˈa2la2sw snɡˌa2chaʔˌaɜba2thˌasʔasai2ɹˈa2khaɜrmb	／ /weːlaː wâːŋ tɕʰɔ̂ːp tʰam ʔàraj kʰráp/
+13	คุณเคยไปญี่ปุ่นไหมครับ	khˌu2ne2kha2jˈaiɜpa2js pˈuɜ nˌai5ha2mˈa2khaɜrmb	／ /kʰun kʰɤːj paj jîːpùn máj kʰráp/
+14	ถ่ายรูปได้ไหมครับ	th sja2ɹˈuːɜpaiɜd ˌai5ha2mˈa2khaɜrmb	／ /tʰàːj rûːp dâj máj kʰráp/
+15	คุณมาที่นี่เมื่อไหร่ครับ	khu2nˈa2ma2sths ns e2mˈueː ʔˈai5ha2r khˈaɜrmb	／ /kʰun maː tʰîːnîː mɯ̂aràj kʰráp/
+16	คุณชอบซูชิไหมครับ	khˌu2na2chˌaʔaɜbˌa2suː2chˌiai5ha2mˈa2khaɜrmb	／ /kʰun tɕʰɔ̂ːp suːtɕʰíʔ máj kʰráp/
+17	“สบายๆ” แปลว่าอะไรครับ	sˈaɜba2sjm ˌaeɜpˈa2la2w sʔˌasai2ɹˈa2khaɜrmb	／ /sàbaːj sàbaːj plɛː wâː ʔàraj kʰráp/
+18	คุณว่ายน้ำเป็นไหมครับ	khˈu2na2w sjˈa2n sˈeɜp nˌai5ha2mˈa2khaɜrmb	／ /kʰun wâːj náːm pen máj kʰráp/
+19	มีไวไฟไหมครับ	msˌai2wai2fˌai5ha2mˈa2khaɜrmb	／ /miː wajfaj máj kʰráp/
+20	ช่วยพูดอีกครั้งได้ไหมครับ	ch wˌa2ja2phˌuːɜdaɜʔskˈa2kha2rm nɡˈaiɜd ˌai5ha2mˈa2khaɜrmb	／ /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâj máj kʰráp/
+21	อันนี้เท่าไหร่ครับ	ʔmnˈa2ns ˈe2th sˈai5ha2r khˈaɜrmb	／ /ʔanníː tʰâwràj kʰráp/
+22	อยากไปสถานีรถไฟครับ	ʔˌa2jaɜskˌaiɜpa5sˌa5tha2snsɹˌa5thai2fˈa2khaɜrmb	／ /jàːk paj sàtʰǎːniː rótfaj kʰráp/
+23	ไปสนามบินยังไงครับ	ˌaiɜpa5sˌa2na2smˌaɜbi2nˌa2jmnɡai2nɡˈa2khaɜrmb	／ /paj sànǎːmbin jaŋŋaj kʰráp/
+24	รถเมล์สายไหนครับ	ɹa5thˈe2ma2l sˌa2sjai5ha2nˈa2khaɜrmb	／ /rótmeː sǎːj nǎj kʰráp/
+25	คนนั้นคือใครครับ	khˈa2na2nm nˌa2khuˌeːʔai2kha2ɹˈa2khaɜrmb	／ /kʰon nán kʰɯː kʰraj kʰráp/
+26	ตอนนี้กี่โมงแล้วครับ	taɜʔˈa2na2ns ks ˌo2ma2nɡˈae2l wˈa2khaɜrmb	／ /tɔːnníː kìː moːŋ lɛ́ːw kʰráp/
+27	มีเมนูอะไรแนะนำไหมครับ	msˌe2ma2nˌuːʔasˌai2ɹaˌe2na2snˌasai5ha2mˈa2khaɜrmb	／ /miː meːnuː ʔàraj nɛ́ʔnam máj kʰráp/
+28	ขออันนี้ครับ	kha5ʔˈa2ʔmna2ns khˈaɜrmb	／ /kʰɔ̌ː ʔanníː kʰráp/
+29	เช็คบิลด้วยครับ	ˈe2ch khaɜbˈi2laɜd wa2jˈa2khaɜrmb	／ /tɕʰékbin dûaj kʰráp/
+30	ช่วยหน่อยได้ไหมครับ	ch wa2jˈa5ha2n ʔˈa2jaiɜd ˌai5ha2mˈa2khaɜrmb	／ /tɕʰûaj nɔ̀j dâj máj kʰráp/

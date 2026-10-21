@@ -1,0 +1,32 @@
+# pypinyin 0.55.0（Style.TONE・1字ずつ・多音字は既定の1つ目）。番号・example・機械の出力 ／ 決定版（周回10 時点）
+ 1	你叫什么名字？	nǐ jiào shén me míng zì ？	／ nǐ jiào shénme míngzi	差
+ 2	你是哪里人？	nǐ shì nǎ lǐ rén ？	／ nǐ shì nǎli rén	差
+ 3	你住在哪里？	nǐ zhù zài nǎ lǐ ？	／ nǐ zhù zài nǎli	差
+ 4	最近怎么样？	zuì jìn zěn me yàng ？	／ zuìjìn zěnmeyàng	一致
+ 5	你呢？	nǐ ne ？	／ nǐ ne	一致
+ 6	很高兴认识你。	hěn gāo xìng rèn shí nǐ 。	／ hěn gāoxìng rènshi nǐ	差
+ 7	你是做什么工作的？	nǐ shì zuò shén me gōng zuò de ？	／ nǐ shì zuò shénme gōngzuò de	一致
+ 8	你会说英语吗？	nǐ huì shuō yīng yǔ ma ？	／ nǐ huì shuō yīngyǔ ma	一致
+ 9	你为什么学中文？	nǐ wèi shén me xué zhōng wén ？	／ nǐ wèishénme xué zhōngwén	一致
+10	因为我想去旅行。	yīn wèi wǒ xiǎng qù lǚ xíng 。	／ yīnwèi wǒ xiǎng qù lǚxíng	一致
+11	你学中文多久了？	nǐ xué zhōng wén duō jiǔ le ？	／ nǐ xué zhōngwén duōjiǔ le	一致
+12	你平时喜欢做什么？	nǐ píng shí xǐ huān zuò shén me ？	／ nǐ píngshí xǐhuan zuò shénme	差
+13	你去过日本吗？	nǐ qù guò rì běn ma ？	／ nǐ qùguo rìběn ma	差
+14	我可以拍照吗？	wǒ kě yǐ pāi zhào ma ？	／ wǒ kěyǐ pāizhào ma	一致
+15	你是什么时候来的？	nǐ shì shén me shí hòu lái de ？	／ nǐ shì shénme shíhou lái de	差
+16	你喜欢寿司吗？	nǐ xǐ huān shòu sī ma ？	／ nǐ xǐhuan shòusī ma	差
+17	“加油”是什么意思？	“ jiā yóu ” shì shén me yì si ？	／ jiāyóu shì shénme yìsi	一致
+18	你会游泳吗？	nǐ huì yóu yǒng ma ？	／ nǐ huì yóuyǒng ma	一致
+19	有Wi-Fi吗？	yǒu W i - F i ma ？	／ yǒu Wi-Fi ma	一致
+20	请再说一遍。	qǐng zài shuō yī biàn 。	／ qǐng zài shuō yí biàn	差
+21	这个多少钱？	zhè ge duō shǎo qián ？	／ zhège duōshao qián	差
+22	我想去火车站。	wǒ xiǎng qù huǒ chē zhàn 。	／ wǒ xiǎng qù huǒchēzhàn	一致
+23	去机场怎么走？	qù jī chǎng zěn me zǒu ？	／ qù jīchǎng zěnme zǒu	一致
+24	哪一路车？	nǎ yī lù chē ？	／ nǎ yí lù chē	差
+25	那位是谁？	nà wèi shì shuí ？	／ nà wèi shì shéi	差
+26	现在几点？	xiàn zài jǐ diǎn ？	／ xiànzài jǐ diǎn	一致
+27	有什么推荐的菜吗？	yǒu shén me tuī jiàn de cài ma ？	／ yǒu shénme tuījiàn de cài ma	一致
+28	我要这个。	wǒ yào zhè ge 。	／ wǒ yào zhège	一致
+29	麻烦买单。	má fán mǎi dān 。	／ máfan mǎidān	差
+30	可以帮我一下吗？	kě yǐ bāng wǒ yī xià ma ？	／ kěyǐ bāng wǒ yíxià ma	差
+# 差 14件（種類と理由は docs/DECISIONS.md「周回8〜9」の zh）

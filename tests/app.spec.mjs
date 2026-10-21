@@ -155,6 +155,87 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(cards.nth(4)).not.toHaveClass(/playing/, { timeout: 2000 })
   })
 
+  test('AC11 どの言語でも30マスすべてに読み（中国語はピンイン・ほかは発音記号）が常時見え、押した文の欄にも出る。幅390で横スクロールなし・マスは44px以上で枠の中', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    const board = await page.locator('#board').boundingBox()
+    for (const code of CODES) {
+      await page.locator(`.tab[data-lang="${code}"]`).click()
+      await expect(page.locator('.card').first().locator('.text')).toHaveText(data.phrases[0].langs[code].example)
+      const rs = await page.locator('.card').evaluateAll(es => es.map(e => {
+        const r = e.querySelector('.reading'); const b = e.getBoundingClientRect(); const rb = r && r.getBoundingClientRect()
+        return { text: r ? r.textContent : '', lang: r ? r.getAttribute('lang') : '', hidden: r ? r.getAttribute('aria-hidden') : '', h: rb ? rb.height : 0, cardH: b.height, x: b.x, right: b.right,
+          order: r ? (e.querySelector('.text').getBoundingClientRect().bottom <= rb.top + 1 && rb.bottom <= e.querySelector('.ja').getBoundingClientRect().top + 1) : false }
+      }))
+      expect(rs.length).toBe(30)
+      rs.forEach((r, i) => {
+        expect(r.text, `${code} ${i + 1}番の読み`).toBe(data.phrases[i].langs[code].reading)
+        expect(r.h, `${code} ${i + 1}番の読みが描かれている`).toBeGreaterThan(0)
+        expect(r.order, `${code} ${i + 1}番: 文 → 読み → 訳 の順`).toBe(true)
+        expect(r.cardH, `${code} ${i + 1}番のマスは44px以上`).toBeGreaterThanOrEqual(44)
+        expect(r.x, `${code} ${i + 1}番は枠の中（左）`).toBeGreaterThanOrEqual(board.x - 1)
+        expect(r.right, `${code} ${i + 1}番は枠の中（右）`).toBeLessThanOrEqual(board.x + board.width + 1)
+        expect(r.lang, `${code} 読みの言語の印`).toBe(code === 'zh' ? 'zh-Latn-pinyin' : `${code}-fonipa`)
+        expect(r.hidden, `${code} ${i + 1}番の読みは画面の読み上げ機能に読ませない`).toBe('true')
+      })
+      await expect(page.locator('#langnote'), `${code} 言語の説明に読みの記号の読み方`).toContainText(code === 'zh' ? 'ピンイン' : '発音記号')
+      // 記号の読み方の一覧（開閉）: 見出しの文言・開くとその言語の凡例が全部（行数＝legend の件数）
+      const legend = data.languages.find(l => l.code === code).legend
+      await expect(page.locator('#legendsum')).toHaveText(`記号の読み方（${code === 'zh' ? 'ピンイン' : '発音記号'}）`)
+      await expect(page.locator('#legendlist dt')).toHaveCount(legend.length)
+      await expect(page.locator('#legendlist dt').first()).toHaveText(legend[0][0])
+      const sw = await page.evaluate(() => document.documentElement.scrollWidth)
+      expect(sw, `${code} の横幅`).toBeLessThanOrEqual(390)
+    }
+    // 押した文の欄にも同じ読み
+    await page.locator('.tab[data-lang="zh"]').click()
+    await page.locator('.card[data-n="1"]').click()
+    await expect(page.locator('#detail .dreading')).toHaveText(data.phrases[0].langs.zh.reading)
+  })
+
+  test('AC5d 6言語それぞれ一番長い番号（注＋型＋訳）でも、高さ664（幅390・320）で欄の中身が隠れない。記号の読み方は開閉でき、開いても横スクロールなし', async ({ page }) => {
+    test.setTimeout(180000)
+    await page.addInitScript(MOCK_SYNTH([]))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    await page.evaluate(() => { window.__silent = true })
+    const rows = []
+    for (const code of CODES) {
+      // 欄に出る文字が一番多い番号（注・言い換えの型・訳）
+      const pick = data.phrases.map(p => { const x = p.langs[code]; const tpl = x.template && x.template !== x.example ? x.template : ''; return { n: p.n, len: (x.note || '').length + tpl.length + (x.ja || '').length } }).sort((a, b) => b.len - a.len)[0]
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.locator(`.tab[data-lang="${code}"]`).click()
+      await page.locator(`.card[data-n="${pick.n}"]`).dispatchEvent('click')
+      await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
+      for (const [w, h] of [[390, 664], [320, 664]]) {
+        await page.setViewportSize({ width: w, height: h })
+        await page.waitForTimeout(150)
+        const m = await page.locator('#dock').evaluate(e => ({ h: Math.round(e.getBoundingClientRect().height), sh: e.scrollHeight, ch: e.clientHeight }))
+        rows.push(`${code}${pick.n} ${w}×${h} ${m.sh}/${m.ch}`); console.log('欄', rows[rows.length - 1])
+        expect(m.sh, `${code} ${pick.n}番・幅${w}×高さ${h}: 欄の中身が隠れない`).toBeLessThanOrEqual(m.ch + 1)
+        expect(m.h, `${code} ${pick.n}番・幅${w}×高さ${h}: 欄は画面の4割以内`).toBeLessThanOrEqual(h * 0.4 + 0.5)
+      }
+      // 案内が出ている間は欄の読みを隠す（クラスで。古い iOS でも効く）
+      await expect(page.locator('#dock')).toHaveClass(/has-notice/)
+      await expect(page.locator('#detail .dreading')).toBeHidden()
+    }
+    console.log('欄（6言語の一番長い番号・高さ664）:', rows.join(' ｜ '))
+    // 案内を閉じると欄の読みが戻る
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.locator('#noticeclose').click()
+    await expect(page.locator('#dock')).not.toHaveClass(/has-notice/)
+    await expect(page.locator('#detail .dreading')).toBeVisible()
+    // 記号の読み方: 既定は閉じている・開いても横スクロールなし・押せる高さ
+    await expect(page.locator('#legend')).not.toHaveAttribute('open', '')
+    expect(await page.locator('#legendsum').evaluate(e => getComputedStyle(e, '::before').content), '閉じている時は ▶').toContain('▶')
+    await page.locator('#legendsum').click()
+    await expect(page.locator('#legendlist')).toBeVisible()
+    expect(await page.locator('#legendsum').evaluate(e => getComputedStyle(e, '::before').content), '開いたら ▼').toContain('▼')
+    expect((await page.locator('#legendsum').boundingBox()).height).toBeGreaterThanOrEqual(44)
+    for (const w of [390, 320]) { await page.setViewportSize({ width: w, height: 844 }); expect(await page.evaluate(() => document.documentElement.scrollWidth), `幅${w}で記号の一覧を開いても横スクロールなし`).toBeLessThanOrEqual(w) }
+  })
+
   test('AC5 幅390pxで横スクロールが出ず、カードとタブは44px以上、本文は広い列にある', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
@@ -205,10 +286,17 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(page.locator('#notice')).toContainText('鳴りません', { timeout: 7000 })
     await expect(page.locator('#detail .tpl')).toContainText('言い換えの型')
     await dockOK('鳴らない＋声なし＋8番の型と注')
-    await page.setViewportSize({ width: 390, height: 664 })   // iPhone Safari で実際に見える高さの目安（上下のバーを除く）。数字を残すだけで合否にしない（次版で詰める）
+    await page.setViewportSize({ width: 390, height: 664 })   // iPhone Safari で実際に見える高さの目安（上下のバーを除く）。周回9 から合否にする（周回8 judge: 読みを足して 1px→20px に退行した）
     await page.waitForTimeout(200)
     const m664 = await page.locator('#dock').evaluate(e => ({ h: Math.round(e.getBoundingClientRect().height), sh: e.scrollHeight, ch: e.clientHeight }))
     console.log('欄（高さ664の画面・最長の状態）:', JSON.stringify(m664), '上限 40% =', Math.round(664 * 0.4), 'px')
+    expect(m664.sh, '高さ664でも欄の中身が隠れない（欄の中にスクロールが出ない）').toBeLessThanOrEqual(m664.ch + 1)
+    await page.setViewportSize({ width: 320, height: 664 })   // 一番狭いスマホ（周回8 東条: 320×664 で 302/265 だった）
+    await page.waitForTimeout(200)
+    const m320 = await page.locator('#dock').evaluate(e => ({ h: Math.round(e.getBoundingClientRect().height), sh: e.scrollHeight, ch: e.clientHeight }))
+    console.log('欄（幅320・高さ664・最長の状態）:', JSON.stringify(m320))
+    expect(m320.sh, '幅320・高さ664でも欄の中身が隠れない').toBeLessThanOrEqual(m320.ch + 1)
+    await page.setViewportSize({ width: 390, height: 844 })
     expect((await page.locator('.top').boundingBox()).height, '固定の帯は画面の3割以内').toBeLessThan(844 * 0.3)
   })
 

@@ -1,0 +1,361 @@
+# 突き合わせ（周回8: ハヤトと東条が互いに見ずに作った180件の食い違い）と決定（周回10 で1件ごとに「決定: 採った形｜理由」を付けた）
+# 理由の規則は docs/調査/2026-10-20_読みの表記の約束.md（言語の節）。決定行の数＝食い違いの件数で照合する
+# 全180件: 一致 91・強勢/長音/声調だけ違う 47・音が違う 42・決定行 89
+# 食い違い＝2者の読みを、区切りの点・空白・引用符を除いて比べて違う物。点・空白・引用符だけ違う13件（zh17・ko2・th1・th7・th10・th12・th15・th17・th21・th22・th23・th24・th29）は、共通の規則（区切り点・引用符を付けない）で一致に数えた
+
+zh  2 [強勢・長音・声調だけ違う] 你是哪里人？
+    私  : nǐ shì nǎli rén
+    東条: nǐ shì nǎlǐ rén
+    決定: nǐ shì nǎli rén｜ハヤト案｜軽声は記号なし＝哪里 nǎli（約束 zh）
+zh  3 [強勢・長音・声調だけ違う] 你住在哪里？
+    私  : nǐ zhù zài nǎli
+    東条: nǐ zhù zài nǎlǐ
+    決定: nǐ zhù zài nǎli｜ハヤト案｜軽声は記号なし＝哪里 nǎli（約束 zh）
+zh 19 [音が違う] 有Wi-Fi吗？
+    私  : yǒu Wi-Fi ma
+    東条: yǒu wāifāi ma
+    決定: yǒu Wi-Fi ma｜ハヤト案｜文の中のラテン文字は文の表記どおり Wi-Fi（約束 zh）
+en  2 [音が違う] Where are you from?
+    私  : /weər ə ju ˈfrɒm/
+    東条: /ˈweə ə ju ˈfrɒm/
+    決定: /ˈweər ə ju ˈfrɒm/｜組み合わせ｜疑問詞に ˈ（東条）＋母音の前の語末 r は繋ぎの r /ˈweər ə/（ハヤト）（約束 en）
+en  3 [強勢・長音・声調だけ違う] Where do you live?
+    私  : /weə də ju ˈlɪv/
+    東条: /ˈweə də ju ˈlɪv/
+    決定: /ˈweə də ju ˈlɪv/｜東条案｜疑問詞に ˈ（約束 en）
+en  4 [強勢・長音・声調だけ違う] How's it going?
+    私  : /haʊz ɪt ˈɡəʊɪŋ/
+    東条: /ˈhaʊz ɪt ˈɡəʊɪŋ/
+    決定: /ˈhaʊz ɪt ˈɡəʊɪŋ/｜東条案｜疑問詞に ˈ（約束 en）
+en  5 [強勢・長音・声調だけ違う] How about you?
+    私  : /haʊ əˈbaʊt ˈjuː/
+    東条: /ˈhaʊ əbaʊt ˈju/
+    決定: /ˈhaʊ əˈbaʊt ˈjuː/｜組み合わせ｜疑問詞に ˈ（東条）＋2音節以上の語は語の強勢を残す /əˈbaʊt/・対比で焦点の you は強形 /ˈjuː/（ハヤト）（約束 en）
+en  7 [強勢・長音・声調だけ違う] What do you do?
+    私  : /wɒt də ju ˈduː/
+    東条: /ˈwɒt də ju ˈduː/
+    決定: /ˈwɒt də ju ˈduː/｜東条案｜疑問詞に ˈ（約束 en）
+en 11 [音が違う] How long have you been learning English?
+    私  : /haʊ ˈlɒŋ həv ju bɪn ˈlɜːnɪŋ ˈɪŋɡlɪʃ/
+    東条: /ˈhaʊ ˈlɒŋ əv ju bɪn ˈlɜːnɪŋ ˈɪŋɡlɪʃ/
+    決定: /ˈhaʊ ˈlɒŋ həv ju bɪn ˈlɜːnɪŋ ˈɪŋɡlɪʃ/｜組み合わせ｜疑問詞に ˈ（東条）＋助動詞 have は h を残す /həv/（ハヤト）（約束 en）
+en 12 [強勢・長音・声調だけ違う] What do you do for fun?
+    私  : /wɒt də ju ˈduː fə ˈfʌn/
+    東条: /ˈwɒt də ju ˈduː fə ˈfʌn/
+    決定: /ˈwɒt də ju ˈduː fə ˈfʌn/｜東条案｜疑問詞に ˈ（約束 en）
+en 13 [音が違う] Have you ever been to Japan?
+    私  : /həv ju ˈevə bɪn tə dʒəˈpæn/
+    東条: /əv ju ˈevə bɪn tə dʒəˈpæn/
+    決定: /həv ju ˈevə bɪn tə dʒəˈpæn/｜ハヤト案｜助動詞 have は h を残す /həv/（約束 en）
+en 15 [強勢・長音・声調だけ違う] When did you get here?
+    私  : /wen dɪd ju ˈɡet ˈhɪə/
+    東条: /ˈwen dɪd ju ˈɡet ˈhɪə/
+    決定: /ˈwen dɪd ju ˈɡet ˈhɪə/｜東条案｜疑問詞に ˈ（約束 en）
+en 17 [強勢・長音・声調だけ違う] What does "sweet as" mean?
+    私  : /wɒt dəz ˈswiːt æz ˈmiːn/
+    東条: /ˈwɒt dəz ˈswiːt æz ˈmiːn/
+    決定: /ˈwɒt dəz ˈswiːt æz ˈmiːn/｜東条案｜疑問詞に ˈ（約束 en）
+en 19 [強勢・長音・声調だけ違う] Do you have Wi-Fi?
+    私  : /də ju ˈhæv ˈwaɪfaɪ/
+    東条: /də ju hæv ˈwaɪ faɪ/
+    決定: /də ju ˈhæv ˈwaɪfaɪ/｜ハヤト案｜本動詞の have に ˈ・Wi-Fi は1語（約束 en・共通の語の単位）
+en 21 [強勢・長音・声調だけ違う] How much is this?
+    私  : /haʊ ˈmʌtʃ ɪz ˈðɪs/
+    東条: /ˈhaʊ ˈmʌtʃ ɪz ˈðɪs/
+    決定: /ˈhaʊ ˈmʌtʃ ɪz ˈðɪs/｜東条案｜疑問詞に ˈ（約束 en）
+en 23 [強勢・長音・声調だけ違う] How do I get to the airport?
+    私  : /haʊ də aɪ ˈɡet tə ði ˈeəpɔːt/
+    東条: /ˈhaʊ də aɪ ˈɡet tə ði ˈeəpɔːt/
+    決定: /ˈhaʊ də aɪ ˈɡet tə ði ˈeəpɔːt/｜東条案｜疑問詞に ˈ（約束 en）
+en 24 [強勢・長音・声調だけ違う] Which bus is it?
+    私  : /wɪtʃ ˈbʌs ɪz ɪt/
+    東条: /ˈwɪtʃ ˈbʌs ɪz ɪt/
+    決定: /ˈwɪtʃ ˈbʌs ɪz ɪt/｜東条案｜疑問詞に ˈ（約束 en）
+en 25 [強勢・長音・声調だけ違う] Who is that?
+    私  : /huː ɪz ˈðæt/
+    東条: /ˈhuː ɪz ˈðæt/
+    決定: /ˈhuː ɪz ˈðæt/｜東条案｜疑問詞に ˈ（約束 en）
+en 26 [強勢・長音・声調だけ違う] What time is it?
+    私  : /wɒt ˈtaɪm ɪz ɪt/
+    東条: /ˈwɒt ˈtaɪm ɪz ɪt/
+    決定: /ˈwɒt ˈtaɪm ɪz ɪt/｜東条案｜疑問詞に ˈ（約束 en）
+en 27 [強勢・長音・声調だけ違う] What dish would you recommend?
+    私  : /wɒt ˈdɪʃ wəd ju rekəˈmend/
+    東条: /ˈwɒt ˈdɪʃ wəd ju rekəˈmend/
+    決定: /ˈwɒt ˈdɪʃ wəd ju rekəˈmend/｜東条案｜疑問詞に ˈ（約束 en）
+en 28 [強勢・長音・声調だけ違う] I'll have this one, please.
+    私  : /aɪl ˈhæv ˈðɪs wʌn ˈpliːz/
+    東条: /aɪl ˈhæv ðɪs ˈwʌn pliːz/
+    決定: /aɪl ˈhæv ˈðɪs wʌn ˈpliːz/｜ハヤト案｜this one は this に強勢・please に ˈ（約束 en）
+en 29 [強勢・長音・声調だけ違う] Can I get the bill, please?
+    私  : /kən aɪ ˈɡet ðə ˈbɪl ˈpliːz/
+    東条: /kən aɪ ˈɡet ðə ˈbɪl pliːz/
+    決定: /kən aɪ ˈɡet ðə ˈbɪl ˈpliːz/｜ハヤト案｜please に ˈ（約束 en）
+ko  1 [音が違う] 이름이 뭐예요?
+    私  : /iɾɯmi mwʌejo/
+    東条: /iɾɯmi mwʌjejo/
+    決定: /iɾɯmi mwʌjejo/｜東条案｜예요 は標準発音 /jejo/（約束 ko）
+ko  4 [音が違う] 잘 지내세요?
+    私  : /tɕal dʑinesejo/
+    東条: /tɕal tɕinɛsejo/
+    決定: /tɕal tɕinɛsejo/｜東条案｜語頭の平音は無声 /tɕinɛsejo/・ㅐ は /ɛ/（約束 ko）
+ko  5 [音が違う] 민수 씨는요?
+    私  : /minsu ɕ͈inɯnjo/
+    東条: /minsu s͈inɯnjo/
+    決定: /minsu ɕ͈inɯnjo/｜ハヤト案｜ㅆ は い の前で /ɕ͈/（約束 ko）
+ko  9 [音が違う] 왜 한국어를 공부하세요?
+    私  : /we hanɡuɡʌɾɯl koŋbuhasejo/
+    東条: /wɛ hanɡuɡʌɾɯl koŋbuhasejo/
+    決定: /wɛ hanɡuɡʌɾɯl koŋbuhasejo/｜東条案｜ㅐ は /ɛ/（約束 ko）
+ko 10 [音が違う] 여행 가고 싶어서요.
+    私  : /jʌheŋ kaɡo ɕipʰʌsʌjo/
+    東条: /jʌhɛŋ kaɡo ɕipʰʌsʌjo/
+    決定: /jʌhɛŋ kaɡo ɕipʰʌsʌjo/｜東条案｜ㅐ は /ɛ/（約束 ko）
+ko 11 [音が違う] 한국어 배운 지 얼마나 됐어요?
+    私  : /hanɡuɡʌ peun dʑi ʌlmana twes͈ʌjo/
+    東条: /hanɡuɡʌ pɛun tɕi ʌlmana twɛs͈ʌjo/
+    決定: /hanɡuɡʌ pɛun tɕi ʌlmana twɛs͈ʌjo/｜東条案｜ㅐ は /ɛ/・語頭の平音は無声 /tɕi/（約束 ko）
+ko 12 [音が違う] 취미가 뭐예요?
+    私  : /tɕʰwimiɡa mwʌejo/
+    東条: /tɕʰwimiɡa mwʌjejo/
+    決定: /tɕʰwimiɡa mwʌjejo/｜東条案｜예요 は標準発音 /jejo/（約束 ko）
+ko 13 [音が違う] 일본에 가 보신 적 있으세요?
+    私  : /ilbone ka boɕin tɕʌk is͈ɯsejo/
+    東条: /ilbone ka poɕin tɕʌɡ is͈ɯsejo/
+    決定: /ilbone ka poɕin tɕʌk is͈ɯsejo/｜組み合わせ｜語頭の平音は無声 /poɕin/（東条）＋分かち書きの境を越える連音は書かない /tɕʌk/（ハヤト）（約束 ko）
+ko 14 [音が違う] 사진 찍어도 돼요?
+    私  : /sadʑin tɕ͈iɡʌdo twejo/
+    東条: /sadʑin tɕ͈iɡʌdo twɛjo/
+    決定: /sadʑin tɕ͈iɡʌdo twɛjo/｜東条案｜ㅐ は /ɛ/（約束 ko）
+ko 16 [強勢・長音・声調だけ違う] 초밥 좋아하세요?
+    私  : /tɕʰobap tɕoahasejo/
+    東条: /tɕʰobap̚ tɕ͈oahasejo/
+    決定: /tɕʰobap tɕ͈oahasejo/｜組み合わせ（周回10 で直した）｜詰まる音で終わる語のあとの平音は分かち書きを越えても濃音 /tɕ͈oa/（東条。周回8 の「東条案の濃音は誤り」はハヤトの誤り）＋̚ は使わない（ハヤト）（約束 ko・IPA）
+ko 17 [音が違う] '대박'이 무슨 뜻이에요?
+    私  : /tebaɡi musɯn t͈ɯɕiejo/
+    東条: /tɛbaɡi musɯn t͈ɯɕiejo/
+    決定: /tɛbaɡi musɯn t͈ɯɕiejo/｜東条案｜ㅐ は /ɛ/（約束 ko）
+ko 20 [音が違う] 다시 한번 말씀해 주세요.
+    私  : /taɕi hanbʌn mals͈ɯmhe dʑusejo/
+    東条: /taɕi hanbʌn mals͈ɯmhe tɕusejo/
+    決定: /taɕi hanbʌn mals͈ɯmhɛ tɕusejo/｜組み合わせ｜ㅐ は /ɛ/（規則）＋語頭の平音は無声 /tɕusejo/（東条）（約束 ko）
+ko 21 [音が違う] 이거 얼마예요?
+    私  : /iɡʌ ʌlmaejo/
+    東条: /iɡʌ ʌlmajejo/
+    決定: /iɡʌ ʌlmajejo/｜東条案｜예요 は標準発音 /jejo/（約束 ko）
+ko 24 [音が違う] 어느 버스예요?
+    私  : /ʌnɯ pʌsɯejo/
+    東条: /ʌnɯ pʌsɯjejo/
+    決定: /ʌnɯ pʌsɯjejo/｜東条案｜예요 は標準発音 /jejo/（約束 ko）
+ko 26 [音が違う] 지금 몇 시예요?
+    私  : /tɕiɡɯm mjʌt ɕ͈iejo/
+    東条: /tɕiɡɯm mjʌt̚ s͈ijejo/
+    決定: /tɕiɡɯm mjʌt ɕ͈ijejo/｜組み合わせ｜ㅆ は い の前で /ɕ͈/・終声 ㄷ の後の濃音化（ハヤト）＋예요 /jejo/（東条）・̚ は使わない（約束 ko・IPA）
+ko 27 [音が違う] 추천 메뉴가 뭐예요?
+    私  : /tɕʰutɕʰʌn menjuɡa mwʌejo/
+    東条: /tɕʰutɕʰʌn menjuɡa mwʌjejo/
+    決定: /tɕʰutɕʰʌn menjuɡa mwʌjejo/｜東条案｜예요 は標準発音 /jejo/（約束 ko）
+ko 28 [音が違う] 이거 주세요.
+    私  : /iɡʌ dʑusejo/
+    東条: /iɡʌ tɕusejo/
+    決定: /iɡʌ tɕusejo/｜東条案｜語頭の平音は無声 /tɕusejo/（約束 ko）
+ko 29 [音が違う] 계산해 주세요.
+    私  : /kesanhe dʑusejo/
+    東条: /kjesanhe tɕusejo/
+    決定: /kjesanhɛ tɕusejo/｜組み合わせ｜계 は /kje/（東条）＋ㅐ は /ɛ/（規則）＋語頭の平音は無声（約束 ko）
+ko 30 [音が違う] 좀 도와주시겠어요?
+    私  : /tɕom dowadʑuɕiɡes͈ʌjo/
+    東条: /tɕom towadʑuɕiɡes͈ʌjo/
+    決定: /tɕom towadʑuɕiɡes͈ʌjo/｜東条案｜語頭の平音は無声（도와주시겠어요 は1語なので語頭の 도 だけ /t/）（約束 ko）
+es  5 [強勢・長音・声調だけ違う] ¿Y tú?
+    私  : /i ˈtu/
+    東条: /i tu/
+    決定: /i ˈtu/｜ハヤト案｜疑問詞（qué・quién）と tú は強い語で ˈ（約束 es）
+es  7 [強勢・長音・声調だけ違う] ¿A qué te dedicas?
+    私  : /a ˈke te deˈdikas/
+    東条: /a ke te deˈdikas/
+    決定: /a ˈke te deˈdikas/｜ハヤト案｜疑問詞（qué・quién）と tú は強い語で ˈ（約束 es）
+es  9 [強勢・長音・声調だけ違う] ¿Por qué estudias español?
+    私  : /poɾ ˈke esˈtudjas espaˈɲol/
+    東条: /poɾ ke esˈtudjas espaˈɲol/
+    決定: /poɾ ˈke esˈtudjas espaˈɲol/｜ハヤト案｜疑問詞（qué・quién）と tú は強い語で ˈ（約束 es）
+es 11 [強勢・長音・声調だけ違う] ¿Cuánto tiempo llevas estudiando español?
+    私  : /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/
+    東条: /ˈkwanto ˈtjempo ˈʝebas estudˈjando espaˈɲol/
+    決定: /ˈkwanto ˈtjempo ˈʝebas estuˈdjando espaˈɲol/｜ハヤト案｜ˈ は強い音節の頭 estuˈdjando（約束 IPA）
+es 12 [音が違う] ¿Qué haces en tu tiempo libre?
+    私  : /ˈke ˈaθes en tu ˈtjempo ˈlibɾe/
+    東条: /ke ˈases en tu ˈtjempo ˈlibɾe/
+    決定: /ˈke ˈaθes en tu ˈtjempo ˈlibɾe/｜ハヤト案｜疑問詞 qué に ˈ・c は /θ/（約束 es）
+es 13 [音が違う] ¿Alguna vez has estado en Japón?
+    私  : /alˈɡuna ˈbeθ as esˈtado en xaˈpon/
+    東条: /alˈɡuna bes as esˈtado en xaˈpon/
+    決定: /alˈɡuna ˈbeθ as esˈtado en xaˈpon/｜ハヤト案｜1音節の強い語 vez に ˈ・z は /θ/（約束 es）
+es 16 [音が違う] ¿Te gusta el sushi?
+    私  : /te ˈɡusta el ˈsusi/
+    東条: /te ˈɡusta el ˈsuʃi/
+    決定: /te ˈɡusta el ˈsuʃi/｜東条案｜外来語の sh は /ʃ/（約束 es）
+es 17 [強勢・長音・声調だけ違う] ¿Qué significa "vale"?
+    私  : /ˈke siɡniˈfika ˈbale/
+    東条: /ke siɡniˈfika ˈbale/
+    決定: /ˈke siɡniˈfika ˈbale/｜ハヤト案｜疑問詞（qué・quién）と tú は強い語で ˈ（約束 es）
+es 22 [音が違う] Quiero ir a la estación.
+    私  : /ˈkjeɾo ˈiɾ a la estaˈθjon/
+    東条: /ˈkjeɾo iɾ a la estaˈsjon/
+    決定: /ˈkjeɾo ˈiɾ a la estaˈθjon/｜ハヤト案｜強い語 ir に ˈ・c は /θ/（約束 es）
+es 24 [音が違う] ¿Qué autobús es?
+    私  : /ˈke awtoˈbus es/
+    東条: /ke autoˈbus es/
+    決定: /ˈke awtoˈbus es/｜ハヤト案｜疑問詞 qué に ˈ・二重母音の半母音は /w/ /awtoˈbus/（約束 es）
+es 25 [強勢・長音・声調だけ違う] ¿Quién es esa persona?
+    私  : /ˈkjen es ˈesa peɾˈsona/
+    東条: /kjen es ˈesa peɾˈsona/
+    決定: /ˈkjen es ˈesa peɾˈsona/｜ハヤト案｜疑問詞（qué・quién）と tú は強い語で ˈ（約束 es）
+es 26 [強勢・長音・声調だけ違う] ¿Qué hora es?
+    私  : /ˈke ˈoɾa es/
+    東条: /ke ˈoɾa es/
+    決定: /ˈke ˈoɾa es/｜ハヤト案｜疑問詞（qué・quién）と tú は強い語で ˈ（約束 es）
+es 27 [強勢・長音・声調だけ違う] ¿Qué plato me recomienda?
+    私  : /ˈke ˈplato me rekoˈmjenda/
+    東条: /ke ˈplato me rekoˈmjenda/
+    決定: /ˈke ˈplato me rekoˈmjenda/｜ハヤト案｜疑問詞（qué・quién）と tú は強い語で ˈ（約束 es）
+ru  1 [音が違う] Как вас зовут?
+    私  : /ˈkak vas zɐˈvut/
+    東条: /kak vɐs zɐˈvut/
+    決定: /kak vaz zɐˈvut/｜どちらでもない（周回9 で直した）｜1音節に ˈ なし（東条）＋вас の母音は弱めない（ハヤト）＋語の境を越える有声化 /vaz zɐˈvut/（約束 ru）
+ru  3 [音が違う] Где вы живёте?
+    私  : /ˈɡdʲe vɨ ʐɨˈvʲotʲɪ/
+    東条: /ɡdʲe vɨ ʐɨˈvʲɵtʲe/
+    決定: /ɡdʲe vɨ ʐɨˈvʲotʲɪ/｜組み合わせ｜1音節に ˈ なし（東条）＋ё は /o/・語末の無強勢 -е は /ɪ/（ハヤト）（約束 ru）
+ru  4 [音が違う] Как дела?
+    私  : /ˈkak dʲɪˈla/
+    東条: /kaɡ dʲɪˈla/
+    決定: /kaɡ dʲɪˈla/｜東条案｜как＋有声子音は /kaɡ/・1音節に ˈ なし（約束 ru）
+ru  5 [強勢・長音・声調だけ違う] А вы?
+    私  : /a ˈvɨ/
+    東条: /a vɨ/
+    決定: /a vɨ/｜東条案｜1音節の語に ˈ なし（約束 ru）
+ru  7 [音が違う] Кем вы работаете?
+    私  : /ˈkʲem vɨ rɐˈbotəjɪtʲɪ/
+    東条: /kʲem vɨ rɐˈbotəjɪtʲe/
+    決定: /kʲem vɨ rɐˈbotəjɪtʲɪ/｜組み合わせ｜1音節に ˈ なし（東条）＋-те は /tʲɪ/（ハヤト）（約束 ru）
+ru  8 [音が違う] Вы говорите по-английски?
+    私  : /vɨ ɡəvɐˈrʲitʲɪ pɐ ɐnˈɡlʲiskʲɪ/
+    東条: /vɨ ɡəvɐˈrʲitʲe pə ɐnˈɡlʲijskʲɪ/
+    決定: /vɨ ɡəvɐˈrʲitʲɪ pəɐnˈɡlʲijskʲɪ/｜組み合わせ｜-те は /tʲɪ/（ハヤト）＋по は強勢から2つ前の о で /ə/・-ийск の j を書く（東条）＋ハイフンの語は1語（周回9）（約束 ru）
+ru  9 [音が違う] Почему вы учите русский?
+    私  : /pətɕɪˈmu vɨ ˈutɕɪtʲɪ ˈruskʲɪj/
+    東条: /pətɕɪˈmu vɨ ʊˈtɕitʲe ˈruskʲɪj/
+    決定: /pətɕɪˈmu vɨ ˈutɕɪtʲɪ ˈruskʲɪj/｜ハヤト案｜вы у́чите は現在形の強勢・-те は /tʲɪ/（約束 ru）
+ru 10 [音が違う] Потому что я хочу путешествовать.
+    私  : /pətɐˈmu ʂtə ja xɐˈtɕu pʊtʲɪˈʂɛstvəvətʲ/
+    東条: /pətɐˈmu ʂtə ja xɐˈtɕu pʊtʲɪˈʂestvəvətʲ/
+    決定: /pətɐˈmu ʂtə ja xɐˈtɕu pʊtʲɪˈʂɛstvəvətʲ/｜ハヤト案｜ш の後の е は /ɛ/（約束 ru）
+ru 11 [音が違う] Как давно вы учите русский?
+    私  : /ˈkak dɐvˈno vɨ ˈutɕɪtʲɪ ˈruskʲɪj/
+    東条: /kaɡ dɐvˈno vɨ ʊˈtɕitʲe ˈruskʲɪj/
+    決定: /kaɡ dɐvˈno vɨ ˈutɕɪtʲɪ ˈruskʲɪj/｜組み合わせ｜как давно は /kaɡ/（東条）＋у́чите は現在形の強勢（ハヤト）（約束 ru）
+ru 12 [強勢・長音・声調だけ違う] Чем вы увлекаетесь?
+    私  : /ˈtɕem vɨ ʊvlʲɪˈkajɪtʲɪsʲ/
+    東条: /tɕem vɨ ʊvlʲɪˈkajɪtʲɪsʲ/
+    決定: /tɕem vɨ ʊvlʲɪˈkajɪtʲɪsʲ/｜東条案｜1音節の語に ˈ なし（約束 ru）
+ru 16 [音が違う] Вы любите суши?
+    私  : /vɨ ˈlʲubʲɪtʲɪ ˈsuʂɨ/
+    東条: /vɨ ˈlʲubʲɪtʲe ˈsuʂɨ/
+    決定: /vɨ ˈlʲubʲɪtʲɪ ˈsuʂɨ/｜ハヤト案｜-те は /tʲɪ/（約束 ru）
+ru 17 [強勢・長音・声調だけ違う] Что значит «ладно»?
+    私  : /ˈʂto ˈznatɕɪt ˈladnə/
+    東条: /ʂto ˈznatɕɪt ˈladnə/
+    決定: /ʂto ˈznatɕɪt ˈladnə/｜東条案｜1音節の語に ˈ なし（約束 ru）
+ru 18 [音が違う] Вы умеете плавать?
+    私  : /vɨ ʊˈmʲejɪtʲɪ ˈplavətʲ/
+    東条: /vɨ ʊˈmejɪtʲe ˈplavətʲ/
+    決定: /vɨ ʊˈmʲejɪtʲɪ ˈplavətʲ/｜ハヤト案｜軟音 mʲ を落とさない・-те は /tʲɪ/（約束 ru）
+ru 19 [音が違う] У вас есть вай-фай?
+    私  : /u ˈvas jestʲ vajˈfaj/
+    東条: /u vɐs jesʲtʲ vajˈfaj/
+    決定: /u vas jesʲtʲ vajˈfaj/｜組み合わせ｜1音節に ˈ なし（東条）＋вас の母音は弱めない（ハヤト）＋есть は軟音 тʲ の前で с も軟音 /sʲ/（東条）（約束 ru）
+ru 20 [音が違う] Повторите, пожалуйста.
+    私  : /pəftɐˈrʲitʲɪ pɐˈʐalʊstə/
+    東条: /pəftɐˈrʲitʲe pɐˈʐalʊstə/
+    決定: /pəftɐˈrʲitʲɪ pɐˈʐalʊstə/｜ハヤト案｜-те は /tʲɪ/（約束 ru）
+ru 23 [音が違う] Как добраться до аэропорта?
+    私  : /ˈkak dɐˈbratsə də ɐɛrɐˈportə/
+    東条: /kaɡ dɐˈbrat͡sə də ɐɪrɐˈportə/
+    決定: /kaɡ dɐˈbratsə də ɐɪrɐˈportə/｜組み合わせ｜как＋有声子音 /kaɡ/・無強勢の э は /ɪ/（東条）＋つなぎ線 ͡ は使わない /ts/（ハヤト）（約束 ru・IPA）
+ru 25 [強勢・長音・声調だけ違う] Кто это?
+    私  : /ˈkto ˈɛtə/
+    東条: /kto ˈɛtə/
+    決定: /kto ˈɛtə/｜東条案｜1音節の語に ˈ なし（約束 ru）
+ru 26 [強勢・長音・声調だけ違う] Который час?
+    私  : /kɐˈtorɨj ˈtɕas/
+    東条: /kɐˈtorɨj tɕas/
+    決定: /kɐˈtorɨj tɕas/｜東条案｜1音節の語に ˈ なし（約束 ru）
+ru 27 [音が違う] Какое блюдо вы посоветуете?
+    私  : /kɐˈkojə ˈblʲudə vɨ pəsɐˈvʲetʊjɪtʲɪ/
+    東条: /kɐˈkoje ˈblʲudə vɨ pəsɐˈvetʊjɪtʲe/
+    決定: /kɐˈkojə ˈblʲudə vɨ pəsɐˈvʲetʊjɪtʲɪ/｜ハヤト案｜j の後の語末無強勢 -е は /ə/・軟音 vʲ を落とさない・-те は /tʲɪ/（約束 ru）
+ru 28 [強勢・長音・声調だけ違う] Мне вот это, пожалуйста.
+    私  : /mnʲe ˈvot ˈɛtə pɐˈʐalʊstə/
+    東条: /mnʲe vot ˈɛtə pɐˈʐalʊstə/
+    決定: /mnʲe vot ˈɛtə pɐˈʐalʊstə/｜東条案｜1音節の語に ˈ なし（約束 ru）
+ru 29 [音が違う] Счёт, пожалуйста.
+    私  : /ˈɕːot pɐˈʐalʊstə/
+    東条: /ɕːɵt pɐˈʐalʊstə/
+    決定: /ɕːot pɐˈʐalʊstə/｜組み合わせ｜1音節に ˈ なし（東条）＋ё は /o/（ハヤト）（約束 ru）
+ru 30 [強勢・長音・声調だけ違う] Вы не могли бы мне помочь?
+    私  : /vɨ nʲɪ mɐɡˈlʲi bɨ mnʲe pɐˈmotɕ/
+    東条: /vɨ nʲɪ mɐˈɡlʲi bɨ mnʲe pɐˈmotɕ/
+    決定: /vɨ nʲɪ mɐˈɡlʲi bɨ mnʲe pɐˈmotɕ/｜東条案｜ˈ は強い音節の頭 /mɐˈɡlʲi/（約束 IPA）
+th  4 [強勢・長音・声調だけ違う] สบายดีไหมครับ
+    私  : /sàbaːj diː máj kʰráp/
+    東条: /sà.baːj diː mǎj kʰráp/
+    決定: /sàbaːj diː máj kʰráp/｜ハヤト案｜疑問の ไหม は話し言葉の高声 /máj/（約束 th・IPA）
+th  6 [強勢・長音・声調だけ違う] ยินดีที่ได้รู้จักครับ
+    私  : /jin diː tʰîː dâj rúː tɕàk kʰráp/
+    東条: /jin diː tʰîː dâːj rúː.tɕàk kʰráp/
+    決定: /jindiː tʰîː dâj rúːtɕàk kʰráp/｜ハヤト案｜ได้ は /dâj/・区切り点は付けない（約束 th・IPA）
+th  8 [強勢・長音・声調だけ違う] คุณพูดภาษาอังกฤษได้ไหมครับ
+    私  : /kʰun pʰûːt pʰaːsǎː ʔaŋkrìt dâj máj kʰráp/
+    東条: /kʰun pʰûːt pʰaː.sǎː ʔaŋ.krìt dâːj mǎj kʰráp/
+    決定: /kʰun pʰûːt pʰaːsǎː ʔaŋkrìt dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/・区切り点は付けない（約束 th・IPA）
+th  9 [強勢・長音・声調だけ違う] ทำไมคุณถึงเรียนภาษาไทยครับ
+    私  : /tʰammaj kʰun tʰɯ̌ŋ rian pʰaːsǎː tʰaj kʰráp/
+    東条: /tʰam.maj kʰun tʰɯ̌ŋ riːan pʰaː.sǎː tʰaj kʰráp/
+    決定: /tʰammaj kʰun tʰɯ̌ŋ rian pʰaːsǎː tʰaj kʰráp/｜ハヤト案｜เรียน は /rian/・区切り点は付けない（約束 th・IPA）
+th 11 [強勢・長音・声調だけ違う] คุณเรียนภาษาไทยมานานแค่ไหนแล้วครับ
+    私  : /kʰun rian pʰaːsǎː tʰaj maː naːn kʰɛ̂ː nǎj lɛ́ːw kʰráp/
+    東条: /kʰun riːan pʰaː.sǎː tʰaj maː naːn kʰɛ̂ː nǎj lɛ́ːw kʰráp/
+    決定: /kʰun rian pʰaːsǎː tʰaj maː naːn kʰɛ̂ːnǎj lɛ́ːw kʰráp/｜ハヤト案｜เรียน は /rian/・区切り点は付けない（約束 th・IPA）
+th 13 [強勢・長音・声調だけ違う] คุณเคยไปญี่ปุ่นไหมครับ
+    私  : /kʰun kʰɤːj paj jîːpùn máj kʰráp/
+    東条: /kʰun kʰɤːj paj jîː.pùn mǎj kʰráp/
+    決定: /kʰun kʰɤːj paj jîːpùn máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・IPA）
+th 14 [強勢・長音・声調だけ違う] ถ่ายรูปได้ไหมครับ
+    私  : /tʰàːj rûːp dâj máj kʰráp/
+    東条: /tʰàːj rûːp dâːj mǎj kʰráp/
+    決定: /tʰàːj rûːp dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・IPA）
+th 16 [強勢・長音・声調だけ違う] คุณชอบซูชิไหมครับ
+    私  : /kʰun tɕʰɔ̂ːp suːtɕʰíʔ máj kʰráp/
+    東条: /kʰun tɕʰɔ̂ːp suː.tɕʰíʔ mǎj kʰráp/
+    決定: /kʰun tɕʰɔ̂ːp suːtɕʰíʔ máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・IPA）
+th 18 [強勢・長音・声調だけ違う] คุณว่ายน้ำเป็นไหมครับ
+    私  : /kʰun wâːj náːm pen máj kʰráp/
+    東条: /kʰun wâːj náːm pen mǎj kʰráp/
+    決定: /kʰun wâːj náːm pen máj kʰráp/｜ハヤト案｜ไหม /máj/（約束 th・IPA）
+th 19 [強勢・長音・声調だけ違う] มีไวไฟไหมครับ
+    私  : /miː waj faj máj kʰráp/
+    東条: /miː waj.faj mǎj kʰráp/
+    決定: /miː wajfaj máj kʰráp/｜ハヤト案｜ไหม /máj/・ไวไฟ は1語（周回9）（約束 th・IPA）
+th 20 [強勢・長音・声調だけ違う] ช่วยพูดอีกครั้งได้ไหมครับ
+    私  : /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâj máj kʰráp/
+    東条: /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâːj mǎj kʰráp/
+    決定: /tɕʰûaj pʰûːt ʔìːk kʰráŋ dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・IPA）
+th 27 [強勢・長音・声調だけ違う] มีเมนูอะไรแนะนำไหมครับ
+    私  : /miː meːnuː ʔàraj nɛ́ʔnam máj kʰráp/
+    東条: /miː meː.nuː ʔà.raj nɛ́ʔ.nam mǎj kʰráp/
+    決定: /miː meːnuː ʔàraj nɛ́ʔnam máj kʰráp/｜ハヤト案｜ไหม /máj/・区切り点は付けない（約束 th・IPA）
+th 30 [強勢・長音・声調だけ違う] ช่วยหน่อยได้ไหมครับ
+    私  : /tɕʰûaj nɔ̀j dâj máj kʰráp/
+    東条: /tɕʰûaj nɔ̀j dâːj mǎj kʰráp/
+    決定: /tɕʰûaj nɔ̀j dâj máj kʰráp/｜ハヤト案｜ได้ /dâj/・ไหม /máj/（約束 th・IPA）
