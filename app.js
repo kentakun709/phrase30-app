@@ -364,17 +364,22 @@
   }
   function startQuiz(onlyWrong) {
     stopAll();
-    var pool = onlyWrong || state.data.phrases.map(function (p) { return p.n; });
-    var remaining = [], questions = [], counts = mistakesForLang();
-    // 重みをつけて重複なしで引く。復習が10文未満なら、ひと通り出してからもう一周する。
-    for (var i = 0; i < 10; i++) {
-      if (!remaining.length) remaining = pool.slice();
+    refreshVoices();
+    // 一覧が空なら読み込み待ちかもしれない。声が無いと分かる時だけ聞く問題を休む。
+    var noVoice = !synth || (state.voices.length > 0 && state.noVoice);
+    var pool = onlyWrong ? Array.from(new Set(onlyWrong)) : state.data.phrases.map(function (p) { return p.n; });
+    var remaining = pool.slice(), questions = [], counts = mistakesForLang();
+    var questionCount = onlyWrong ? pool.length : Math.min(10, pool.length);
+    // 重みをつけて重複なしで引く。復習は間違えた文を1回ずつ出す。
+    for (var i = 0; i < questionCount; i++) {
       var total = remaining.reduce(function (sum, n) { return sum + 1 + 3 * (counts[n] || 0); }, 0);
       var draw = Math.random() * total, at = 0;
       for (; at < remaining.length - 1; at++) { draw -= 1 + 3 * (counts[remaining[at]] || 0); if (draw < 0) break; }
       questions.push(remaining.splice(at, 1)[0]);
     }
-    quiz = { questions: questions, kinds: shuffle(['meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening']), index: 0, score: 0, wrong: [], answered: false };
+    var kinds = shuffle(['meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening']).slice(0, questions.length);
+    if (noVoice) kinds = questions.map(function () { return 'meaning'; });
+    quiz = { questions: questions, kinds: kinds, noVoice: noVoice, index: 0, score: 0, wrong: [], answered: false };
     showQuestion();
   }
   function choiceText(n, kind) {
@@ -398,9 +403,10 @@
       if (choices.length < 4 && !seen.has(key(p.n))) { choices.push(p.n); seen.add(key(p.n)); }
     });
     quiz.answered = false;
-    $quiz.innerHTML = '<p class="quiz-progress">' + (quiz.index + 1) + ' / 10問 · ' + esc(langDef().nameJa) + '</p>' +
+    $quiz.innerHTML = '<p class="quiz-progress">' + (quiz.index + 1) + ' / ' + quiz.questions.length + '問 · ' + esc(langDef().nameJa) + '</p>' +
+      (quiz.noVoice ? '<p class="quiz-voice-note">この端末には' + esc(langDef().nameJa) + 'の声が無いので、聞く問題はお休みです</p>' : '') +
       '<h2 tabindex="-1">' + (kind === 'meaning' ? 'この意味はどれ？' : '聞いて選ぶ') + '</h2>' +
-      (kind === 'meaning' ? '<p class="quiz-prompt">' + esc(state.data.phrases[n - 1].langs[state.lang].ja) + '</p>' : '<p>聞こえた文の意味を選んでね。</p><button type="button" id="quiz-replay">もう一度聞く</button>') +
+      (kind === 'meaning' ? '<p class="quiz-prompt">' + esc(state.data.phrases[n - 1].langs[state.lang].ja) + '</p>' : '<p>聞こえた文の意味を選んでね。</p><div class="quiz-actions"><button type="button" id="quiz-replay">もう一度聞く</button><button type="button" id="quiz-show-text" aria-expanded="false" aria-controls="quiz-hint">聞こえない時は文を見る</button></div><div id="quiz-hint" hidden></div>') +
       '<div class="quiz-choices">' + shuffle(choices).map(function (id) {
         var it = state.data.phrases[id - 1].langs[state.lang];
         return '<button type="button" class="quiz-choice" data-n="' + id + '">' +
@@ -408,19 +414,28 @@
       }).join('') + '</div><div id="quiz-feedback" aria-live="polite"></div>';
     $quiz.querySelectorAll('.quiz-choice').forEach(function (b) { b.addEventListener('click', function () { answerQuiz(Number(b.getAttribute('data-n'))); }); });
     if ($('quiz-replay')) $('quiz-replay').addEventListener('click', function () { play(n); });
+    if ($('quiz-show-text')) $('quiz-show-text').addEventListener('click', function () {
+      var it = state.data.phrases[n - 1].langs[state.lang];
+      $('quiz-hint').innerHTML = '<span class="quiz-text" lang="' + esc(langDef().bcp47[0]) + '">' + esc(it.example) + '</span>' + readingHtml(it, 'quiz-reading');
+      $('quiz-hint').hidden = false;
+      $('quiz-show-text').setAttribute('aria-expanded', 'true');
+    });
     window.scrollTo(0, 0); focusQuiz('h2');
     if (kind === 'listening') play(n); // はじめる／次へを押した流れの中で鳴らす。
   }
   function answerQuiz(chosen) {
     if (quiz.answered) return;
     quiz.answered = true;
-    var n = quiz.questions[quiz.index], correct = chosen === n;
-    if (correct) quiz.score++;
+    var n = quiz.questions[quiz.index], correct = chosen === n, counts = mistakesForLang();
+    if (correct) {
+      quiz.score++;
+      counts[n] = Math.max(0, (counts[n] || 0) - 1);
+    }
     else {
       if (quiz.wrong.indexOf(n) < 0) quiz.wrong.push(n);
-      var counts = mistakesForLang(); counts[n] = Math.min(1000, (counts[n] || 0) + 1);
-      try { localStorage.setItem('phrase30.quiz.mistakes.' + state.lang, JSON.stringify(counts)); } catch (e) { /* */ }
+      counts[n] = Math.min(1000, (counts[n] || 0) + 1);
     }
+    try { localStorage.setItem('phrase30.quiz.mistakes.' + state.lang, JSON.stringify(counts)); } catch (e) { /* */ }
     $quiz.querySelectorAll('.quiz-choice').forEach(function (b) {
       var id = Number(b.getAttribute('data-n')); b.disabled = true;
       if (id === n) { b.classList.add('is-correct'); b.insertAdjacentHTML('beforeend', '<span class="quiz-mark"> ○ 正解</span>'); }
@@ -428,15 +443,15 @@
     });
     $('quiz-feedback').innerHTML = '<div class="quiz-answer"><h2>' + (correct ? '正解！' : 'おしい！ 正解はこちら') + '</h2>' +
       '<button type="button" class="quiz-review" id="quiz-answer-play" aria-label="正解の文をもう一度聞く">' + quizPhraseHtml(n) + '</button></div>' +
-      '<div class="quiz-actions"><button type="button" class="quiz-primary" id="quiz-next">' + (quiz.index === 9 ? '結果を見る' : '次へ') + '</button></div>';
+      '<div class="quiz-actions"><button type="button" class="quiz-primary" id="quiz-next">' + (quiz.index === quiz.questions.length - 1 ? '結果を見る' : '次へ') + '</button></div>';
     $('quiz-answer-play').addEventListener('click', function () { play(n); });
-    $('quiz-next').addEventListener('click', function () { stopAll(); quiz.index++; if (quiz.index === 10) finishQuiz(); else showQuestion(); });
+    $('quiz-next').addEventListener('click', function () { stopAll(); quiz.index++; if (quiz.index === quiz.questions.length) finishQuiz(); else showQuestion(); });
     focusQuiz('#quiz-next');
     play(n);
   }
   function finishQuiz() {
     var wrong = quiz.wrong.slice();
-    $quiz.innerHTML = '<h2 tabindex="-1">10問中 ' + quiz.score + '問正解</h2>' +
+    $quiz.innerHTML = '<h2 tabindex="-1">' + quiz.questions.length + '問中 ' + quiz.score + '問正解</h2>' +
       (wrong.length ? '<p>間違えた文です。押すと聞けます。</p><ul class="quiz-review-list">' + wrong.map(function (n) {
         return '<li><button type="button" class="quiz-review" data-n="' + n + '">' + quizPhraseHtml(n) + '</button></li>';
       }).join('') + '</ul>' : '<p>ぜんぶ正解！</p>') +
@@ -447,11 +462,11 @@
     if ($('quiz-wrong-only')) $('quiz-wrong-only').addEventListener('click', function () { startQuiz(wrong); });
     window.scrollTo(0, 0); focusQuiz('h2');
   }
-  function syncView() {
+  function syncView(initial) {
     var next = window.location.hash === '#quiz' ? 'quiz' : 'phrases', changed = next !== view;
     if (changed) {
       stopAll();
-      if (next === 'quiz') { saveScroll(); phraseDetailN = state.detailN; }
+      if (next === 'quiz') { if (initial !== true) saveScroll(); phraseDetailN = state.detailN; }
       else { state.detailN = phraseDetailN; renderDetail(); }
     }
     view = next;
@@ -476,11 +491,12 @@
     renderTabs();
     renderList();
     refreshVoices();
-    syncView();
+    syncView(true); // 起動時は一覧を表示していないので、保存位置を上書きしない。
     window.addEventListener('hashchange', syncView);
     window.addEventListener('popstate', syncView);
     ['phrases-tab', 'quiz-tab'].forEach(function (id) {
       $(id).addEventListener('click', function (ev) {
+        if (ev.button !== 0 || ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey) return;
         ev.preventDefault();
         var hash = id === 'quiz-tab' ? '#quiz' : '';
         if (window.location.hash === hash) return;

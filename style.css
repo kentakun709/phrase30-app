@@ -122,10 +122,13 @@ body{max-width:960px;margin:0 auto}
 .quiz h2{font-size:18px;line-height:1.4;margin:0 0 12px}
 .quiz p{font-size:14px;line-height:1.5;margin:8px 0 12px}
 .quiz .quiz-progress{color:var(--sub);font-size:12px;margin-top:0}
+.quiz .quiz-voice-note{color:var(--sub);font-size:12px}
 .quiz button{appearance:none;min-height:44px;max-width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
   background:var(--tab-bg);color:var(--ink);font:inherit;font-size:14px;line-height:1.45;cursor:pointer;overflow-wrap:anywhere}
 .quiz .quiz-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
 .quiz-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.quiz #quiz-show-text{font-size:12px}
+#quiz-hint{margin-top:12px}
 .quiz-choices{display:grid;gap:8px;margin-top:12px}
 .quiz .quiz-choice,.quiz .quiz-review{width:100%;text-align:left}
 .quiz .quiz-choice:disabled{cursor:default;opacity:1}
