@@ -74,14 +74,26 @@ for (const width of [320, 390]) {
 test('電鍵ボタンを押して入力を確定しても例外がない', async ({ page }) => {
   const errors = []
   page.on('pageerror', error => errors.push(error.message))
+  await page.clock.install({ time: new Date('2026-01-01T00:00:00Z') })
   await page.goto('/morse.html')
   await page.getByRole('tab', { name: '打つ', exact: true }).click()
   const key = page.getByRole('button', { name: '長さを変えて押す', exact: true })
+  const prompt = await page.locator('#key-prompt').textContent()
+  // 読み込み後に時計を止め、実時間の負荷によらず tap を短点として処理する。
+  await page.clock.pauseAt(new Date('2026-01-01T01:00:00Z'))
   await key.tap()
   await expect(key).toHaveAttribute('aria-pressed', 'false')
-  await expect(page.locator('#key-code')).toHaveText('・')
-  await expect(page.locator('#key-status')).toContainText(/正解|でした/)
+  // 短点の確定待ち（既定700ms）と次のお題へのリセット（900ms）を進める。
+  await page.clock.runFor(2000)
+  await expect(page.locator('#key-status')).toHaveText(
+    prompt === 'E' ? '正解。E です。' : `E でした。お題は ${prompt} です。`
+  )
   await expect(page.locator('#key-code')).toHaveText('—')
+  const processed = await page.evaluate(() => {
+    const progress = JSON.parse(localStorage.getItem('morse-tag-progress'))
+    return Object.values(progress).reduce((total, score) => total + score.correct + score.wrong, 0)
+  })
+  expect(processed).toBe(1)
   await expect(page.locator('#fatal-error')).toBeHidden()
   expect(errors).toEqual([])
 })

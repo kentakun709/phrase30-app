@@ -19,9 +19,9 @@ for (const [f, s] of files) {
       const url = m[3] ?? m[4] ?? m[5]
       if (/^(?:https?:)?\/\//i.test(url)) errs.push(`${f}: 外部${m[1].toLowerCase() === 'script' ? 'スクリプト' : 'リンク'}を読み込んでいる`)
     }
-    continue
+  } else {
+    for (const m of s.matchAll(/https?:\/\/[^\s"'<>)]+/g)) if (!/www\.w3\.org\/2000\/svg/.test(m[0])) errs.push(`${f}: 外部URL ${m[0]}`)
   }
-  for (const m of s.matchAll(/https?:\/\/[^\s"'<>)]+/g)) if (!/www\.w3\.org\/2000\/svg/.test(m[0])) errs.push(`${f}: 外部URL ${m[0]}`)
   for (const m of s.matchAll(/fetch\(\s*['"`]([^'"`]+)/g)) if (m[1] !== 'data/phrases.json') errs.push(`${f}: fetch 先 ${m[1]}`)
   if (/XMLHttpRequest|WebSocket|EventSource|navigator\.sendBeacon/.test(s)) errs.push(`${f}: 通信の仕組みがある`)
   if (/api[_-]?key|apikey|client_secret|authorization|bearer|stripe|paypal|login|signin|password/i.test(s)) errs.push(`${f}: 鍵・ログイン・課金の語がある`)
