@@ -2,13 +2,8 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-</head>
-<body style="margin:0">
-<title>MORSE TAG</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+JP:wght@400;500;700&family=Saira+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>モールス｜30フレーズ</title>
 <style>
   :root {
     color-scheme: dark;
@@ -37,6 +32,21 @@
     outline: 3px solid var(--led-on);
     outline-offset: 3px;
   }
+  .app-switcher {
+    padding: env(safe-area-inset-top, 0px) max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px));
+    border-bottom: 1px solid #394960;
+    background: #151e2d;
+  }
+  .app-switcher-inner { max-width: 496px; margin: 0 auto; }
+  .app-switcher-label { margin: 0; padding-top: 10px; color: #a9bedb; font-size: .7rem; }
+  .app-switcher-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .app-switcher a {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 48px; padding: 8px 0; border-bottom: 3px solid transparent;
+    color: #b7c3d5; font-weight: 700; text-decoration: none;
+  }
+  .app-switcher a[aria-current="page"] { border-bottom-color: #98c4ff; color: #dceaff; }
+  .app-switcher a:focus-visible { outline: 3px solid #98c4ff; outline-offset: -3px; }
   .app {
     width: 100%;
     max-width: 520px;
@@ -54,7 +64,7 @@
   .app-header > *, .prompt-row > *, .quiz-row > * { min-width: 0; }
   h1 {
     margin: 0;
-    font: 700 clamp(1.55rem, 7vw, 2.25rem)/1 "Saira Semi Condensed", sans-serif;
+    font: 700 clamp(1.55rem, 7vw, 2.25rem)/1 "Saira Semi Condensed", system-ui, sans-serif;
     letter-spacing: .12em;
   }
   .tagline { margin: 0; color: var(--edge); font-size: .7rem; letter-spacing: .08em; }
@@ -62,15 +72,15 @@
   #plate { display: block; width: 100%; max-width: 100%; height: auto; max-height: 48vh; max-height: 48svh; margin: 0 auto; }
   .plate-edge { fill: var(--plate); stroke: var(--edge); stroke-width: 3; }
   .plate-inner { fill: none; stroke: #323b4d; stroke-width: 1; }
-  .plate-title { fill: var(--silk); font: 600 25px "Saira Semi Condensed", sans-serif; letter-spacing: 5px; }
-  .plate-subtitle { fill: var(--edge); font: 600 10px "IBM Plex Mono", monospace; letter-spacing: 4px; }
+  .plate-title { fill: var(--silk); font: 600 25px "Saira Semi Condensed", system-ui, sans-serif; letter-spacing: 5px; }
+  .plate-subtitle { fill: var(--edge); font: 600 10px "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing: 4px; }
   .antenna, .branch { fill: none; stroke: var(--edge); stroke-width: 2; stroke-linecap: round; }
   .branch { opacity: .74; }
   .hanger-rim { fill: #080b11; stroke: var(--edge); stroke-width: 4; }
   .hanger-hole { fill: var(--ground); stroke: #4a5361; stroke-width: 2; }
   .morse-node { cursor: pointer; }
   .morse-node .lamp { fill: var(--led-off); stroke: #617068; stroke-width: 1.4; transition: fill .14s, stroke .14s; }
-  .morse-node .node-label { fill: var(--silk); font: 600 18px "Saira Semi Condensed", sans-serif; pointer-events: none; }
+  .morse-node .node-label { fill: var(--silk); font: 600 18px "Saira Semi Condensed", system-ui, sans-serif; pointer-events: none; }
   .morse-node:hover .lamp, .morse-node:focus .lamp { stroke: var(--silk); }
   .morse-node.active .lamp {
     fill: var(--led-on);
@@ -117,12 +127,12 @@
     min-height: 52px;
     margin: 0;
     color: var(--led-on);
-    font: 600 clamp(2rem, 10vw, 3.1rem)/1.15 "IBM Plex Mono", monospace;
+    font: 600 clamp(2rem, 10vw, 3.1rem)/1.15 "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
     letter-spacing: .15em;
   }
-  .readout .letter { color: var(--silk); font-family: "Saira Semi Condensed", sans-serif; }
+  .readout .letter { color: var(--silk); font-family: "Saira Semi Condensed", system-ui, sans-serif; }
   .prompt-row, .quiz-row, .stats { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .prompt-letter { color: var(--silk); font: 700 2.5rem/1 "Saira Semi Condensed", sans-serif; }
+  .prompt-letter { color: var(--silk); font: 700 2.5rem/1 "Saira Semi Condensed", system-ui, sans-serif; }
   .key {
     width: 100%;
     min-height: 78px;
@@ -151,7 +161,7 @@
   .status.good { color: var(--led-on); }
   .status.bad { color: var(--error); }
   .stats { margin-top: 14px; padding-top: 12px; border-top: 1px solid #293141; font-size: .8rem; }
-  .stats strong { font-family: "IBM Plex Mono", monospace; color: var(--silk); }
+  .stats strong { font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace; color: var(--silk); }
   .convert-input {
     width: 100%; min-height: 86px; resize: vertical; padding: 10px 12px;
     border: 1px solid #596475; border-radius: 10px; background: #0b1018;
@@ -159,11 +169,11 @@
   }
   .convert-preview, .convert-output {
     min-width: 0; overflow-wrap: anywhere; white-space: pre-wrap;
-    font-family: "IBM Plex Mono", monospace; line-height: 1.7;
+    font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace; line-height: 1.7;
   }
   .convert-preview { min-height: 1.7em; margin: 6px 0 10px; color: #aeb6c1; }
   .convert-output { min-height: 1.7em; margin: 2px 0 10px; color: var(--led-on); }
-  .convert-roman { margin: 2px 0 8px; overflow-wrap: anywhere; color: var(--silk); font-family: "IBM Plex Mono", monospace; }
+  .convert-roman { margin: 2px 0 8px; overflow-wrap: anywhere; color: var(--silk); font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace; }
   .convert-error { color: var(--error); text-decoration: underline; text-decoration-thickness: 2px; }
   .convert-active { color: #0A0D13; background: var(--led-on); border-radius: 3px; }
   .convert-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -179,7 +189,7 @@
   summary { padding: 13px 15px; font-weight: 700; cursor: pointer; }
   .settings { display: grid; gap: 14px; padding: 3px 15px 16px; }
   .setting-line { display: grid; grid-template-columns: 92px 1fr 54px; align-items: center; gap: 10px; font-size: .78rem; }
-  .setting-line output { text-align: right; font-family: "IBM Plex Mono", monospace; color: var(--led-on); }
+  .setting-line output { text-align: right; font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace; color: var(--led-on); }
   input[type="range"] { width: 100%; min-width: 0; accent-color: var(--led-on); }
   .switch-line { display: flex; justify-content: space-between; align-items: center; font-size: .78rem; }
   .switch-line input { width: 20px; height: 20px; accent-color: var(--led-on); }
@@ -236,6 +246,19 @@
     *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
   }
 </style>
+</head>
+<body style="margin:0">
+
+<nav class="app-switcher" aria-label="アプリ切り替え">
+  <div class="app-switcher-inner">
+    <p class="app-switcher-label">30フレーズ</p>
+    <div class="app-switcher-links">
+      <a href="index.html">フレーズ</a>
+      <a href="index.html#quiz">問題</a>
+      <a href="morse.html" aria-current="page">モールス</a>
+    </div>
+  </div>
+</nav>
 
 <div id="fatal-error" role="alert" hidden><button id="fatal-error-close" type="button" aria-label="エラー表示を閉じる">×</button><span id="fatal-error-message"></span></div>
 
