@@ -692,18 +692,37 @@ window.addEventListener('unhandledrejection', function (e) { window.showFatalErr
     }
     return { normalized, roman, morseTokens, errors };
   }
+  function correctKuromojiDictionaryUrls() {
+    const xhrPrototype = window.XMLHttpRequest.prototype;
+    const originalOpen = xhrPrototype.open;
+    // Kuromoji の path.join が潰した scheme を、この版の辞書12ファイルだけ補正する。
+    const collapsedPath = KUROMOJI_DIC.replace('://', ':/');
+    xhrPrototype.open = function (...args) {
+      const url = args[1];
+      if (typeof url === 'string' && url.startsWith(collapsedPath)) {
+        const file = url.slice(collapsedPath.length);
+        if (/^(?:base|check|cc|tid|tid_pos|tid_map|unk|unk_pos|unk_map|unk_char|unk_compat|unk_invoke)\.dat\.gz$/.test(file)) {
+          args[1] = KUROMOJI_DIC + file;
+        }
+      }
+      return originalOpen.apply(this, args);
+    };
+    return () => { xhrPrototype.open = originalOpen; };
+  }
   function loadTokenizer() {
     if (tokenizer) return Promise.resolve(tokenizer);
     if (tokenizerPromise) return tokenizerPromise;
     tokenizerPromise = new Promise((resolve, reject) => {
       const build = () => {
+        const restoreDictionaryUrls = correctKuromojiDictionaryUrls();
         try {
           window.kuromoji.builder({ dicPath: KUROMOJI_DIC }).build((error, builtTokenizer) => {
+            restoreDictionaryUrls();
             if (error || !builtTokenizer) { reject(error || new Error('Kuromoji の初期化に失敗しました')); return; }
             tokenizer = builtTokenizer;
             resolve(tokenizer);
           });
-        } catch (error) { reject(error); }
+        } catch (error) { restoreDictionaryUrls(); reject(error); }
       };
       if (window.kuromoji) { build(); return; }
       const script = document.createElement('script');

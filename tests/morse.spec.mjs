@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { fileURLToPath } from 'node:url'
 
 const modes = [
   ['さわる', 'explore'],
@@ -36,6 +37,76 @@ test('起動と4つの練習切り替えで画面エラー・外部通信がな�
   await expect(page.locator('#fatal-error')).toBeHidden()
   expect(errors).toEqual([])
   expect(externalRequests).toEqual([])
+})
+
+test('HTTPS公開先でも手動読込の辞書12ファイルをCDNに要求する', async ({ page }) => {
+  const publishedUrl = 'https://kentakun709.github.io/phrase30-app/morse.html'
+  const cdn = 'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/'
+  const files = ['base', 'check', 'cc', 'tid', 'tid_pos', 'tid_map', 'unk', 'unk_pos', 'unk_map', 'unk_char', 'unk_compat', 'unk_invoke']
+    .map(name => `${name}.dat.gz`)
+  const dictionaryRequests = []
+  const cdnRequests = []
+  const errors = []
+  page.on('pageerror', error => errors.push(error.message))
+  page.on('request', request => {
+    const url = request.url()
+    if (url.endsWith('.dat.gz')) dictionaryRequests.push(url)
+    if (url.startsWith(cdn)) cdnRequests.push(url)
+  })
+  await page.addInitScript(() => { window.originalXhrOpen = XMLHttpRequest.prototype.open })
+  // 未知の要求も遮断し、本物のCDNには接続しない。
+  await page.route('**/*', route => route.abort())
+  await page.route('https://kentakun709.github.io/phrase30-app/**', route => {
+    if (route.request().url() === publishedUrl) {
+      return route.fulfill({ path: fileURLToPath(new URL('../morse.html', import.meta.url)), contentType: 'text/html; charset=utf-8' })
+    }
+    return route.fulfill({ status: 404, body: '' })
+  })
+  await page.route(`${cdn}**`, route => {
+    if (route.request().url() !== `${cdn}build/kuromoji.js`) {
+      return route.fulfill({ body: 'dictionary fixture', headers: { 'access-control-allow-origin': '*' } })
+    }
+    return route.fulfill({ contentType: 'application/javascript', body: `
+      window.kuromoji = {
+        builder({ dicPath }) {
+          return { build(done) {
+            const files = ${JSON.stringify(files)};
+            Promise.all(files.map(file => new Promise((resolve, reject) => {
+              const xhr = new XMLHttpRequest();
+              // 本物の path.join と同様に scheme の二重スラッシュを潰す。
+              xhr.open('GET', (dicPath + file).replace('://', ':/'), true);
+              xhr.onload = () => xhr.status === 200 ? resolve() : reject(new Error('dictionary status ' + xhr.status));
+              xhr.onerror = () => reject(new Error('dictionary request failed'));
+              xhr.send();
+            }))).then(() => done(null, {
+              tokenize(text) {
+                if (text === '東京') return [{ surface_form: '東京', reading: 'トウキョウ', word_position: 1 }];
+                return [
+                  { surface_form: '今日', reading: 'キョウ', word_position: 1 },
+                  { surface_form: 'は', reading: 'ハ', pos: '助詞', word_position: 3 },
+                  { surface_form: '良い', reading: 'ヨイ', word_position: 4 },
+                  { surface_form: '天気', reading: 'テンキ', word_position: 6 }
+                ];
+              }
+            }), error => done(error));
+          } };
+        }
+      };
+    ` })
+  })
+  await page.goto(publishedUrl)
+  await page.getByRole('tab', { name: '変換', exact: true }).click()
+  await page.locator('#convert-input').fill('東京')
+  await expect(page.locator('#read-kanji')).toBeVisible()
+  await page.waitForLoadState('networkidle')
+  expect(cdnRequests).toEqual([])
+  expect(dictionaryRequests).toEqual([])
+  await page.locator('#read-kanji').click()
+  await expect(page.locator('#convert-roman')).toHaveText('toukyou')
+  expect(dictionaryRequests.sort()).toEqual(files.map(file => `${cdn}dict/${file}`).sort())
+  await expect(page.locator('#read-kanji')).toBeHidden()
+  expect(await page.evaluate(() => XMLHttpRequest.prototype.open === window.originalXhrOpen)).toBe(true)
+  expect(errors).toEqual([])
 })
 
 test('アプリ切り替えの3リンクと現在地が正しい', async ({ page }) => {
