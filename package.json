@@ -7,7 +7,7 @@
   "scripts": {
     "check": "node scripts/check-data.mjs && node scripts/check-no-external.mjs",
     "test": "npm run check && playwright test",
-    "serve": "python3 -m http.server 8000"
+    "serve": "node scripts/serve.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.0"

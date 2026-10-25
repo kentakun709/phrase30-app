@@ -16,7 +16,7 @@ export default defineConfig({
     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
   },
   webServer: {
-    command: `python3 -m http.server ${PORT} --bind 127.0.0.1`,
+    command: `node scripts/serve.mjs ${PORT}`,
     url: `http://127.0.0.1:${PORT}/index.html`,
     reuseExistingServer: true,
     timeout: 15000,
