@@ -9,6 +9,8 @@
   var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticebody'), $noticeclose = $('noticeclose'), $noticehow = $('noticehow');
   var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $legendsum = $('legendsum'), $legendlist = $('legendlist'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody'), $howtosum = $('howtosum'), $voicehow = $('voicehow');
   var $dbody = $('dbody');
+  var view = 'phrases', quiz = null, quizMistakes = {}, phraseDetailN = 0;
+  var $quiz = $('quiz');
 
   var SPEAKER_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
   var LANG_JA = { 'en-nz': 'ニュージーランド英語', 'en-au': 'オーストラリア英語', 'en-gb': 'イギリス英語', 'en-ie': 'アイルランド英語', 'en-us': 'アメリカ英語',
@@ -211,6 +213,7 @@
     a.onerror = function () { if (state.gen === gen) { setPlaying(null); fallback(); } };
     a.onpause = function () { if (state.gen === gen && a.ended) setPlaying(null); };
     a.src = src;
+    a.playbackRate = state.slow ? 0.7 : 1;
     setPlaying(n);
     var p;
     try { p = a.play(); } catch (e) { setPlaying(null); fallback(); return; }
@@ -300,11 +303,20 @@
     try { window.scrollTo(0, Math.max(0, el.getBoundingClientRect().top + (window.scrollY || 0) - topOffset() - 8)); } catch (e) { /* */ }
   }
   function setLang(code) {
+    if (view === 'quiz') {
+      state.lang = code;
+      try { localStorage.setItem('phrase30.lang', code); } catch (e) { /* */ }
+      stopAll(); hideNotice(''); renderTabs(); renderList(); refreshVoices();
+      resetQuiz();
+      window.scrollTo(0, 0);
+      return;
+    }
     var inList = !!state.data && $list.getBoundingClientRect().top < topOffset();   // 一覧の中まで下りている時だけ番号で引き継ぐ（一番上なら一番上のまま）
     var curY = window.scrollY || 0, curCard = inList ? visibleFirstCard() : 0;
     if (state.data) state.scroll[state.lang] = curY;
     state.lang = code;
     try { localStorage.setItem('phrase30.lang', code); } catch (e) { /* プライベートモード等 */ }
+    resetQuiz();
     stopAll();
     hideNotice('');
     var tabs = $tabs.querySelectorAll('.tab');
@@ -321,11 +333,137 @@
     try { localStorage.setItem('phrase30.slow', state.slow ? '1' : '0'); } catch (e) { /* */ }
   }
   function saveScroll() {
+    if (view === 'quiz') return;
     state.scroll[state.lang] = window.scrollY || 0;
     try { localStorage.setItem('phrase30.scroll.v2', JSON.stringify(state.scroll)); /* 周回6で並びが変わったので鍵を変えた（送信1の版の位置を戻さない） */ } catch (e) { /* */ }
   }
 
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+  // 問題の音も一覧と同じ play() を通す。文・声・失敗時の案内を共通にする。
+  function shuffle(items) {
+    var a = items.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function mistakesForLang() {
+    if (quizMistakes[state.lang]) return quizMistakes[state.lang];
+    var saved = null, counts = {};
+    try { saved = JSON.parse(localStorage.getItem('phrase30.quiz.mistakes.' + state.lang) || '{}'); } catch (e) { /* 保存できなくても遊べる */ }
+    state.data.phrases.forEach(function (p) {
+      var count = saved && saved[p.n];
+      if (typeof count === 'number' && isFinite(count) && count > 0) counts[p.n] = Math.min(1000, Math.floor(count));
+    });
+    quizMistakes[state.lang] = counts;
+    return counts;
+  }
+  function resetQuiz() {
+    quiz = null;
+    $quiz.innerHTML = '<h2 tabindex="-1">' + esc(langDef().nameJa) + 'の問題</h2><p>10問にちょうせん！ 文を選ぶ問題と、聞いて選ぶ問題が出ます。</p><button type="button" class="quiz-primary" id="quiz-start">はじめる</button>';
+    $('quiz-start').addEventListener('click', function () { startQuiz(); });
+  }
+  function startQuiz(onlyWrong) {
+    stopAll();
+    var pool = onlyWrong || state.data.phrases.map(function (p) { return p.n; });
+    var remaining = [], questions = [], counts = mistakesForLang();
+    // 重みをつけて重複なしで引く。復習が10文未満なら、ひと通り出してからもう一周する。
+    for (var i = 0; i < 10; i++) {
+      if (!remaining.length) remaining = pool.slice();
+      var total = remaining.reduce(function (sum, n) { return sum + 1 + 3 * (counts[n] || 0); }, 0);
+      var draw = Math.random() * total, at = 0;
+      for (; at < remaining.length - 1; at++) { draw -= 1 + 3 * (counts[remaining[at]] || 0); if (draw < 0) break; }
+      questions.push(remaining.splice(at, 1)[0]);
+    }
+    quiz = { questions: questions, kinds: shuffle(['meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening', 'meaning', 'listening']), index: 0, score: 0, wrong: [], answered: false };
+    showQuestion();
+  }
+  function choiceText(n, kind) {
+    var it = state.data.phrases[n - 1].langs[state.lang];
+    return kind === 'meaning' ? it.example : it.ja;
+  }
+  function quizPhraseHtml(n) {
+    var it = state.data.phrases[n - 1].langs[state.lang];
+    return '<span class="quiz-text" lang="' + esc(langDef().bcp47[0]) + '">' + esc(it.example) + '</span>' + readingHtml(it, 'quiz-reading') +
+      '<span class="quiz-ja">' + esc(it.ja) + '</span>' + (it.note ? '<span class="quiz-note">' + esc(it.note) + '</span>' : '');
+  }
+  function focusQuiz(selector) {
+    var el = $quiz.querySelector(selector);
+    if (el) el.focus({ preventScroll: true });
+  }
+  function showQuestion() {
+    var n = quiz.questions[quiz.index], kind = quiz.kinds[quiz.index], seen = new Set(), choices = [n];
+    var key = function (id) { return choiceText(id, kind).normalize('NFKC').replace(/\s+/g, ' ').trim(); };
+    seen.add(key(n));
+    shuffle(state.data.phrases).forEach(function (p) {
+      if (choices.length < 4 && !seen.has(key(p.n))) { choices.push(p.n); seen.add(key(p.n)); }
+    });
+    quiz.answered = false;
+    $quiz.innerHTML = '<p class="quiz-progress">' + (quiz.index + 1) + ' / 10問 · ' + esc(langDef().nameJa) + '</p>' +
+      '<h2 tabindex="-1">' + (kind === 'meaning' ? 'この意味はどれ？' : '聞いて選ぶ') + '</h2>' +
+      (kind === 'meaning' ? '<p class="quiz-prompt">' + esc(state.data.phrases[n - 1].langs[state.lang].ja) + '</p>' : '<p>聞こえた文の意味を選んでね。</p><button type="button" id="quiz-replay">もう一度聞く</button>') +
+      '<div class="quiz-choices">' + shuffle(choices).map(function (id) {
+        var it = state.data.phrases[id - 1].langs[state.lang];
+        return '<button type="button" class="quiz-choice" data-n="' + id + '">' +
+          (kind === 'meaning' ? '<span class="quiz-option-text" lang="' + esc(langDef().bcp47[0]) + '">' + esc(it.example) + '</span>' + readingHtml(it, 'quiz-reading') : '<span class="quiz-option-text">' + esc(it.ja) + '</span>') + '</button>';
+      }).join('') + '</div><div id="quiz-feedback" aria-live="polite"></div>';
+    $quiz.querySelectorAll('.quiz-choice').forEach(function (b) { b.addEventListener('click', function () { answerQuiz(Number(b.getAttribute('data-n'))); }); });
+    if ($('quiz-replay')) $('quiz-replay').addEventListener('click', function () { play(n); });
+    window.scrollTo(0, 0); focusQuiz('h2');
+    if (kind === 'listening') play(n); // はじめる／次へを押した流れの中で鳴らす。
+  }
+  function answerQuiz(chosen) {
+    if (quiz.answered) return;
+    quiz.answered = true;
+    var n = quiz.questions[quiz.index], correct = chosen === n;
+    if (correct) quiz.score++;
+    else {
+      if (quiz.wrong.indexOf(n) < 0) quiz.wrong.push(n);
+      var counts = mistakesForLang(); counts[n] = Math.min(1000, (counts[n] || 0) + 1);
+      try { localStorage.setItem('phrase30.quiz.mistakes.' + state.lang, JSON.stringify(counts)); } catch (e) { /* */ }
+    }
+    $quiz.querySelectorAll('.quiz-choice').forEach(function (b) {
+      var id = Number(b.getAttribute('data-n')); b.disabled = true;
+      if (id === n) { b.classList.add('is-correct'); b.insertAdjacentHTML('beforeend', '<span class="quiz-mark"> ○ 正解</span>'); }
+      else if (id === chosen) { b.classList.add('is-wrong'); b.insertAdjacentHTML('beforeend', '<span class="quiz-mark"> ×</span>'); }
+    });
+    $('quiz-feedback').innerHTML = '<div class="quiz-answer"><h2>' + (correct ? '正解！' : 'おしい！ 正解はこちら') + '</h2>' +
+      '<button type="button" class="quiz-review" id="quiz-answer-play" aria-label="正解の文をもう一度聞く">' + quizPhraseHtml(n) + '</button></div>' +
+      '<div class="quiz-actions"><button type="button" class="quiz-primary" id="quiz-next">' + (quiz.index === 9 ? '結果を見る' : '次へ') + '</button></div>';
+    $('quiz-answer-play').addEventListener('click', function () { play(n); });
+    $('quiz-next').addEventListener('click', function () { stopAll(); quiz.index++; if (quiz.index === 10) finishQuiz(); else showQuestion(); });
+    focusQuiz('#quiz-next');
+    play(n);
+  }
+  function finishQuiz() {
+    var wrong = quiz.wrong.slice();
+    $quiz.innerHTML = '<h2 tabindex="-1">10問中 ' + quiz.score + '問正解</h2>' +
+      (wrong.length ? '<p>間違えた文です。押すと聞けます。</p><ul class="quiz-review-list">' + wrong.map(function (n) {
+        return '<li><button type="button" class="quiz-review" data-n="' + n + '">' + quizPhraseHtml(n) + '</button></li>';
+      }).join('') + '</ul>' : '<p>ぜんぶ正解！</p>') +
+      '<div class="quiz-actions"><button type="button" class="quiz-primary" id="quiz-again">もう一回</button>' +
+      (wrong.length ? '<button type="button" id="quiz-wrong-only">間違えたのだけ</button>' : '') + '</div>';
+    $quiz.querySelectorAll('.quiz-review').forEach(function (b) { b.addEventListener('click', function () { play(Number(b.getAttribute('data-n'))); }); });
+    $('quiz-again').addEventListener('click', function () { startQuiz(); });
+    if ($('quiz-wrong-only')) $('quiz-wrong-only').addEventListener('click', function () { startQuiz(wrong); });
+    window.scrollTo(0, 0); focusQuiz('h2');
+  }
+  function syncView() {
+    var next = window.location.hash === '#quiz' ? 'quiz' : 'phrases', changed = next !== view;
+    if (changed) {
+      stopAll();
+      if (next === 'quiz') { saveScroll(); phraseDetailN = state.detailN; }
+      else { state.detailN = phraseDetailN; renderDetail(); }
+    }
+    view = next;
+    document.body.classList.toggle('quiz-view', view === 'quiz');
+    ['board', 'legend', 'detail', 'langnote'].forEach(function (id) { $(id).hidden = view === 'quiz'; });
+    $quiz.hidden = view !== 'quiz';
+    $('phrases-tab').toggleAttribute('aria-current', view === 'phrases');
+    $('quiz-tab').toggleAttribute('aria-current', view === 'quiz');
+    $(view === 'quiz' ? 'quiz-tab' : 'phrases-tab').setAttribute('aria-current', 'page');
+    if (view === 'quiz' && !quiz) resetQuiz();
+    if (changed) { window.scrollTo(0, view === 'quiz' ? 0 : state.scroll[state.lang] || 0); }
+  }
 
   function init(data) {
     state.data = data;
@@ -338,6 +476,18 @@
     renderTabs();
     renderList();
     refreshVoices();
+    syncView();
+    window.addEventListener('hashchange', syncView);
+    window.addEventListener('popstate', syncView);
+    ['phrases-tab', 'quiz-tab'].forEach(function (id) {
+      $(id).addEventListener('click', function (ev) {
+        ev.preventDefault();
+        var hash = id === 'quiz-tab' ? '#quiz' : '';
+        if (window.location.hash === hash) return;
+        history.pushState(null, '', window.location.pathname + window.location.search + hash);
+        syncView();
+      });
+    });
     if (synth && typeof synth.addEventListener === 'function') synth.addEventListener('voiceschanged', refreshVoices);
     else if (synth) synth.onvoiceschanged = refreshVoices;
     $slow.addEventListener('click', function () { setSlow(!state.slow); });
@@ -353,7 +503,7 @@
     document.addEventListener('visibilitychange', function () { if (document.hidden) stopAll(); });
     window.addEventListener('pagehide', function () { stopAll(); saveScroll(); });
     var t = null; window.addEventListener('scroll', function () { if (t) return; t = setTimeout(function () { t = null; saveScroll(); }, 400); }, { passive: true });
-    var y = state.scroll[state.lang] || 0; if (y > 0) { try { window.scrollTo(0, y); } catch (e) { /* */ } }
+    var y = state.scroll[state.lang] || 0; if (view === 'phrases' && y > 0) { try { window.scrollTo(0, y); } catch (e) { /* */ } }
   }
 
   // 試験と将来の差し替えのための小さな窓口（外部には何も送らない）
