@@ -9,6 +9,7 @@
 - ついでに直した既存の不具合: モールスの「漢字を読む」が https の公開先で辞書を 404 にしていた（kuromoji の path.join が `https://` を潰す）。**元の https://kentakun709.github.io/morse-tag/ には同じ不具合が残っている**（morse-tag は触っていない）
 - 確認: Playwright 50本（既存24＋問題＋モールス）を `--workers=2` で計3回全部合格。Pages の4ファイルが main と一致。公開URLで 10問→結果→モールス→問題へ戻る を通し、画面エラー0。https を模した手元で本物の CDN から辞書12ファイル 200・「東京タワー」→ toukyou tawaa。レビューは独立レビュー（Claude）と Codex の検収の相見積 → 指摘を直して Codex 再検収「指摘なし」
 - **未確認**: iPhone/Android の実機で音が鳴るか・押した感じ（試験は読み上げを差し替えている）
+- 実機確認の担当: Kenta のスマホで問題タブの音とモールスを触ってもらう（2026-10-26 依頼済み・結果待ち）。赤が出たら葵が直す
 - 試験のサーバーを `python3 -m http.server` → `node scripts/serve.mjs` に変えた（葵の Windows に python3 が無い）
 - 10-21 のドラムの未コミット作業（YouGlish 解析・練習画面・英語の保存音声・単語タップ/0.5倍）は、**ローカルの枝 `trial/youglish-english`（5827401）に退避**。main には入れていない（push もしていない）。下の [接触7391] の送信3・周回11〜 も手つかずのまま
 
