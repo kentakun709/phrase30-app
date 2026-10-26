@@ -2,6 +2,8 @@
 
 ## 2026-10-25 葵: 「問題」タブとモールス統合を公開（main 8ff0cf1）
 
+- 2026-10-26 追記: Kenta「統合でいいよ」→ 元の https://kentakun709.github.io/morse-tag/ は、ここの `morse.html` への転送ページにした（morse-tag 70e3433）。**モールスの本体は今後ここの morse.html だけを直す**
+
 - 発端: Kenta（端末）「これ問題出すようにアプデしてみて（タブ増やして）あとモールス信号のやつもこれに統合していいよ」
 - **公開済み**: https://kentakun709.github.io/phrase30-app/ に画面タブ「フレーズ／問題／モールス」。問題＝今の言語で10問の4択（意味→文／聞いて→意味）・間違えた文ほど多く出る・声が無い端末では聞く問題を休む・`#quiz` で直接開ける。モールス＝`morse.html`（morse-tag 9edaf8e の原本＋上にアプリ切り替えの帯・Google Fonts を外した）
 - ついでに直した既存の不具合: モールスの「漢字を読む」が https の公開先で辞書を 404 にしていた（kuromoji の path.join が `https://` を潰す）。**元の https://kentakun709.github.io/morse-tag/ には同じ不具合が残っている**（morse-tag は触っていない）
