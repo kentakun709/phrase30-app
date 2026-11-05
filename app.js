@@ -4,11 +4,12 @@
   'use strict';
   var synth = window.speechSynthesis || null;
   var state = { data: null, lang: 'en', voices: [], voice: null, playing: null, utter: null, audioEl: null,
-    noVoice: false, slow: false, gen: 0, watchdog: null, dismissed: {}, noticeKey: '', busyCancelAt: 0, scroll: {}, howtoAuto: false, howtoOpened: {}, detailN: 0 };
+    noVoice: false, slow: false, slower: false, gen: 0, watchdog: null, dismissed: {}, noticeKey: '', busyCancelAt: 0, scroll: {}, howtoAuto: false, howtoOpened: {}, detailN: 0 };
   var $ = function (id) { return document.getElementById(id); };
   var $tabs = $('tabs'), $list = $('list'), $notice = $('notice'), $noticetext = $('noticebody'), $noticeclose = $('noticeclose'), $noticehow = $('noticehow');
   var $voiceinfo = $('voiceinfo'), $loading = $('loading'), $langnote = $('langnote'), $legendsum = $('legendsum'), $legendlist = $('legendlist'), $slow = $('slow'), $howto = $('howto'), $howtobody = $('howtobody'), $howtosum = $('howtosum'), $voicehow = $('voicehow');
   var $dbody = $('dbody');
+  var $slower = $('slower');
   var view = 'phrases', quiz = null, quizMistakes = {}, phraseDetailN = 0;
   var $quiz = $('quiz');
 
@@ -164,7 +165,7 @@
     var u = new SpeechSynthesisUtterance(item.example);
     u.lang = state.voice ? state.voice.lang : def.bcp47[0];
     if (state.voice) u.voice = state.voice;
-    u.rate = state.slow ? 0.7 : 0.9; u.pitch = 1; u.volume = 1;
+    u.rate = playbackRate(false); u.pitch = 1; u.volume = 1;
     var started = false;
     u.onstart = function () { if (state.utter !== u) return; started = true; clearWatchdog(); hideFailNotices(['silent', 'err']); setPlaying(n); };   // 「読み上げで鳴らしました」の案内は残す
     u.onend = function () { if (state.utter !== u) return; clearWatchdog(); setPlaying(null); };
@@ -213,7 +214,7 @@
     a.onerror = function () { if (state.gen === gen) { setPlaying(null); fallback(); } };
     a.onpause = function () { if (state.gen === gen && a.ended) setPlaying(null); };
     a.src = src;
-    a.playbackRate = state.slow ? 0.7 : 1;
+    a.playbackRate = playbackRate(true);
     setPlaying(n);
     var p;
     try { p = a.play(); } catch (e) { setPlaying(null); fallback(); return; }
@@ -275,12 +276,12 @@
     var tag = state.lang === 'zh' ? 'zh-Latn-pinyin' : state.lang + '-fonipa';   // lang は字体を選ぶための印（画面の読み上げ機能には aria-hidden で読ませない）
     return '<span class="' + cls + '" lang="' + tag + '" aria-hidden="true">' + esc(it.reading) + '</span>';   // 目で見る補助。画面の読み上げ機能ではボタン名に記号を混ぜない
   }
-  // 押した文（欄 #dock の中）: 大きい字・訳・注・言い換えの型（マスには入れない＝表を軽く保つ）。欄を押すと同じ文がもう一度鳴る
+  // 押した文（欄 #dock の中）: 単語は個別に、訳・注などを押すと文全体をもう一度鳴らす
   function renderDetail() {
     var n = state.detailN;
-    if (!n) { $dbody.innerHTML = '<span class="dhint">マスを押すと鳴ります（何度でも）。押した文と、言い換えの型・注はここに出ます。</span>'; return; }
+    if (!n) { $dbody.innerHTML = '<span class="dhint">マスを押すと鳴ります（何度でも）。押した文と、言い換えの型・注はここに出ます。単語を押すと、その単語だけ鳴ります。</span>'; return; }
     var p = state.data.phrases[n - 1], it = p.langs[state.lang], def = langDef();
-    var html = '<div class="dhead"><span class="dnum">' + (n < 10 ? '0' + n : n) + '</span><span class="dtext" lang="' + esc(def.bcp47[0]) + '">' + esc(it.example) + '</span></div>' +
+    var html = '<div class="dhead"><span class="dnum">' + (n < 10 ? '0' + n : n) + '</span><span class="dtext" lang="' + esc(def.bcp47[0]) + '">' + wordHtml(it.example, def) + '</span></div>' +
       readingHtml(it, 'dreading') +
       '<span class="dja">' + esc(it.ja) + '</span>';
     if (it.note) html += '<span class="note">' + esc(it.note) + '</span>';
@@ -291,6 +292,33 @@
     }
     $dbody.innerHTML = html;
   }
+  function wordHtml(text, def) {
+    // 分かち書きのない中国語・タイ語も端末内で分割。未対応・失敗時は従来の文全体再生に戻す。
+    if (!window.Intl || typeof Intl.Segmenter !== 'function') return esc(text);
+    try {
+      var parts = Array.from(new Intl.Segmenter(def.bcp47[0], { granularity: 'word' }).segment(text));
+      return parts.map(function (part) {
+        return part.isWordLike ? '<button type="button" class="dword" data-word="' + esc(part.segment) + '" aria-label="' + esc(part.segment) + ' を発音">' + esc(part.segment) + '</button>' : esc(part.segment);
+      }).join('');
+    } catch (e) { return esc(text); }
+  }
+  function playWord(word) {
+    if (!word || !state.detailN) return;
+    stopAll();
+    hideFailNotices(['audiofail']);
+    speakItem({ example: word }, state.detailN, langDef());
+  }
+  function nearestWord(x, y, limit) {
+    var best = null, bestD = limit + 0.001;
+    Array.prototype.forEach.call($dbody.querySelectorAll('.dword'), function (el) {
+      Array.prototype.forEach.call(el.getClientRects(), function (r) {
+        var dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom), d = Math.sqrt(dx * dx + dy * dy);
+        if (d < bestD) { bestD = d; best = el; }
+      });
+    });
+    return best;
+  }
+  function playbackRate(file) { return view === 'phrases' && state.slower ? 0.5 : state.slow ? 0.7 : file ? 1 : 0.9; }
 
   function topOffset() { var top = document.querySelector('.top'); return top ? top.getBoundingClientRect().height : 0; }
   function visibleFirstCard() {   // 帯のすぐ下に見えている最初のカードの番号
@@ -329,8 +357,14 @@
     if (window.requestAnimationFrame) window.requestAnimationFrame(restore);   // 描画の直後にもう一度（一覧の高さが決まる前だと届かない端末がある）
   }
   function setSlow(on) {
+    state.slower = false; $slower.setAttribute('aria-pressed', 'false');
     state.slow = !!on; $slow.setAttribute('aria-pressed', state.slow ? 'true' : 'false');
     try { localStorage.setItem('phrase30.slow', state.slow ? '1' : '0'); } catch (e) { /* */ }
+  }
+  function setSlower(on) {
+    setSlow(false);
+    state.slower = !!on; $slower.setAttribute('aria-pressed', state.slower ? 'true' : 'false');
+    try { localStorage.setItem('phrase30.slow', state.slower ? '2' : '0'); } catch (e) { /* */ }
   }
   function saveScroll() {
     if (view === 'quiz') return;
@@ -486,7 +520,7 @@
     try { saved = localStorage.getItem('phrase30.lang'); slow = localStorage.getItem('phrase30.slow'); scroll = JSON.parse(localStorage.getItem('phrase30.scroll.v2') || '{}'); } catch (e) { /* */ }
     if (saved && data.languages.some(function (l) { return l.code === saved; })) state.lang = saved;
     if (scroll && typeof scroll === 'object') state.scroll = scroll;
-    setSlow(slow === '1');
+    if (slow === '2') setSlower(true); else setSlow(slow === '1');
     $loading.hidden = true;
     renderTabs();
     renderList();
@@ -507,13 +541,28 @@
     if (synth && typeof synth.addEventListener === 'function') synth.addEventListener('voiceschanged', refreshVoices);
     else if (synth) synth.onvoiceschanged = refreshVoices;
     $slow.addEventListener('click', function () { setSlow(!state.slow); });
+    $slower.addEventListener('click', function () { setSlower(!state.slower); });
     $howtosum.addEventListener('click', function () { state.howtoAuto = false; });   // 手で開け閉めした物は、自動では畳まない
     var goHowto = function () {
       $howto.hidden = false; $howto.open = true; state.howtoAuto = false;   // 自分で開けた物は、声が見つかっても畳まない
       try { window.scrollTo(0, Math.max(0, $howto.getBoundingClientRect().top + (window.scrollY || 0) - topOffset() - 8)); } catch (e) { /* */ }
     };
     $noticehow.addEventListener('click', goHowto);
-    $dbody.addEventListener('click', function () { if (state.detailN) play(state.detailN); });   // 欄の文を押しても鳴る（大きく出ている物ほど押したくなる）
+    $dbody.addEventListener('click', function (ev) {
+      var word = ev.target.closest('.dword');
+      if (word) { playWord(word.getAttribute('data-word')); return; }
+      if ($dbody.querySelector('.dword')) {   // 単語の外を押した時: 8px 以内に単語があればそれを鳴らす（読みの行など欄のどこでも・行の高さは変えずに押せる範囲を広げる）。文の上で遠ければ何もしない（文全体が鳴る誤爆を防ぐ）
+        var near = nearestWord(ev.clientX, ev.clientY, 8);
+        if (near) { playWord(near.getAttribute('data-word')); return; }
+        if (ev.target.closest('.dtext')) return;
+      }
+      if (state.detailN) play(state.detailN);
+    });
+    $('detail').addEventListener('click', function (ev) {   // 欄の余白（文のすぐ上など）を押した時も、8px 以内の単語は鳴らす。下の声の案内のボタンには触れない
+      if ($dbody.contains(ev.target) || ev.target.closest('button')) return;
+      var near = nearestWord(ev.clientX, ev.clientY, 8);
+      if (near) playWord(near.getAttribute('data-word'));
+    });
     $voicehow.addEventListener('click', goHowto);
     $noticeclose.addEventListener('click', function () { if (/^(nosynth|novoice)/.test(state.noticeKey)) state.dismissed[state.noticeKey] = true; hideNotice(''); });   // 失敗の知らせは次に失敗すればまた出す
     document.addEventListener('visibilitychange', function () { if (document.hidden) stopAll(); });

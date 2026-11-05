@@ -155,6 +155,193 @@ test.describe('30フレーズ（スマホ幅・読み上げは差し替え）', 
     await expect(cards.nth(4)).not.toHaveClass(/playing/, { timeout: 2000 })
   })
 
+  test('AC12 下の欄の単語をタップするとその語だけを同じ声で再生し、読みと文全体の再生を保つ', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    const item = data.phrases[7].langs.en
+    await page.locator('.card[data-n="8"]').dispatchEvent('click')
+    await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(1)
+    const word = page.locator('#detail .dword[data-word="Japanese"]')
+    await word.tap()
+    await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(2)
+    const calls = await page.evaluate(() => window.__calls.filter(c => c.type === 'cancel' || c.type === 'speak'))
+    expect(calls.slice(-2).map(c => c.type)).toEqual(['cancel', 'speak'])
+    expect(calls.at(-1)).toMatchObject({ text: 'Japanese', lang: 'en-AU', voice: 'Karen', rate: 0.9 })
+    await expect(page.locator('#detail .dtext')).toHaveText(item.example)
+    await expect(page.locator('#detail .dreading')).toHaveText(item.reading)
+    await expect(page.locator('#detail .dword')).toHaveCount(4)
+    await word.tap()
+    await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(3)
+    expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').at(-1).text)).toBe('Japanese')
+    await page.locator('#detail .dja').click()
+    await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(4)
+    expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').at(-1).text)).toBe(item.example)
+    // 単語の間（文の欄の上で単語ボタンの外）を押し外しても、文全体は鳴らない（東条の検収 2026-11-05）
+    await page.locator('#detail .dtext').dispatchEvent('click')
+    await page.waitForTimeout(300)
+    expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(4)
+    // 単語の少し外（上下 3px・下は読みの行に当たる位置）を実際に押しても、文全体ではなくその単語が鳴る
+    const box = await word.boundingBox()
+    let n = 4
+    for (const y of [box.y - 3, box.y + box.height + 3]) {
+      await page.mouse.click(box.x + box.width / 2, y)
+      n += 1
+      await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(n)
+      expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').at(-1).text)).toBe('Japanese')
+    }
+  })
+
+  for (const [code, word, lang] of [['zh', '英语', 'zh-CN'], ['th', 'อังกฤษ', 'th-TH']]) {
+    test(`AC12 ${code}の空白のない文を語に分け、句読点と読みを保ち単語だけを発音する`, async ({ page }) => {
+      await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+      await page.goto('/')
+      await page.locator(`.tab[data-lang="${code}"]`).click()
+      await page.locator('.card[data-n="8"]').dispatchEvent('click')
+      const item = data.phrases[7].langs[code]
+      expect(item.example).not.toMatch(/\s/)
+      await expect(page.locator('#detail .dtext')).toHaveText(item.example)
+      const words = await page.locator('#detail .dword').allTextContents()
+      expect(words.length).toBeGreaterThan(1)
+      expect(words).toContain(word)
+      await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(1)
+      await page.locator(`#detail .dword[data-word="${word}"]`).tap()
+      await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(2)
+      expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').at(-1))).toMatchObject({ text: word, lang })
+      await expect(page.locator('#detail .dreading')).toHaveText(item.reading)
+    })
+  }
+
+  for (const unavailable of ['missing', 'throws']) {
+    test(`AC12 Intl.Segmenterが${unavailable === 'missing' ? 'ない' : '失敗する'}端末では文全体を再生できる`, async ({ page }) => {
+      const errors = []
+      page.on('pageerror', error => errors.push(error.message))
+      await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+      await page.addInitScript(mode => {
+        Object.defineProperty(Intl, 'Segmenter', { configurable: true, value: mode === 'missing' ? undefined : function () { throw new Error('segmenter unavailable') } })
+      }, unavailable)
+      await page.goto('/')
+      await page.locator('.tab[data-lang="zh"]').click()
+      await page.locator('.card[data-n="8"]').dispatchEvent('click')
+      await expect(page.locator('#detail .dword')).toHaveCount(0)
+      await expect(page.locator('#detail .dtext')).toHaveText(data.phrases[7].langs.zh.example)
+      await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(1)
+      await page.locator('#detail .dtext').tap()
+      await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(2)
+      expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').at(-1).text)).toBe(data.phrases[7].langs.zh.example)
+      await expect(page.locator('#detail .dreading')).toHaveText(data.phrases[7].langs.zh.reading)
+      expect(errors).toEqual([])
+    })
+  }
+
+  test('AC13 普通0.9・ゆっくり0.7・もっとゆっくり0.5を切り替え、単語と再読込でも選んだ速度を使う', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    const card = page.locator('.card[data-n="8"]'), item = data.phrases[7].langs.en
+    const hear = async (target, text, rate) => {
+      const before = await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)
+      await target.dispatchEvent('click')
+      await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(before + 1)
+      expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').at(-1))).toMatchObject({ text, rate })
+    }
+    await hear(card, item.example, 0.9)
+    await page.locator('#slow').click()
+    await hear(card, item.example, 0.7)
+    await page.getByRole('button', { name: 'もっとゆっくり', exact: true }).click()
+    await expect(page.locator('#slower')).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.locator('#slow')).toHaveAttribute('aria-pressed', 'false')
+    await hear(card, item.example, 0.5)
+    await hear(page.locator('#detail .dword[data-word="Japanese"]'), 'Japanese', 0.5)
+    await page.locator('#slower').click()
+    await expect(page.locator('#slower')).toHaveAttribute('aria-pressed', 'false')
+    await hear(card, item.example, 0.9)
+    await page.locator('#slower').click()
+    await page.locator('#slow').click()
+    await expect(page.locator('#slower')).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.locator('#slow')).toHaveAttribute('aria-pressed', 'true')
+    await hear(card, item.example, 0.7)
+    await page.locator('#slower').click()
+    await page.reload()
+    await expect(page.locator('#slower')).toHaveAttribute('aria-pressed', 'true')
+    await hear(card, item.example, 0.5)
+  })
+
+  test('AC13 音声ファイル差し替え口ももっとゆっくり0.5で再生し、単語はファイルを止めて読み上げる', async ({ page }) => {
+    await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+    await page.addInitScript(() => {
+      window.__audioRates = []
+      window.Audio = function () {
+        this.paused = true
+        this.pause = () => { this.paused = true }
+        this.play = () => {
+          this.paused = false
+          window.__audioRates.push(this.playbackRate)
+          if (this.onplay) this.onplay()
+          return Promise.resolve()
+        }
+      }
+    })
+    await page.route('**/data/phrases.json', route => {
+      const d = JSON.parse(JSON.stringify(data))
+      d.phrases[7].langs.en.audio = 'audio/en/08.wav'
+      return route.fulfill({ json: d })
+    })
+    await page.goto('/')
+    await expect(page.locator('.card')).toHaveCount(30)
+    for (const selector of [null, '#slow', '#slower']) {
+      if (selector) await page.locator(selector).click()
+      await page.locator('.card[data-n="8"]').dispatchEvent('click')
+    }
+    expect(await page.evaluate(() => window.__audioRates)).toEqual([1, 0.7, 0.5])
+    expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(0)
+    await page.locator('#detail .dword[data-word="Japanese"]').tap()
+    await expect.poll(() => page.evaluate(() => window.__calls.filter(c => c.type === 'speak').length)).toBe(1)
+    expect(await page.evaluate(() => window.__calls.filter(c => c.type === 'speak').at(-1))).toMatchObject({ text: 'Japanese', rate: 0.5 })
+    expect(await page.evaluate(() => window.phrase30.state.audioEl.paused)).toBe(true)
+    expect(await page.evaluate(() => window.__audioRates)).toHaveLength(3)
+  })
+
+  for (const width of [320, 390]) {
+    test(`AC12 AC13 幅${width}×664で速度ボタンと6言語30文の単語・読みが欄からはみ出さない`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 664 })
+      await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
+      await page.goto('/')
+      await expect(page.locator('.card')).toHaveCount(30)
+      const buttons = await page.locator('.speeds .toggle').evaluateAll(es => es.map(e => {
+        const r = e.getBoundingClientRect()
+        return { x: r.x, y: r.y, right: r.right, h: r.height, sw: e.scrollWidth, cw: e.clientWidth }
+      }))
+      for (const b of buttons) {
+        expect(b.h).toBeGreaterThanOrEqual(44)
+        expect(b.x).toBeGreaterThanOrEqual(0)
+        expect(b.right).toBeLessThanOrEqual(width)
+        expect(b.sw).toBeLessThanOrEqual(b.cw + 1)
+      }
+      expect(buttons[0].y).toBe(buttons[1].y)
+      expect(buttons[0].right).toBeLessThanOrEqual(buttons[1].x)
+      for (const code of CODES) {
+        await page.locator(`.tab[data-lang="${code}"]`).click()
+        // カードを画面内へ送らず押し、押した瞬間の欄を全30文で調べる。
+        const bad = await page.evaluate(() => {
+          const failures = [], dock = document.getElementById('dock')
+          for (const card of document.querySelectorAll('.card')) {
+            card.click()
+            const d = dock.getBoundingClientRect()
+            if (dock.scrollHeight > dock.clientHeight + 1) failures.push(`${card.dataset.n}: 欄の縦はみ出し`)
+            for (const e of document.querySelectorAll('#detail .dtext, #detail .dword, #detail .dreading')) {
+              const r = e.getBoundingClientRect()
+              if (r.left < d.left || r.right > d.right || r.top < d.top || r.bottom > d.bottom || e.scrollWidth > e.clientWidth + 1) failures.push(`${card.dataset.n}: ${e.className}`)
+            }
+            if (document.documentElement.scrollWidth > innerWidth) failures.push(`${card.dataset.n}: 画面の横はみ出し`)
+          }
+          return failures
+        })
+        expect(bad, `${code}・幅${width}の全30文`).toEqual([])
+      }
+    })
+  }
+
   test('AC11 どの言語でも30マスすべてに読み（中国語はピンイン・ほかは発音記号）が常時見え、押した文の欄にも出る。幅390で横スクロールなし・マスは44px以上で枠の中', async ({ page }) => {
     await page.addInitScript(MOCK_SYNTH(VOICES_ALL))
     await page.goto('/')
